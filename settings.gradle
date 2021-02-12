@@ -4,5 +4,9 @@ dependencyResolutionManagement {
         jcenter()
     }
 }
+enableFeaturePreview('GRADLE_METADATA')
+
 rootProject.name = "Tick"
+
 include ':app'
+include ':kgit'

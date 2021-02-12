@@ -1,0 +1,62 @@
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+apply plugin: 'kotlinx-serialization'
+apply plugin: 'org.jlleitschuh.gradle.ktlint'
+
+repositories {
+  mavenCentral()
+}
+
+kotlin {
+  targets {
+    fromPreset(presets.jvm, "jvm")
+    fromPreset(presets.macosX64, "macos")
+
+    def buildForDevice = project.findProperty("device")?.toBoolean() ?: false
+    def iosTarget = (buildForDevice) ? presets.iosArm64 : presets.iosX64
+    fromPreset(iosTarget, "ios")
+  }
+
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation deps.stately.concurrency
+        implementation deps.kotlinx.serialization
+      }
+    }
+    commonTest {
+      dependencies {
+        implementation kotlin('test-common')
+        implementation kotlin('test-annotations-common')
+      }
+    }
+    jvmMain {
+      dependencies {
+        implementation "org.eclipse.jgit:org.eclipse.jgit:$versions.jgit"
+        implementation "org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:$versions.jgit"
+      }
+    }
+    jvmTest {
+      dependencies {
+        implementation kotlin('test')
+        implementation kotlin('test-junit')
+      }
+    }
+    nativeMain {
+      dependsOn(commonMain)
+      dependencies {}
+    }
+    nativeTest { dependsOn(commonTest) }
+
+    macosMain { dependsOn(nativeMain) }
+    macosTest { dependsOn(nativeTest) }
+
+    iosMain { dependsOn(nativeMain) }
+    iosTest { dependsOn(nativeTest) }
+
+    all {
+      languageSettings {
+        enableLanguageFeature("InlineClasses")
+      }
+    }
+  }
+}

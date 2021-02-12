@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="kgit-jvm">
+    <output-path>C:\Users\jamie\Development\jamiesanson\Tick\kgit\build\libs</output-path>
+    <root id="archive" name="kgit-jvm.jar">
+      <element id="module-output" name="Tick.kgit.jvmMain" />
+    </root>
+  </artifact>
+</component>
