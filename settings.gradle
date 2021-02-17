@@ -10,3 +10,4 @@ rootProject.name = "Tick"
 
 include ':app'
 include ':kgit'
+include ':todo'
