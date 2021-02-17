@@ -4,6 +4,8 @@ plugins {
     id 'kotlin-kapt'
 }
 
+apply plugin: 'com.squareup.sqldelight'
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -40,6 +42,8 @@ dependencies {
     implementation "io.arrow-kt:arrow-optics:$arrow_version"
     implementation "io.arrow-kt:arrow-syntax:$arrow_version"
     kapt    "io.arrow-kt:arrow-meta:$arrow_version"
+
+    implementation "com.squareup.sqldelight:android-driver:1.4.3"
 
     testImplementation 'junit:junit:4.13.2'
 }
