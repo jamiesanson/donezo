@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel: TickViewModel = viewModel()
-
             // Abstract the ViewModel implementation away from the [App] such that
             // it's decoupled from Android, which might allow for a desktop compose app in the future.
             App(
@@ -35,7 +34,7 @@ class TickViewModel: ViewModel() {
     /**
      * The store holding the whole app's state
      */
-    val store = createApp()
+    val store = createApp(TickApplication.context)
 
     /**
      * The current state held in the [store]. Exposed as [LiveData].
