@@ -1,25 +1,29 @@
 package nz.sanson.tick.todo
 
 import android.content.Context
-import com.squareup.sqldelight.android.AndroidSqliteDriver
-import nz.sanson.tick.todo.feature.navigation.navigationReducer
-import org.reduxkotlin.Store
-import org.reduxkotlin.combineReducers
-import org.reduxkotlin.createThreadSafeStore
+import kotlinx.coroutines.CoroutineScope
+import nz.sanson.tick.todo.di.ApplicationModule
+import nz.sanson.tick.todo.feature.list.ListObservationMiddleware
+import nz.sanson.tick.todo.feature.navigation.NavigationReducer
+import nz.sanson.tick.todo.redux.createThunkMiddleware
+import org.koin.core.context.startKoin
+import org.reduxkotlin.*
 
 /**
  * [createApp] wires up all the necessary Redux components, returning the [Store] to the consuming
  * frontend.
  */
-fun createApp(context: Context): Store<AppState> {
-    val database = initialiseDb(context)
+fun createApp(context: Context, applicationScope: CoroutineScope): Store<AppState> {
+    startKoin {
+        modules(ApplicationModule(context, applicationScope))
+    }
 
-    val reducer = combineReducers(navigationReducer, rootReducer)
+    val reducer = combineReducers(NavigationReducer, RootReducer)
 
-    return createThreadSafeStore(reducer, AppState())
-}
+    val middleware = applyMiddleware(
+        createThunkMiddleware(),
+        ListObservationMiddleware
+    )
 
-private fun initialiseDb(context: Context): Database {
-    val driver = AndroidSqliteDriver(Database.Schema, context, "todo.db")
-    return Database(driver)
+    return createThreadSafeStore(reducer, AppState(), middleware)
 }

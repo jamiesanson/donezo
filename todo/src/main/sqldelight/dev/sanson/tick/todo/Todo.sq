@@ -1,5 +1,19 @@
-CREATE TABLE Todo (
+CREATE TABLE todo (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    is_done INTEGER AS Boolean DEFAULT 0,
-    text TEXT NOT NULL
+    listId INTEGER NOT NULL REFERENCES list(id),
+    isDone INTEGER AS Boolean NOT NULL DEFAULT 0,
+    text TEXT NOT NULL DEFAULT ""
 );
+
+selectAll:
+SELECT *
+FROM todo;
+
+insert:
+INSERT INTO todo(listId, text)
+VALUES (:listId, :text);
+
+update:
+UPDATE todo
+SET isDone = :isDone, text = :text
+WHERE id = :id;

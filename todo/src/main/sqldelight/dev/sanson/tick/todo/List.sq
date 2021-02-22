@@ -1,0 +1,20 @@
+CREATE TABLE list (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL DEFAULT ""
+);
+
+selectAll:
+SELECT *
+FROM list;
+
+insert:
+INSERT INTO list(title)
+VALUES (:title);
+
+lastInsertId:
+SELECT last_insert_rowid();
+
+update:
+UPDATE list
+SET title = :title
+WHERE id = :id;

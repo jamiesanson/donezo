@@ -2,64 +2,94 @@ package dev.sanson.tick
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 import dev.sanson.tick.ui.theme.TickTheme
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import nz.sanson.tick.todo.AppState
 import nz.sanson.tick.todo.Screen
-import nz.sanson.tick.todo.feature.navigation.Navigation
+import nz.sanson.tick.todo.model.Todo
+import nz.sanson.tick.todo.model.TodoList
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun App(state: StateFlow<AppState>, dispatch: (Any) -> Any) {
+fun App(stateFlow: StateFlow<AppState>, dispatch: (Any) -> Any) {
     TickTheme {
         Surface(color = MaterialTheme.colors.background) {
-            val state = state.collectAsState()
+            val state = stateFlow.collectAsState()
 
-            when (state.value.screen) {
-                is Screen.Splash -> SplashScreen(navigateTo = { dispatch(it) } )
-                is Screen.Lists -> ListScreen()
+            when (val screen = state.value.screen) {
+                is Screen.Splash -> SplashScreen()
+                is Screen.Lists -> ListScreen(state = screen, dispatch = dispatch)
             }
         }
     }
 }
 
 @Composable
-fun SplashScreen(
-    navigateTo: (Navigation) -> Unit
-) {
+fun SplashScreen() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Greeting("Android")
-        Button(onClick = { navigateTo(Navigation.Todo) }) {
-            Text(text = "Navigate to list screen")
+        Text(text = "\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6")
+    }
+}
+
+@Composable
+fun ListScreen(state: Screen.Lists, dispatch: (Any) -> Any) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        state.lists.forEach { list ->
+            TodoList(list = list, dispatch = dispatch)
         }
     }
 }
 
 @Composable
-fun ListScreen() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Welcome to the list of todos!")
+fun TodoList(list: TodoList, dispatch: (Any) -> Any) {
+    Column {
+        TextField(value = list.title, onValueChange = { })
+        list.items.forEach {
+            TodoRow(item = it)
+        }
     }
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun TodoRow(item: Todo) {
+    Text(text = item.text + "; done: ${item.isDone}")
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun SplashPreview() {
     TickTheme {
-        Greeting("Android")
+        SplashScreen()
+    }
+}
+
+@Preview(showBackground = true, name = "Single todo list")
+@Composable
+fun ListPreview() {
+    TickTheme {
+        TodoList(
+            list = TodoList(
+                title = "Work, 23rd Feb",
+                items = listOf(
+                    Todo(
+                        text = "Book that meeting",
+                        isDone = false
+                    )
+                )
+            ),
+            dispatch = {}
+        )
     }
 }

@@ -6,4 +6,4 @@ import org.reduxkotlin.Reducer
 /**
  * Not a lot happens on the splash screen.
  */
-val splashReducer: Reducer<Screen.Splash> = { state, _ -> state }
+val SplashReducer: Reducer<Screen.Splash> = { state, _ -> state }

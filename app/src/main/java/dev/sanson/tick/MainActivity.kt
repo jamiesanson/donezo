@@ -3,15 +3,14 @@ package dev.sanson.tick
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import nz.sanson.tick.todo.Action
 import nz.sanson.tick.todo.AppState
 import nz.sanson.tick.todo.createApp
 
@@ -20,10 +19,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel: TickViewModel = viewModel()
+            // Make the splash screen last half a second - replace with animations at some point
+            lifecycleScope.launch {
+                delay(500)
+                viewModel.store.dispatch(Action.Navigation.Todo)
+            }
+
             // Abstract the ViewModel implementation away from the [App] such that
             // it's decoupled from Android, which might allow for a desktop compose app in the future.
             App(
-                state = viewModel.state,
+                stateFlow = viewModel.state,
                 dispatch = viewModel.store.dispatch
             )
         }
@@ -32,9 +37,10 @@ class MainActivity : AppCompatActivity() {
 
 class TickViewModel: ViewModel() {
     /**
-     * The store holding the whole app's state
+     * The store holding the whole app's state. We scope all internal
+     * coroutines calls to this ViewModel, which represents the lifecycle of the entire application.
      */
-    val store = createApp(TickApplication.context)
+    val store = createApp(context = TickApplication.context, applicationScope = viewModelScope)
 
     /**
      * The current state held in the [store]. Exposed as [LiveData].
