@@ -41,7 +41,8 @@ val ListObservationMiddleware = middleware<AppState> { store, next, action ->
         is Action.Navigation.Todo -> {
             val scope by inject<CoroutineScope>()
 
-            // Pass the navigation along
+            // Pass the navigation action along so that the list reducer is applied
+            // before the first emission from the database
             next(action)
 
             // Start observation

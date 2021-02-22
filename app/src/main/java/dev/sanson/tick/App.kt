@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import dev.sanson.tick.ui.theme.TickTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import nz.sanson.tick.todo.Action
 import nz.sanson.tick.todo.AppState
 import nz.sanson.tick.todo.Screen
 import nz.sanson.tick.todo.model.Todo
@@ -55,7 +56,9 @@ fun ListScreen(state: Screen.Lists, dispatch: (Any) -> Any) {
 @Composable
 fun TodoList(list: TodoList, dispatch: (Any) -> Any) {
     Column {
-        TextField(value = list.title, onValueChange = { })
+        TextField(value = list.title, onValueChange = {
+            dispatch(Action.ListTitleUpdated(list = list, title = it))
+        })
         list.items.forEach {
             TodoRow(item = it)
         }
