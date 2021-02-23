@@ -3,19 +3,26 @@ package dev.sanson.tick.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.sp
 import dev.sanson.tick.ui.theme.TickTheme
 import nz.sanson.tick.todo.model.Todo
 
 @Composable
-fun TodoRow(item: Todo, onTitleTextChanged: (String) -> Unit, onDoneChanged: (Boolean) -> Unit) {
+fun TodoRow(
+        item: Todo,
+        onTitleTextChanged: (String) -> Unit = {},
+        onDoneChanged: (Boolean) -> Unit = {},
+) {
     Row(
             modifier = Modifier
                     .preferredHeight(Dp(56f))
@@ -23,6 +30,7 @@ fun TodoRow(item: Todo, onTitleTextChanged: (String) -> Unit, onDoneChanged: (Bo
                     .clickable { onDoneChanged(!item.isDone) },
             verticalAlignment = Alignment.CenterVertically
     ) {
+
         Spacer(
                 modifier = Modifier.width(width = Dp(16f))
         )
@@ -33,15 +41,19 @@ fun TodoRow(item: Todo, onTitleTextChanged: (String) -> Unit, onDoneChanged: (Bo
         )
 
         Spacer(
-                modifier = Modifier.width(width = Dp(8f))
+                modifier = Modifier.width(width = Dp(16f))
         )
 
         BasicTextField(
                 value = item.text,
                 onValueChange = onTitleTextChanged,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                        capitalization = KeyboardCapitalization.Sentences
+                ),
                 cursorColor = MaterialTheme.colors.onSurface.copy(alpha = 0.54f),
                 textStyle = MaterialTheme.typography.body1.copy(
-                        color = MaterialTheme.colors.onSurface
+                        color = MaterialTheme.colors.onSurface,
+                        fontSize = 18.sp
                 ),
         )
     }
@@ -54,7 +66,7 @@ fun TodoRow(item: Todo, onTitleTextChanged: (String) -> Unit, onDoneChanged: (Bo
 fun TodoPreview() {
     TickTheme {
         Scaffold {
-            TodoRow(item = Todo(text = "Hang the washing out", isDone = false), {}, {})
+            TodoRow(item = Todo(text = "Hang the washing out", isDone = false))
         }
     }
 }

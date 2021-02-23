@@ -25,5 +25,9 @@ fun createApp(context: Context, applicationScope: CoroutineScope): Store<AppStat
         ListObservationMiddleware
     )
 
-    return createThreadSafeStore(reducer, AppState(), middleware)
+    val store =  createThreadSafeStore(reducer, AppState(), middleware)
+
+    store.dispatch(Action.SeedDatabaseIfEmpty())
+
+    return store
 }

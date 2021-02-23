@@ -2,6 +2,7 @@ package dev.sanson.tick.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
@@ -27,6 +29,10 @@ fun TickTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = modifier,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                    capitalization = KeyboardCapitalization.Sentences
+            ),
+            maxLines = 1,
             cursorColor = MaterialTheme.colors.onSurface.copy(alpha = 0.54f),
             textStyle = MaterialTheme.typography.h4.copy(
                     color = MaterialTheme.colors.onSurface,

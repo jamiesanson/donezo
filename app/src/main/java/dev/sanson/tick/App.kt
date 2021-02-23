@@ -1,11 +1,10 @@
 package dev.sanson.tick
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,18 +53,40 @@ fun ListScreen(state: Screen.Lists, dispatch: (Any) -> Any) {
 
 @Composable
 fun TodoList(list: TodoList, dispatch: (Any) -> Any) {
-    Column {
-        TickTextField(
-            value = list.title,
-            onValueChange = { dispatch(Action.ListTitleUpdated(list = list, title = it)) },
-            modifier = Modifier.padding(start = Dp(16f))
-        )
+    LazyColumn {
+        item {
+            TickTextField(
+                    value = list.title,
+                    onValueChange = {
+                        val action = if (it.isNotEmpty() && it.last() == '\n') {
+                            Action.NewTodoItem(list = list)
+                        } else {
+                            Action.ListTitleUpdated(list = list, title = it)
+                        }
 
-        list.items.forEach { todo ->
+                        dispatch(action)
+                    },
+                    modifier = Modifier.padding(start = Dp(16f))
+            )
+
+            Spacer(modifier = Modifier.height(Dp(8f)))
+        }
+
+        items(list.items) { todo ->
             TodoRow(
-                item = todo,
-                onTitleTextChanged = { dispatch(Action.TodoItemUpdated(item = todo, text = it)) },
-                onDoneChanged = { dispatch(Action.TodoItemUpdated(item = todo, isDone = it)) }
+                    item = todo,
+                    onTitleTextChanged = { title ->
+                        val action = if (title.isNotEmpty() && title.trimEnd { it == '\t' || it == ' ' }.lastOrNull() == '\n') {
+                            Action.NewTodoItem(list = list)
+                        } else {
+                            Action.TodoItemUpdated(item = todo, text = title)
+                        }
+
+                        dispatch(action)
+                    },
+                    onDoneChanged = {
+                        dispatch(Action.TodoItemUpdated(item = todo, isDone = it))
+                    },
             )
         }
     }

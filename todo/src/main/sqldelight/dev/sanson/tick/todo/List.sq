@@ -11,6 +11,10 @@ insert:
 INSERT INTO list(title)
 VALUES (:title);
 
+seed:
+INSERT INTO list(title)
+SELECT "TODO('Title')" WHERE NOT EXISTS (SELECT * FROM list);
+
 lastInsertId:
 SELECT last_insert_rowid();
 

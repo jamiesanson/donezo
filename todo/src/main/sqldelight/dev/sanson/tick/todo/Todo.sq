@@ -17,3 +17,7 @@ update:
 UPDATE todo
 SET isDone = :isDone, text = :text
 WHERE id = :id;
+
+delete:
+DELETE FROM todo
+WHERE id = :id;
