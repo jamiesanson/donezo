@@ -2,14 +2,18 @@ package dev.sanson.tick
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import dev.sanson.tick.ui.TickTextField
+import dev.sanson.tick.ui.TickTextFieldStyle
 import dev.sanson.tick.ui.theme.TickTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +27,7 @@ import nz.sanson.tick.todo.model.TodoList
 @Composable
 fun App(stateFlow: StateFlow<AppState>, dispatch: (Any) -> Any) {
     TickTheme {
-        Surface(color = MaterialTheme.colors.background) {
+        Surface(color = MaterialTheme.colors.surface, modifier = Modifier.fillMaxSize()) {
             val state = stateFlow.collectAsState()
 
             when (val screen = state.value.screen) {
@@ -43,10 +47,7 @@ fun SplashScreen() {
 
 @Composable
 fun ListScreen(state: Screen.Lists, dispatch: (Any) -> Any) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(modifier = Modifier.padding(Dp(16f))) {
         state.lists.forEach { list ->
             TodoList(list = list, dispatch = dispatch)
         }
@@ -56,9 +57,12 @@ fun ListScreen(state: Screen.Lists, dispatch: (Any) -> Any) {
 @Composable
 fun TodoList(list: TodoList, dispatch: (Any) -> Any) {
     Column {
-        TextField(value = list.title, onValueChange = {
-            dispatch(Action.ListTitleUpdated(list = list, title = it))
-        })
+        TickTextField(
+            type = TickTextFieldStyle.Title,
+            value = list.title,
+            onValueChange = { dispatch(Action.ListTitleUpdated(list = list, title = it)) }
+        )
+
         list.items.forEach {
             TodoRow(item = it)
         }
@@ -82,17 +86,19 @@ fun SplashPreview() {
 @Composable
 fun ListPreview() {
     TickTheme {
-        TodoList(
-            list = TodoList(
-                title = "Work, 23rd Feb",
-                items = listOf(
-                    Todo(
-                        text = "Book that meeting",
-                        isDone = false
-                    )
-                )
-            ),
-            dispatch = {}
-        )
+        Scaffold(modifier = Modifier.padding(Dp(8f))) {
+            TodoList(
+                    list = TodoList(
+                            title = "Work, 23rd Feb",
+                            items = listOf(
+                                    Todo(
+                                            text = "Book that meeting",
+                                            isDone = false
+                                    )
+                            )
+                    ),
+                    dispatch = {}
+            )
+        }
     }
 }
