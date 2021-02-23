@@ -3,6 +3,7 @@ package nz.sanson.tick.todo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import nz.sanson.tick.todo.di.inject
+import nz.sanson.tick.todo.model.Todo
 import nz.sanson.tick.todo.model.TodoList
 import nz.sanson.tick.todo.redux.Thunk
 
@@ -25,6 +26,15 @@ sealed class Action {
 
             scope.launch {
                 database.listQueries.update(id = list.id!!, title = title)
+            }
+        }
+
+        fun TodoItemUpdated(item: Todo, text: String = item.text, isDone: Boolean = item.isDone): Thunk<AppState> = { _, _, _ ->
+            val database by inject<Database>()
+            val scope by inject<CoroutineScope>()
+
+            scope.launch {
+                database.todoQueries.update(id = item.id!!, text = text, isDone = isDone)
             }
         }
     }

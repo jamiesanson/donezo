@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 private val TickColorPalette = darkColors(
     primary = purple500,
     primaryVariant = purple700,
-    secondary = teal200,
+    secondary = yellow500,
     surface = blueGrey700,
     background = blueGrey700
 )

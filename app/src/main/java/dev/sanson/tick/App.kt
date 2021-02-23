@@ -1,10 +1,8 @@
 package dev.sanson.tick
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.ui.TickTextField
-import dev.sanson.tick.ui.TickTextFieldStyle
+import dev.sanson.tick.ui.TodoRow
 import dev.sanson.tick.ui.theme.TickTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -47,7 +45,7 @@ fun SplashScreen() {
 
 @Composable
 fun ListScreen(state: Screen.Lists, dispatch: (Any) -> Any) {
-    Column(modifier = Modifier.padding(Dp(16f))) {
+    Column(modifier = Modifier.padding(top = Dp(16f))) {
         state.lists.forEach { list ->
             TodoList(list = list, dispatch = dispatch)
         }
@@ -58,20 +56,19 @@ fun ListScreen(state: Screen.Lists, dispatch: (Any) -> Any) {
 fun TodoList(list: TodoList, dispatch: (Any) -> Any) {
     Column {
         TickTextField(
-            type = TickTextFieldStyle.Title,
             value = list.title,
-            onValueChange = { dispatch(Action.ListTitleUpdated(list = list, title = it)) }
+            onValueChange = { dispatch(Action.ListTitleUpdated(list = list, title = it)) },
+            modifier = Modifier.padding(start = Dp(16f))
         )
 
-        list.items.forEach {
-            TodoRow(item = it)
+        list.items.forEach { todo ->
+            TodoRow(
+                item = todo,
+                onTitleTextChanged = { dispatch(Action.TodoItemUpdated(item = todo, text = it)) },
+                onDoneChanged = { dispatch(Action.TodoItemUpdated(item = todo, isDone = it)) }
+            )
         }
     }
-}
-
-@Composable
-fun TodoRow(item: Todo) {
-    Text(text = item.text + "; done: ${item.isDone}")
 }
 
 @Preview(showBackground = true)
@@ -86,7 +83,7 @@ fun SplashPreview() {
 @Composable
 fun ListPreview() {
     TickTheme {
-        Scaffold(modifier = Modifier.padding(Dp(8f))) {
+        Scaffold {
             TodoList(
                     list = TodoList(
                             title = "Work, 23rd Feb",

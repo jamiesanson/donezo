@@ -17,31 +17,23 @@ import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.ui.theme.TickTheme
 import dev.sanson.tick.ui.theme.purple200
 
-enum class TickTextFieldStyle {
-    Title, Entry
-}
-
 @Composable
 fun TickTextField(
-        type: TickTextFieldStyle,
         value: String,
         onValueChange: (String) -> Unit,
+        modifier: Modifier = Modifier
 ) {
-    when (type) {
-        TickTextFieldStyle.Title -> {
-            BasicTextField(
-                    value = value,
-                    onValueChange = onValueChange,
-                    cursorColor = MaterialTheme.colors.onSurface.copy(alpha = 0.54f),
-                    textStyle = MaterialTheme.typography.h4.copy(
-                        color = MaterialTheme.colors.onSurface,
-                        fontWeight = FontWeight.Medium
-                    ),
-                    visualTransformation = TickTitleVisualTransformation,
-            )
-        }
-        TickTextFieldStyle.Entry -> TODO()
-    }
+    BasicTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            cursorColor = MaterialTheme.colors.onSurface.copy(alpha = 0.54f),
+            textStyle = MaterialTheme.typography.h4.copy(
+                    color = MaterialTheme.colors.onSurface,
+                    fontWeight = FontWeight.Medium
+            ),
+            visualTransformation = TickTitleVisualTransformation,
+    )
 }
 
 /**
@@ -77,7 +69,7 @@ private val TickTitleVisualTransformation = VisualTransformation { text ->
 fun TickTitleTextFieldPreview() {
     TickTheme {
         Scaffold(modifier = Modifier.padding(Dp(8f))) {
-            TickTextField(type = TickTextFieldStyle.Title, value = "Work things this week", onValueChange = { /*TODO*/ })
+            TickTextField(value = "Work things this week", onValueChange = { /*TODO*/ })
         }
     }
 }
