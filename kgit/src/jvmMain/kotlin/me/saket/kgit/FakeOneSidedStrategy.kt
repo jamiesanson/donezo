@@ -28,13 +28,13 @@ class FakeOneSidedStrategy : JgitMergeStrategy() {
   class FakeMerger(local: Repository) : ResolveMerger(local, true) {
 
     override fun processEntry(
-      base: CanonicalTreeParser?,
-      ours: CanonicalTreeParser?,
-      theirs: CanonicalTreeParser?,
-      index: DirCacheBuildIterator?,
-      work: WorkingTreeIterator?,
-      ignoreConflicts: Boolean,
-      attributes: Attributes?
+        base: CanonicalTreeParser?,
+        ours: CanonicalTreeParser?,
+        theirs: CanonicalTreeParser?,
+        index: DirCacheBuildIterator?,
+        work: WorkingTreeIterator?,
+        ignoreConflicts: Boolean,
+        attributes: Attributes?
     ): Boolean {
       // If the same file entry exists in "ours" and "theirs" trees, always prefer "ours".
       if (ours != null && theirs != null) {

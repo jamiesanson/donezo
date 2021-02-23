@@ -15,7 +15,7 @@ data class GitConfig(val sections: List<Section>) {
  */
 @Suppress("FunctionName")
 fun GitConfig(vararg sections: Pair<String, List<Pair<String, String>>>) =
-  GitConfig(sections.map { (name, values) -> Section(name, values) })
+    GitConfig(sections.map { (name, values) -> Section(name, values) })
 
 fun GitConfig.author(): GitIdentity {
   return this["author"].let { GitIdentity(it["name"], it["email"]) }

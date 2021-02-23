@@ -32,20 +32,20 @@ fun <State> ThunkMiddleware<State>.withExtraArgument(arg: Any?) = createThunkMid
 
 fun <State> createThunkMiddleware(extraArgument: Any? = null): ThunkMiddleware<State> =
     { store ->
-        { next: Dispatcher ->
-            { action: Any ->
-                if (action is Function<*>) {
-                    @Suppress("UNCHECKED_CAST")
-                    val thunk = try {
-                        (action as Thunk<State>)
-                    } catch (e: ClassCastException) {
-                        throw IllegalArgumentException("Dispatching functions must use type Thunk:", e)
-                    }
-                    val scope by inject<CoroutineScope>()
-                    scope.thunk(store.dispatch, store.getState, extraArgument)
-                } else {
-                    next(action)
-                }
+      { next: Dispatcher ->
+        { action: Any ->
+          if (action is Function<*>) {
+            @Suppress("UNCHECKED_CAST")
+            val thunk = try {
+              (action as Thunk<State>)
+            } catch (e: ClassCastException) {
+              throw IllegalArgumentException("Dispatching functions must use type Thunk:", e)
             }
+            val scope by inject<CoroutineScope>()
+            scope.thunk(store.dispatch, store.getState, extraArgument)
+          } else {
+            next(action)
+          }
         }
+      }
     }

@@ -1,10 +1,10 @@
 package me.saket.kgit
 
 internal expect class RealGitRepository(
-  directoryPath: String,
-  remote: GitRemote,
-  userConfig: GitConfig,
-  sshKey: SshPrivateKey
+    directoryPath: String,
+    remote: GitRemote,
+    userConfig: GitConfig,
+    sshKey: SshPrivateKey
 ) : GitRepository
 
 interface GitRepository {
@@ -22,9 +22,9 @@ interface GitRepository {
    * @param timestamp when null, the current time is used.
    */
   fun commitAll(
-    message: String,
-    timestamp: UtcTimestamp,
-    allowEmpty: Boolean = false
+      message: String,
+      timestamp: UtcTimestamp,
+      allowEmpty: Boolean = false
   )
 
   fun pull(rebase: Boolean): GitPullResult

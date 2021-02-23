@@ -22,13 +22,27 @@ import org.reduxkotlin.middleware
  * Reducer for the main list screen
  */
 val ListsReducer: Reducer<Screen.Lists> = { state, action ->
-    when (action) {
-        is Action.ListsLoaded -> state.copy(
-            loading = false,
-            lists = action.lists
-        )
-        else -> state
-    }
+  when (action) {
+      is Action.ListsLoaded -> state.copy(
+          loading = false,
+          lists = action.lists
+      )
+      is Action.ItemUpdated -> state.copy(
+          lists = state.lists.map { list ->
+              list.copy(
+                  items = list.items.map {
+                      if (it.id == action.item.id) action.item else it
+                  }
+              )
+          }
+      )
+      is Action.TitleUpdated -> state.copy(
+          lists = state.lists.map {
+              if (it.id == action.list.id) it.copy(title = action.list.title) else it
+          }
+      )
+    else -> state
+  }
 }
 
 private var observationJob: Job? = null
@@ -37,39 +51,39 @@ private var observationJob: Job? = null
  * Start observing the TODO list when we land on the todo screen
  */
 val ListObservationMiddleware = middleware<AppState> { store, next, action ->
-    when (action) {
-        is Action.Navigation.Todo -> {
-            val scope by inject<CoroutineScope>()
+  when (action) {
+      is Action.Navigation.Todo -> {
+          val scope by inject<CoroutineScope>()
 
-            // Pass the navigation action along so that the list reducer is applied
-            // before the first emission from the database
-            next(action)
+          // Pass the navigation action along so that the list reducer is applied
+          // before the first emission from the database
+          next(action)
 
-            // Start observation
-            observationJob = scope.launch {
-                val database by inject<Database>()
+          // Start observation
+          observationJob = scope.launch {
+              val database by inject<Database>()
 
-                fun <T : Any> Query<T>.asListFlow() = asFlow().map { it.executeAsList() }
+              fun <T : Any> Query<T>.asListFlow() = asFlow().map { it.executeAsList() }
 
-                val lists = database.listQueries.selectAll().asListFlow()
-                val todos = database.todoQueries.selectAll().asListFlow()
+              val lists = database.listQueries.selectAll().asListFlow()
+              val todos = database.todoQueries.selectAll().asListFlow()
 
-                lists
-                    .combine(todos) { allLists, allTodos ->
-                        allLists.map { list ->
-                            val todoItems = allTodos.filter { it.listId == list.id }
-                            TodoList(
-                                id = list.id,
-                                title = list.title,
-                                items = todoItems.map { Todo(it.id, it.text, it.isDone) }
-                            )
-                        }
-                    }
-                    .collect {
-                        store.dispatch(Action.ListsLoaded(it))
-                    }
-            }
-        }
-        else -> next(action)
-    }
+              lists
+                  .combine(todos) { allLists, allTodos ->
+                      allLists.map { list ->
+                          val todoItems = allTodos.filter { it.listId == list.id }
+                          TodoList(
+                              id = list.id,
+                              title = list.title,
+                              items = todoItems.map { Todo(it.id, it.text, it.isDone) }
+                          )
+                      }
+                  }
+                  .collect {
+                      store.dispatch(Action.ListsLoaded(it))
+                  }
+          }
+      }
+    else -> next(action)
+  }
 }

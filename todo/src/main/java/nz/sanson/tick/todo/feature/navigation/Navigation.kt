@@ -8,10 +8,10 @@ import org.reduxkotlin.reducerForActionType
  */
 
 val NavigationReducer = reducerForActionType<AppState, Action.Navigation> { state, action ->
-    when (state.screen) {
-        Screen.Splash -> when (action) {
-            Action.Navigation.Todo -> AppState.screen.set(state, Screen.Lists())
-        }
-        is Screen.Lists -> state
+  when (state.screen) {
+    Screen.Splash -> when (action) {
+      Action.Navigation.Todo -> AppState.screen.set(state, Screen.Lists())
     }
+    is Screen.Lists -> state
+  }
 }

@@ -14,20 +14,20 @@ import org.reduxkotlin.*
  * frontend.
  */
 fun createApp(context: Context, applicationScope: CoroutineScope): Store<AppState> {
-    startKoin {
-        modules(ApplicationModule(context, applicationScope))
-    }
+  startKoin {
+    modules(ApplicationModule(context, applicationScope))
+  }
 
-    val reducer = combineReducers(NavigationReducer, RootReducer)
+  val reducer = combineReducers(NavigationReducer, RootReducer)
 
-    val middleware = applyMiddleware(
-        createThunkMiddleware(),
-        ListObservationMiddleware
-    )
+  val middleware = applyMiddleware(
+      createThunkMiddleware(),
+      ListObservationMiddleware
+  )
 
-    val store =  createThreadSafeStore(reducer, AppState(), middleware)
+  val store = createThreadSafeStore(reducer, AppState(), middleware)
 
-    store.dispatch(Action.SeedDatabaseIfEmpty())
+  store.dispatch(Action.SeedDatabaseIfEmpty())
 
-    return store
+  return store
 }

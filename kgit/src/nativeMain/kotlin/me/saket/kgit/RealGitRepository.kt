@@ -1,10 +1,10 @@
 package me.saket.kgit
 
 internal actual class RealGitRepository actual constructor(
-  directoryPath: String,
-  remote: GitRemote,
-  userConfig: GitConfig,
-  sshKey: SshPrivateKey
+    directoryPath: String,
+    remote: GitRemote,
+    userConfig: GitConfig,
+    sshKey: SshPrivateKey
 ) : GitRepository {
   override fun isStagingAreaDirty(): Boolean = TODO()
   override fun checkout(branch: String, createIfNeeded: Boolean): Unit = TODO()

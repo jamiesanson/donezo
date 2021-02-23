@@ -6,7 +6,9 @@ import nz.sanson.tick.todo.model.TodoList
 @optics
 data class AppState(
     val screen: Screen = Screen.Splash
-) { companion object }
+) {
+  companion object
+}
 
 /**
  * A screen is represented as a portion of the app state, given that the app
@@ -15,11 +17,13 @@ data class AppState(
  */
 sealed class Screen {
 
-    object Splash: Screen()
+  object Splash : Screen()
 
-    @optics
-    data class Lists(
-        val loading: Boolean = true,
-        val lists: List<TodoList> = emptyList(),
-    ): Screen() { companion object }
+  @optics
+  data class Lists(
+      val loading: Boolean = true,
+      val lists: List<TodoList> = emptyList(),
+  ) : Screen() {
+    companion object
+  }
 }

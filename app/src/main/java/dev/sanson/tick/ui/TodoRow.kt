@@ -19,44 +19,44 @@ import nz.sanson.tick.todo.model.Todo
 
 @Composable
 fun TodoRow(
-        item: Todo,
-        onTitleTextChanged: (String) -> Unit = {},
-        onDoneChanged: (Boolean) -> Unit = {},
+    item: Todo,
+    onTitleTextChanged: (String) -> Unit = {},
+    onDoneChanged: (Boolean) -> Unit = {},
 ) {
-    Row(
-            modifier = Modifier
-                    .preferredHeight(Dp(56f))
-                    .fillMaxWidth()
-                    .clickable { onDoneChanged(!item.isDone) },
-            verticalAlignment = Alignment.CenterVertically
-    ) {
+  Row(
+      modifier = Modifier
+          .preferredHeight(Dp(56f))
+          .fillMaxWidth()
+          .clickable { onDoneChanged(!item.isDone) },
+      verticalAlignment = Alignment.CenterVertically
+  ) {
 
-        Spacer(
-                modifier = Modifier.width(width = Dp(16f))
-        )
+    Spacer(
+        modifier = Modifier.width(width = Dp(16f))
+    )
 
-        Checkbox(
-                checked = item.isDone,
-                onCheckedChange = onDoneChanged
-        )
+    Checkbox(
+        checked = item.isDone,
+        onCheckedChange = onDoneChanged
+    )
 
-        Spacer(
-                modifier = Modifier.width(width = Dp(16f))
-        )
+    Spacer(
+        modifier = Modifier.width(width = Dp(16f))
+    )
 
-        BasicTextField(
-                value = item.text,
-                onValueChange = onTitleTextChanged,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                        capitalization = KeyboardCapitalization.Sentences
-                ),
-                cursorColor = MaterialTheme.colors.onSurface.copy(alpha = 0.54f),
-                textStyle = MaterialTheme.typography.body1.copy(
-                        color = MaterialTheme.colors.onSurface,
-                        fontSize = 18.sp
-                ),
-        )
-    }
+    BasicTextField(
+        value = item.text,
+        onValueChange = onTitleTextChanged,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            capitalization = KeyboardCapitalization.Sentences
+        ),
+        cursorColor = MaterialTheme.colors.onSurface.copy(alpha = 0.54f),
+        textStyle = MaterialTheme.typography.body1.copy(
+            color = MaterialTheme.colors.onSurface,
+            fontSize = 18.sp
+        ),
+    )
+  }
 }
 
 
@@ -64,10 +64,10 @@ fun TodoRow(
 @Preview(showBackground = true, name = "Title TextField")
 @Composable
 fun TodoPreview() {
-    TickTheme {
-        Scaffold {
-            TodoRow(item = Todo(text = "Hang the washing out", isDone = false))
-        }
+  TickTheme {
+    Scaffold {
+      TodoRow(item = Todo(text = "Hang the washing out", isDone = false))
     }
+  }
 }
 //endregion

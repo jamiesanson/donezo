@@ -3,8 +3,8 @@ package me.saket.kgit
 import kotlinx.serialization.Serializable
 
 data class SshKeyPair(
-  val publicKey: String,
-  val privateKey: SshPrivateKey
+    val publicKey: String,
+    val privateKey: SshPrivateKey
 )
 
 @Serializable

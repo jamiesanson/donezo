@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GitIdentity(
-  val name: String,
-  val email: String?
+    val name: String,
+    val email: String?
 )
