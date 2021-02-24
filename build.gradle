@@ -2,25 +2,31 @@ buildscript {
     apply from: 'gradle/dependencies.gradle'
 
     ext {
-        compose_version = '1.0.0-alpha12'
+        compose_version = '1.0.0-beta01'
     }
 
     repositories {
         google()
         mavenCentral()
-        jcenter()
         maven { url "https://dl.bintray.com/badoo/maven" }
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0-alpha07'
+        classpath 'com.android.tools.build:gradle:7.0.0-alpha08'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.30"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$versions.kotlin"
         classpath "com.squareup.sqldelight:gradle-plugin:$versions.sqlDelight"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:$versions.ktLintPlugin"
         classpath 'com.squareup.sqldelight:gradle-plugin:1.4.3'
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += ["-Xallow-jvm-ir-dependencies"]
     }
 }
 

@@ -7,13 +7,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.ui.theme.TickTheme
@@ -26,14 +24,14 @@ fun TickTextField(
         modifier: Modifier = Modifier
 ) {
   BasicTextField(
-          value = value,
-          onValueChange = onValueChange,
+          value = TextFieldValue(value),
+          onValueChange = { onValueChange(it.text) },
           modifier = modifier,
           keyboardOptions = KeyboardOptions.Default.copy(
                   capitalization = KeyboardCapitalization.Sentences
           ),
           maxLines = 1,
-          cursorColor = MaterialTheme.colors.onSurface.copy(alpha = 0.54f),
+          cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
           textStyle = MaterialTheme.typography.h4.copy(
                   color = MaterialTheme.colors.onSurface,
                   fontWeight = FontWeight.Medium
@@ -75,7 +73,7 @@ private val TickTitleVisualTransformation = VisualTransformation { text ->
 fun TickTitleTextFieldPreview() {
   TickTheme {
     Scaffold(modifier = Modifier.padding(Dp(8f))) {
-      TickTextField(value = "Work things this week", onValueChange = { /*TODO*/ })
+      TickTextField(value = "Live literals are neat", onValueChange = { /*TODO*/ })
     }
   }
 }
