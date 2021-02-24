@@ -24,8 +24,8 @@ fun TickTextField(
         modifier: Modifier = Modifier
 ) {
   BasicTextField(
-          value = TextFieldValue(value),
-          onValueChange = { onValueChange(it.text) },
+          value = value,
+          onValueChange = onValueChange,
           modifier = modifier,
           keyboardOptions = KeyboardOptions.Default.copy(
                   capitalization = KeyboardCapitalization.Sentences

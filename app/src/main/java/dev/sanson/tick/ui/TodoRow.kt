@@ -47,8 +47,8 @@ fun TodoRow(
     )
 
     BasicTextField(
-      value = TextFieldValue(item.text),
-      onValueChange = { onTitleTextChanged(it.text) },
+      value = item.text,
+      onValueChange = onTitleTextChanged,
       keyboardOptions = KeyboardOptions.Default.copy(
         capitalization = KeyboardCapitalization.Sentences
       ),

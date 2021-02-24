@@ -58,6 +58,7 @@ fun TodoList(list: TodoList, dispatch: (Any) -> Any) {
       TickTextField(
           value = list.title,
           onValueChange = {
+            println("On title changed $it")
             val action = if (it.isNotEmpty() && it.last() == '\n') {
               Action.NewTodoItem(list = list)
             } else {
