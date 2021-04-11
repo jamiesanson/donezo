@@ -1,4 +1,4 @@
-package dev.sanson.tick
+package dev.sanson.tick.android
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.sanson.tick.App
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

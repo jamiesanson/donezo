@@ -8,11 +8,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".TickApplication"
+        android:name=".android.TickApplication"
         android:theme="@style/Theme.Tick">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".android.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Tick.NoActionBar">
             <intent-filter>

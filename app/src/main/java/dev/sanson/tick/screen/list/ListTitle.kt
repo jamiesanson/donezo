@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import dev.sanson.tick.LocalDispatch
+import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.ui.theme.TickTheme
 import dev.sanson.tick.ui.theme.purple200
 import nz.sanson.tick.todo.Action

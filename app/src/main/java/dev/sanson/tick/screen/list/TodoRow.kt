@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-import dev.sanson.tick.LocalDispatch
+import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.ui.theme.TickTheme
 import nz.sanson.tick.todo.Action
 import nz.sanson.tick.todo.model.Todo
