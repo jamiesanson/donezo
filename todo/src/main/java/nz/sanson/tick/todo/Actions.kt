@@ -33,7 +33,7 @@ sealed class Action {
     /**
      * Updates the title of [list] to be [title]
      */
-    fun ListTitleUpdated(list: TodoList, title: String): Thunk<AppState> = { dispatch, _, _ ->
+    fun OnListTitleChange(list: TodoList, title: String): Thunk<AppState> = { dispatch, _, _ ->
       val database by inject<Database>()
       val scope by inject<CoroutineScope>()
 
@@ -44,17 +44,18 @@ sealed class Action {
       }
     }
 
+
     /**
-     * Updates the [text] and [isDone] of [item]
+     * Updates a Todo [item]
      */
-    fun TodoItemUpdated(item: Todo, text: String = item.text, isDone: Boolean = item.isDone): Thunk<AppState> = { dispatch, _, _ ->
+    fun OnTodoChange(item: Todo): Thunk<AppState> = { dispatch, _, _ ->
       val database by inject<Database>()
       val scope by inject<CoroutineScope>()
 
-      dispatch(ItemUpdated(item.copy(text = text, isDone = isDone)))
+      dispatch(ItemUpdated(item.copy(text = item.text, isDone = item.isDone)))
 
       scope.launch {
-        database.todoQueries.update(id = item.id!!, text = text, isDone = isDone)
+        database.todoQueries.update(id = item.id!!, text = item.text, isDone = item.isDone)
       }
     }
 
