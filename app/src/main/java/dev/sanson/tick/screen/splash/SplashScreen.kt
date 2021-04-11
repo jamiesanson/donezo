@@ -5,7 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
-import dev.sanson.tick.ui.theme.TickTheme
+import dev.sanson.tick.theme.TickTheme
 
 @Composable
 fun SplashScreen() {

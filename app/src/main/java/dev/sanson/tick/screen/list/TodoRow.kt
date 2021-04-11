@@ -1,4 +1,4 @@
-package dev.sanson.tick.ui
+package dev.sanson.tick.screen.list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import dev.sanson.tick.android.LocalDispatch
-import dev.sanson.tick.ui.theme.TickTheme
+import dev.sanson.tick.theme.TickTheme
 import nz.sanson.tick.todo.Action
 import nz.sanson.tick.todo.model.Todo
 

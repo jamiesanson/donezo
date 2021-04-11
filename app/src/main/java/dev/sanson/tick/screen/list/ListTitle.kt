@@ -1,4 +1,4 @@
-package dev.sanson.tick.ui
+package dev.sanson.tick.screen.list
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -18,8 +18,8 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.android.LocalDispatch
-import dev.sanson.tick.ui.theme.TickTheme
-import dev.sanson.tick.ui.theme.purple200
+import dev.sanson.tick.theme.TickTheme
+import dev.sanson.tick.theme.purple200
 import nz.sanson.tick.todo.Action
 import nz.sanson.tick.todo.model.TodoList
 

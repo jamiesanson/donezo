@@ -9,9 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import dev.sanson.tick.ui.ListTitle
-import dev.sanson.tick.ui.TodoRow
-import dev.sanson.tick.ui.theme.TickTheme
+import dev.sanson.tick.theme.TickTheme
 import nz.sanson.tick.todo.Screen
 import nz.sanson.tick.todo.model.Todo
 import nz.sanson.tick.todo.model.TodoList

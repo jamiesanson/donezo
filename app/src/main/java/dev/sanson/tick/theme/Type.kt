@@ -1,4 +1,4 @@
-package dev.sanson.tick.ui.theme
+package dev.sanson.tick.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

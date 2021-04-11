@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dev.sanson.tick.screen.splash.SplashScreen
 import dev.sanson.tick.screen.list.ListScreen
-import dev.sanson.tick.ui.theme.TickTheme
+import dev.sanson.tick.theme.TickTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import nz.sanson.tick.todo.AppState
 import nz.sanson.tick.todo.Screen
