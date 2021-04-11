@@ -1,5 +1,7 @@
 package dev.sanson.tick.ui
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -15,8 +17,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import dev.sanson.tick.LocalDispatch
 import dev.sanson.tick.ui.theme.TickTheme
 import dev.sanson.tick.ui.theme.purple200
+import nz.sanson.tick.todo.Action
+import nz.sanson.tick.todo.model.TodoList
+
+@Composable
+fun ListTitle(list: TodoList) {
+    val dispatch = LocalDispatch.current
+    ListTitleTextField(
+        value = list.title,
+        onValueChange = {
+            dispatch(Action.OnListTitleChange(list = list, title = it))
+        },
+        onDoneAction = {
+            dispatch(Action.NewTodoItem(list = list))
+        },
+        modifier = Modifier.padding(start = Dp(16f))
+    )
+
+    Spacer(modifier = Modifier.height(Dp(8f)))
+}
 
 @Composable
 fun ListTitleTextField(

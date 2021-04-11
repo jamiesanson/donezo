@@ -5,6 +5,11 @@ CREATE TABLE todo (
     text TEXT NOT NULL DEFAULT ""
 );
 
+select:
+SELECT *
+FROM todo
+WHERE id = :id;
+
 selectAll:
 SELECT *
 FROM todo;

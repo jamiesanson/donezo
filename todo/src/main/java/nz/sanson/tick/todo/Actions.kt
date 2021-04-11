@@ -71,6 +71,18 @@ sealed class Action {
       }
     }
 
+    /**
+     * Add a new [Todo] to [list]
+     */
+    fun NewTodoItemInSameList(item: Todo): Thunk<AppState> = { _, _, _ ->
+      val database by inject<Database>()
+      val scope by inject<CoroutineScope>()
+
+      scope.launch {
+        val dbItem = database.todoQueries.select(id = item.id!!).executeAsOne()
+        database.todoQueries.insert(listId = dbItem.listId, text ="")
+      }
+    }
 
     /**
      * Delete a given [Todo] item

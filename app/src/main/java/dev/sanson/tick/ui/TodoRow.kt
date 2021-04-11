@@ -13,25 +13,48 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
+import dev.sanson.tick.LocalDispatch
 import dev.sanson.tick.ui.theme.TickTheme
+import nz.sanson.tick.todo.Action
 import nz.sanson.tick.todo.model.Todo
 
 @Composable
-fun TodoRow(
+fun TodoRow(item: Todo) {
+    val dispatch = LocalDispatch.current
+    TodoRow(
+        item = item,
+        onTodoChange = { todo ->
+            dispatch(Action.OnTodoChange(item = todo))
+        },
+        onDoneAction = {
+            dispatch(Action.NewTodoItemInSameList(item))
+        },
+        onDeleteItem = {
+            dispatch(Action.DeleteTodoItem(item))
+        }
+    )
+}
+
+@Composable
+private fun TodoRow(
     item: Todo,
     onTodoChange: (Todo) -> Unit = {},
-    onDoneAction: () -> Unit
+    onDoneAction: () -> Unit,
+    onDeleteItem: () -> Unit,
 ) {
     Row(
         modifier = Modifier
-          .height(Dp(56f))
-          .fillMaxWidth(),
+            .height(Dp(56f))
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -55,7 +78,7 @@ fun TodoRow(
         BasicTextField(
             value = textFieldValue.value,
             onValueChange = {
-                textFieldValue.value = it
+                textFieldValue.value = it.copy(text = it.text.replace("\n", ""))
 
                 onTodoChange(
                     item.copy(
@@ -75,6 +98,23 @@ fun TodoRow(
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 18.sp
             ),
+            modifier = Modifier.onKeyEvent {
+                when (it.key) {
+                    Key.Backspace, Key.Delete -> {
+                        if (textFieldValue.value.text.isEmpty()) {
+                            onDeleteItem()
+                            true
+                        } else {
+                            false
+                        }
+                    }
+                    Key.Enter -> {
+                        onDoneAction()
+                        true
+                    }
+                    else -> false
+                }
+            }
         )
     }
 }
@@ -86,7 +126,7 @@ fun TodoRow(
 fun TodoPreview() {
     TickTheme {
         Scaffold {
-            TodoRow(item = Todo(text = "Hang the washing out", isDone = false), {}, {})
+            TodoRow(item = Todo(text = "Hang the washing out", isDone = false), {}, {}, {})
         }
     }
 }
