@@ -23,13 +23,15 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.diffplug.spotless" version "5.12.1"
+}
+
+apply from: rootProject.file("spotless.gradle")
+
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs += ["-Xallow-jvm-ir-dependencies"]
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

@@ -1,0 +1,19 @@
+spotless {
+    ratchetFrom 'origin/main'
+
+    format 'misc', {
+        target '**/*.gradle', '**/*.md', '**/.gitignore'
+
+        indentWithSpaces()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    kotlin {
+        target '**/*.kt'
+        ktlint()
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+}

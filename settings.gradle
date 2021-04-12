@@ -1,12 +1,10 @@
 dependencyResolutionManagement {
     repositories {
         google()
-        jcenter()
     }
 }
 
 rootProject.name = "Tick"
 
 include ':app'
-include ':kgit'
 include ':todo'
