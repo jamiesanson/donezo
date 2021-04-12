@@ -1,6 +1,10 @@
 package dev.sanson.tick.screen.list
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -90,9 +94,11 @@ private fun TodoRow(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next
             ),
-            keyboardActions = KeyboardActions(onNext = {
-                onDoneAction()
-            }),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    onDoneAction()
+                }
+            ),
             cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
             textStyle = MaterialTheme.typography.body1.copy(
                 color = MaterialTheme.colors.onSurface,
@@ -118,7 +124,6 @@ private fun TodoRow(
         )
     }
 }
-
 
 //region previews
 @Preview(showBackground = true, name = "Title TextField")

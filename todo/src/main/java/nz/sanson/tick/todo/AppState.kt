@@ -7,7 +7,7 @@ import nz.sanson.tick.todo.model.TodoList
 data class AppState(
     val screen: Screen = Screen.Splash
 ) {
-  companion object
+    companion object
 }
 
 /**
@@ -17,13 +17,13 @@ data class AppState(
  */
 sealed class Screen {
 
-  object Splash : Screen()
+    object Splash : Screen()
 
-  @optics
-  data class Lists(
-      val loading: Boolean = true,
-      val lists: List<TodoList> = emptyList(),
-  ) : Screen() {
-    companion object
-  }
+    @optics
+    data class Lists(
+        val loading: Boolean = true,
+        val lists: List<TodoList> = emptyList(),
+    ) : Screen() {
+        companion object
+    }
 }

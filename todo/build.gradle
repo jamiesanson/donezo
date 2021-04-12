@@ -45,10 +45,15 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
 
-    implementation "org.koin:koin-core:2.2.2"
+    implementation "io.insert-koin:koin-core:3.0.1-beta-2"
 
     implementation "com.squareup.sqldelight:android-driver:1.4.3"
     implementation "com.squareup.sqldelight:coroutines-extensions:1.4.4"
 
     testImplementation 'junit:junit:4.13.2'
+}
+
+repositories {
+    mavenCentral()
+    google()
 }

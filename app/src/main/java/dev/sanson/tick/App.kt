@@ -1,18 +1,17 @@
 package dev.sanson.tick
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import dev.sanson.tick.screen.splash.SplashScreen
 import dev.sanson.tick.screen.list.ListScreen
+import dev.sanson.tick.screen.splash.SplashScreen
 import dev.sanson.tick.theme.TickTheme
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import nz.sanson.tick.todo.AppState
 import nz.sanson.tick.todo.Screen
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun App(state: AppState) {
     TickTheme {
@@ -30,5 +29,3 @@ fun App(state: AppState) {
 fun AppPreview() {
     App(state = AppState(screen = Screen.Splash))
 }
-
-

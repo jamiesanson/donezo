@@ -1,6 +1,4 @@
 spotless {
-    ratchetFrom 'origin/main'
-
     format 'misc', {
         target '**/*.gradle', '**/*.md', '**/.gitignore'
 
@@ -11,9 +9,7 @@ spotless {
 
     kotlin {
         target '**/*.kt'
-        ktlint()
-        trimTrailingWhitespace()
-        indentWithSpaces()
-        endWithNewline()
+
+        ktlint("0.41.0")
     }
 }

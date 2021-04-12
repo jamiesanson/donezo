@@ -8,5 +8,5 @@ data class Todo(
     val text: String,
     val isDone: Boolean
 ) {
-  companion object
+    companion object
 }

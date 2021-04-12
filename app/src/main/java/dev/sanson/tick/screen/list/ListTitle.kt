@@ -14,7 +14,11 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.android.LocalDispatch
@@ -55,9 +59,11 @@ fun ListTitleTextField(
             capitalization = KeyboardCapitalization.Sentences,
             imeAction = ImeAction.Next
         ),
-        keyboardActions = KeyboardActions(onNext = {
-            onDoneAction()
-        }),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                onDoneAction()
+            }
+        ),
         maxLines = 1,
         cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
         textStyle = MaterialTheme.typography.h4.copy(
@@ -105,7 +111,8 @@ fun TickTitleTextFieldPreview() {
             ListTitleTextField(
                 value = "Live literals are neat",
                 onValueChange = { /*TODO*/ },
-                onDoneAction = {})
+                onDoneAction = {}
+            )
         }
     }
 }
