@@ -2,7 +2,6 @@
 
 package nz.sanson.tick.todo
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import nz.sanson.tick.todo.di.inject
 import nz.sanson.tick.todo.model.Todo
@@ -16,10 +15,6 @@ sealed class Action {
 
     data class ListsLoaded(val lists: List<TodoList>) : Action()
 
-    data class ItemUpdated(val item: Todo) : Action()
-
-    data class TitleUpdated(val list: TodoList) : Action()
-
     /**
      * Thunk functions make sense to put in the companion object, such that they
      * can be referenced like the other actions
@@ -29,13 +24,10 @@ sealed class Action {
         /**
          * Updates the title of [list] to be [title]
          */
-        fun OnListTitleChange(list: TodoList, title: String): Thunk<AppState> = { dispatch, _, _ ->
+        fun OnListTitleChange(list: TodoList, title: String): Thunk<AppState> = { _, _, _ ->
             val database by inject<Database>()
-            val scope by inject<CoroutineScope>()
 
-            dispatch(TitleUpdated(list = list.copy(title = title)))
-
-            scope.launch {
+            launch {
                 database.listQueries.update(id = list.id!!, title = title)
             }
         }
@@ -43,13 +35,10 @@ sealed class Action {
         /**
          * Updates a Todo [item]
          */
-        fun OnTodoChange(item: Todo): Thunk<AppState> = { dispatch, _, _ ->
+        fun OnTodoChange(item: Todo): Thunk<AppState> = { _, _, _ ->
             val database by inject<Database>()
-            val scope by inject<CoroutineScope>()
 
-            dispatch(ItemUpdated(item.copy(text = item.text, isDone = item.isDone)))
-
-            scope.launch {
+            launch {
                 database.todoQueries.update(id = item.id!!, text = item.text, isDone = item.isDone)
             }
         }
@@ -59,9 +48,8 @@ sealed class Action {
          */
         fun NewTodoItem(list: TodoList): Thunk<AppState> = { _, _, _ ->
             val database by inject<Database>()
-            val scope by inject<CoroutineScope>()
 
-            scope.launch {
+            launch {
                 database.todoQueries.insert(listId = list.id!!, text = "")
             }
         }
@@ -71,9 +59,8 @@ sealed class Action {
          */
         fun NewTodoItemInSameList(item: Todo): Thunk<AppState> = { _, _, _ ->
             val database by inject<Database>()
-            val scope by inject<CoroutineScope>()
 
-            scope.launch {
+            launch {
                 val dbItem = database.todoQueries.select(id = item.id!!).executeAsOne()
                 database.todoQueries.insert(listId = dbItem.listId, text = "")
             }
@@ -84,9 +71,8 @@ sealed class Action {
          */
         fun DeleteTodoItem(item: Todo): Thunk<AppState> = { _, _, _ ->
             val database by inject<Database>()
-            val scope by inject<CoroutineScope>()
 
-            scope.launch {
+            launch {
                 database.todoQueries.delete(id = item.id!!)
             }
         }
@@ -96,9 +82,8 @@ sealed class Action {
          */
         internal fun SeedDatabaseIfEmpty(): Thunk<AppState> = { _, _, _ ->
             val database by inject<Database>()
-            val scope by inject<CoroutineScope>()
 
-            scope.launch {
+            launch {
                 database.listQueries.seed()
             }
         }

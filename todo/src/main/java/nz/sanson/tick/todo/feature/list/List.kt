@@ -27,20 +27,6 @@ val ListsReducer: Reducer<Screen.Lists> = { state, action ->
             loading = false,
             lists = action.lists
         )
-        is Action.ItemUpdated -> state.copy(
-            lists = state.lists.map { list ->
-                list.copy(
-                    items = list.items.map {
-                        if (it.id == action.item.id) action.item else it
-                    }
-                )
-            }
-        )
-        is Action.TitleUpdated -> state.copy(
-            lists = state.lists.map {
-                if (it.id == action.list.id) it.copy(title = action.list.title) else it
-            }
-        )
         else -> state
     }
 }

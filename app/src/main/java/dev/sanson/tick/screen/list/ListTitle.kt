@@ -9,6 +9,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
@@ -17,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,9 +54,14 @@ fun ListTitleTextField(
     onDoneAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val textFieldValue = remember { mutableStateOf(TextFieldValue(value)) }
+
     BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
+        value = textFieldValue.value,
+        onValueChange = {
+            textFieldValue.value = it
+            onValueChange(it.text)
+        },
         modifier = modifier,
         keyboardOptions = KeyboardOptions.Default.copy(
             capitalization = KeyboardCapitalization.Sentences,
