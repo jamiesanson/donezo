@@ -1,13 +1,13 @@
-package dev.sanson.tick.sync
+package dev.sanson.tick.backend
 
 import dev.sanson.tick.model.TodoList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class Syncer : SyncMenuItem, SyncSetupFlow {
+abstract class Backend : BackendMenuItem, BackendSetupFlow {
     val status: StateFlow<Status> = MutableStateFlow(Status.Disabled)
 
-    abstract fun onChanged(items: List<TodoList>)
+    abstract fun update(items: List<TodoList>)
 
     abstract fun syncNow()
 

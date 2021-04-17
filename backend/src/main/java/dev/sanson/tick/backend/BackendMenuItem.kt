@@ -1,6 +1,6 @@
-package dev.sanson.tick.sync
+package dev.sanson.tick.backend
 
-interface SyncMenuItem {
+interface BackendMenuItem {
     // TODO: This should be a composable
     val iconUri: String
     val title: String

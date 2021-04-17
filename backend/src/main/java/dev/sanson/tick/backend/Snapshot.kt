@@ -1,4 +1,4 @@
-package dev.sanson.tick.sync
+package dev.sanson.tick.backend
 
 import dev.sanson.tick.model.TodoList
 import java.time.Instant

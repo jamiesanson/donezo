@@ -1,8 +1,8 @@
-package dev.sanson.tick.sync.git.github
+package dev.sanson.tick.backend.git.github
 
-import dev.sanson.tick.sync.git.GitSyncer
+import dev.sanson.tick.backend.git.GitBackend
 
-class GitHubSyncer: GitSyncer() {
+class GitHubBackend: GitBackend() {
     override val iconUri: String
         get() = TODO("Not yet implemented")
 
