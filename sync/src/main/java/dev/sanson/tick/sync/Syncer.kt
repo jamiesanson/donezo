@@ -1,27 +1,41 @@
 package dev.sanson.tick.sync
 
 import dev.sanson.tick.model.TodoList
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-interface Syncer: SyncUIProvider {
+abstract class Syncer : SyncMenuItem, SyncSetupFlow {
+    val status: StateFlow<Status> = MutableStateFlow(Status.Disabled)
 
-    val syncerId: String
+    abstract fun onChanged(items: List<TodoList>)
 
-    val state: StateFlow<State>
+    abstract fun syncNow()
 
-    suspend fun enable()
-    suspend fun disable()
+    protected fun updateStatus(
+        enabled: Boolean = status.value.enabled,
+        currentSnapshot: Snapshot = status.value.currentSnapshot,
+        syncState: State = status.value.syncState
+    ) {
+        (status as MutableStateFlow).compareAndSet(
+            expect = status.value,
+            update = Status(enabled, currentSnapshot, syncState)
+        )
+    }
 
-    fun onChanged(items: List<TodoList>)
-
-    sealed class State {
-        object Syncing : State()
-        object Idle : State()
-
-        data class SyncError(val resolution: Resolution) : State() {
-            sealed class Resolution {
-                data class PresentAlert(val message: String): Resolution()
-            }
+    data class Status(
+        val enabled: Boolean,
+        val currentSnapshot: Snapshot,
+        val syncState: State
+    ) {
+        companion object {
+            val Disabled =
+                Status(enabled = false, currentSnapshot = Snapshot.Empty, syncState = State.Idle)
         }
+    }
+
+    enum class State {
+        Idle,
+        Syncing,
+        Error
     }
 }
