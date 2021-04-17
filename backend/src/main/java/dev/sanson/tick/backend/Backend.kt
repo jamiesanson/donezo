@@ -4,14 +4,24 @@ import dev.sanson.tick.model.TodoList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class Backend : BackendMenuItem, BackendSetupFlow {
-    val status: StateFlow<Status> = MutableStateFlow(Status.Disabled)
+/**
+ * [Backend] implementation exposing UI for presenting in menu item and perform first time setup.
+ */
+interface PresentableBackend: Backend, BackendMenuItem, BackendSetupFlow
 
-    abstract fun update(items: List<TodoList>)
+/**
+ * A [Backend] is a remote destination for syncing todo items to. Backend implementations, when enabled,
+ * are responsible for syncing content on their own schedule, and providing synced todo items
+ * in a [Snapshot].
+ */
+interface Backend {
+    val status: StateFlow<Status>
 
-    abstract fun syncNow()
+    fun update(items: List<TodoList>)
 
-    protected fun updateStatus(
+    fun syncNow()
+
+    fun updateStatus(
         enabled: Boolean = status.value.enabled,
         currentSnapshot: Snapshot = status.value.currentSnapshot,
         syncState: State = status.value.syncState

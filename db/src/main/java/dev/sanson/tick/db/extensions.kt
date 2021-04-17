@@ -26,13 +26,7 @@ fun Database.getAllAsFlow(): Flow<List<TodoList>> {
                 TodoList(
                     id = list.id,
                     title = list.title,
-                    items = todoItems.map {
-                        dev.sanson.tick.model.Todo(
-                            it.id,
-                            it.text,
-                            it.isDone
-                        )
-                    }
+                    items = todoItems.map(Todo::toModel)
                 )
             }
         }
