@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -12,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.android.LocalDispatch
@@ -38,8 +38,8 @@ fun ListScreen(state: Screen.Lists) {
                     ListTitle(list = list)
                 }
 
-                items(count = list.items.size, key = { list.items[it] }) { index ->
-                    TodoRow(item = list.items[index])
+                items(list.items) { item ->
+                    TodoRow(item = item)
                 }
             }
         }

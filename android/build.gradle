@@ -36,7 +36,6 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion "1.4.30"
         kotlinCompilerExtensionVersion compose_version
         useLiveLiterals true
     }
