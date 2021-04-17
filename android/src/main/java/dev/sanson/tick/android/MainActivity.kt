@@ -1,9 +1,11 @@
 package dev.sanson.tick.android
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.lifecycle.ViewModel
@@ -50,6 +52,20 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 delay(500)
                 viewModel.store.dispatch(Action.Navigation.Todo)
+            }
+
+            DisposableEffect(onBackPressedDispatcher) {
+                val callback = object: OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        viewModel.store.dispatch(Action.Navigation.Back)
+                    }
+                }
+
+                onBackPressedDispatcher.addCallback(callback)
+
+                onDispose {
+                    callback.remove()
+                }
             }
 
             CompositionLocalProvider(LocalDispatch provides viewModel.store.dispatch) {
