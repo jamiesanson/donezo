@@ -1,8 +1,11 @@
 package dev.sanson.tick.backend
 
+import androidx.compose.runtime.Composable
+
 interface BackendMenuItem {
-    // TODO: This should be a composable
-    val iconUri: String
+    @Composable
+    fun Icon()
+
     val title: String
     val description: String
 }

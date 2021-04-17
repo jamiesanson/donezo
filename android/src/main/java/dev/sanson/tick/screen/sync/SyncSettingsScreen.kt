@@ -45,7 +45,7 @@ fun SyncSettingsScreen(state: Screen.SyncSettings) {
 fun BackendRow(backend: PresentableBackend) {
     ListItem(
         icon = {
-            Icon(Icons.Filled.Face, contentDescription = "GitHub")
+            backend.Icon()
         },
         secondaryText = {
             Text(backend.description)
