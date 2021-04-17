@@ -7,5 +7,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "Tick"
 
-include ':app'
+include ':android'
 include ':todo'
+include ':db'
+include ':model'
+include ':arch'
+include ':sync'
+include ':git'
