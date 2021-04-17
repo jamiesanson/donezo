@@ -2,8 +2,8 @@ package nz.sanson.tick.todo.di
 
 import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
+import dev.sanson.tick.db.Database
 import kotlinx.coroutines.CoroutineScope
-import nz.sanson.tick.todo.Database
 import org.koin.dsl.module
 
 fun ApplicationModule(context: Context, applicationScope: CoroutineScope) = module {

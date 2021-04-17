@@ -2,11 +2,12 @@
 
 package nz.sanson.tick.todo
 
+import dev.sanson.tick.arch.di.inject
+import dev.sanson.tick.db.Database
 import kotlinx.coroutines.launch
-import nz.sanson.tick.todo.di.inject
-import nz.sanson.tick.todo.model.Todo
-import nz.sanson.tick.todo.model.TodoList
-import nz.sanson.tick.todo.redux.Thunk
+import dev.sanson.tick.model.Todo
+import dev.sanson.tick.model.TodoList
+import dev.sanson.tick.arch.redux.Thunk
 
 sealed class Action {
     sealed class Navigation : Action() {

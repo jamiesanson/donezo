@@ -9,10 +9,8 @@ import org.reduxkotlin.Reducer
  * reducer should change the screen - that is done in the [NavigationReducer].
  */
 val RootReducer: Reducer<AppState> = { state, action ->
-    AppState.screen.modify(state) {
-        when (val current = it) {
-            is Screen.Splash -> SplashReducer(current, action)
-            is Screen.Lists -> ListsReducer(current, action)
-        }
-    }
+    state.copy(screen = when (val screen = state.screen) {
+        is Screen.Splash -> SplashReducer(screen, action)
+        is Screen.Lists -> ListsReducer(screen, action)
+    })
 }

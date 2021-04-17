@@ -1,3 +1,7 @@
 package dev.sanson.tick.model
 
-class Todo
+data class Todo(
+    val id: Long? = null,
+    val text: String,
+    val isDone: Boolean
+)

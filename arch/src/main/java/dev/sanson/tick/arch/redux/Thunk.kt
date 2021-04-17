@@ -1,7 +1,7 @@
-package nz.sanson.tick.todo.redux
+package dev.sanson.tick.arch.redux
 
 import kotlinx.coroutines.CoroutineScope
-import nz.sanson.tick.todo.di.inject
+import dev.sanson.tick.arch.di.inject
 import org.reduxkotlin.Dispatcher
 import org.reduxkotlin.GetState
 import org.reduxkotlin.Middleware

@@ -1,4 +1,4 @@
-package nz.sanson.tick.todo.di
+package dev.sanson.tick.arch.di
 
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier

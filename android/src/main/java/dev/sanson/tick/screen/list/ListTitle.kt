@@ -28,7 +28,7 @@ import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.theme.purple200
 import nz.sanson.tick.todo.Action
-import nz.sanson.tick.todo.model.TodoList
+import dev.sanson.tick.model.TodoList
 
 @Composable
 fun ListTitle(list: TodoList) {

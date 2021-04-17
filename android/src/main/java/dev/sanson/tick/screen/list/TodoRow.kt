@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.theme.TickTheme
 import nz.sanson.tick.todo.Action
-import nz.sanson.tick.todo.model.Todo
+import dev.sanson.tick.model.Todo
 
 @Composable
 fun TodoRow(item: Todo) {
@@ -131,7 +131,10 @@ private fun TodoRow(
 fun TodoPreview() {
     TickTheme {
         Scaffold {
-            TodoRow(item = Todo(text = "Hang the washing out", isDone = false), {}, {}, {})
+            TodoRow(item = Todo(
+                text = "Hang the washing out",
+                isDone = false
+            ), {}, {}, {})
         }
     }
 }

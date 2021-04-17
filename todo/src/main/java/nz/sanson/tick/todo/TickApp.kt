@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import nz.sanson.tick.todo.di.ApplicationModule
 import nz.sanson.tick.todo.feature.list.ListObservationMiddleware
 import nz.sanson.tick.todo.feature.navigation.NavigationReducer
-import nz.sanson.tick.todo.redux.createThunkMiddleware
+import dev.sanson.tick.arch.redux.createThunkMiddleware
 import org.koin.core.context.startKoin
 import org.reduxkotlin.Store
 import org.reduxkotlin.applyMiddleware

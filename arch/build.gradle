@@ -4,6 +4,13 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    api "org.reduxkotlin:redux-kotlin-threadsafe-jvm:0.5.5"
+    api "io.insert-koin:koin-core:3.0.1-beta-2"
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
 }

@@ -36,16 +36,12 @@ android {
 }
 
 dependencies {
-    api "org.reduxkotlin:redux-kotlin-threadsafe-jvm:0.5.5"
+    api project(":model")
+    api project(":arch")
 
-    def arrow_version = "0.11.0"
-    implementation "io.arrow-kt:arrow-optics:$arrow_version"
-    implementation "io.arrow-kt:arrow-syntax:$arrow_version"
-    kapt "io.arrow-kt:arrow-meta:$arrow_version"
+    implementation project(":db")
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
-
-    implementation "io.insert-koin:koin-core:3.0.1-beta-2"
 
     implementation "com.squareup.sqldelight:android-driver:1.4.3"
     implementation "com.squareup.sqldelight:coroutines-extensions:1.4.4"
