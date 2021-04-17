@@ -1,6 +1,6 @@
 package dev.sanson.tick.screen.splash
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -9,9 +9,12 @@ import dev.sanson.tick.theme.TickTheme
 
 @Composable
 fun SplashScreen() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6")
+    Box(contentAlignment = Alignment.Center) {
+        Text(
+            text = "\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6"
+        )
     }
+
 }
 
 @Preview(showBackground = true)

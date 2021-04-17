@@ -2,6 +2,7 @@ package nz.sanson.tick.todo
 
 import nz.sanson.tick.todo.feature.list.ListsReducer
 import nz.sanson.tick.todo.feature.splash.SplashReducer
+import nz.sanson.tick.todo.feature.sync.SyncReducer
 import org.reduxkotlin.Reducer
 
 /**
@@ -9,8 +10,9 @@ import org.reduxkotlin.Reducer
  * reducer should change the screen - that is done in the [NavigationReducer].
  */
 val RootReducer: Reducer<AppState> = { state, action ->
-    state.copy(screen = when (val screen = state.screen) {
+    state.copy(currentScreen = when (val screen = state.currentScreen) {
         is Screen.Splash -> SplashReducer(screen, action)
         is Screen.Lists -> ListsReducer(screen, action)
+        is Screen.SyncSettings -> SyncReducer(screen, action)
     })
 }

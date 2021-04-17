@@ -1,9 +1,13 @@
 package nz.sanson.tick.todo
 
+import dev.sanson.tick.backend.Backend
+import dev.sanson.tick.backend.PresentableBackend
 import dev.sanson.tick.model.TodoList
 
 data class AppState(
-    val screen: Screen = Screen.Splash
+    val backends: List<Backend>,
+    val backstack: List<Screen> = emptyList(),
+    val currentScreen: Screen = Screen.Splash
 )
 
 /**
@@ -19,4 +23,12 @@ sealed class Screen {
         val loading: Boolean = true,
         val lists: List<TodoList> = emptyList(),
     ) : Screen()
+
+    data class SyncSettings(
+        val backends: List<PresentableBackend>
+    ) : Screen() {
+        companion object {
+            fun fromBackends(backends: List<Backend>) = SyncSettings(backends = backends.mapNotNull { it as? PresentableBackend })
+        }
+    }
 }

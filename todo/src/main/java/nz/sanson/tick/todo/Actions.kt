@@ -11,7 +11,9 @@ import dev.sanson.tick.arch.redux.Thunk
 
 sealed class Action {
     sealed class Navigation : Action() {
+        object Back : Navigation()
         object Todo : Navigation()
+        object SyncSettings: Navigation()
     }
 
     data class ListsLoaded(val lists: List<TodoList>) : Action()

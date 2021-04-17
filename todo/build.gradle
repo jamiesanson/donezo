@@ -38,6 +38,7 @@ android {
 dependencies {
     api project(":model")
     api project(":arch")
+    api project(":backend")
 
     implementation project(":db")
 
