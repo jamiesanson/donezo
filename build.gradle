@@ -1,25 +1,14 @@
 buildscript {
-    apply from: 'gradle/dependencies.gradle'
-
-    ext {
-        compose_version = '1.0.0-beta04'
-    }
-
     repositories {
         google()
         mavenCentral()
-        maven { url "https://dl.bintray.com/badoo/maven" }
-        maven { url "https://plugins.gradle.org/m2/" }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0-alpha14'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:$versions.kotlin"
-        classpath "com.squareup.sqldelight:gradle-plugin:$versions.sqlDelight"
-        classpath "org.jlleitschuh.gradle:ktlint-gradle:$versions.ktLintPlugin"
-        classpath 'com.squareup.sqldelight:gradle-plugin:1.4.4'
+        classpath libs.android.plugin
+        classpath libs.kotlin.plugin
+        classpath libs.kotlin.serialization.plugin
+        classpath libs.sqldelight.plugin
     }
 }
 
@@ -32,6 +21,7 @@ apply from: rootProject.file("spotless.gradle")
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
+        useIr = true
         freeCompilerArgs += ["-Xallow-jvm-ir-dependencies"]
     }
 }

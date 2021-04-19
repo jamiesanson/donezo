@@ -8,31 +8,27 @@ apply plugin: 'com.squareup.sqldelight'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.3"
-
-    defaultConfig {
-        minSdkVersion 24
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-    }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+}
+
+repositories {
+    mavenCentral()
+    google()
 }
 
 dependencies {
@@ -42,15 +38,8 @@ dependencies {
 
     implementation project(":db")
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
+    implementation libs.kotlinx.coroutines.core
 
-    implementation "com.squareup.sqldelight:android-driver:1.4.3"
-    implementation "com.squareup.sqldelight:coroutines-extensions:1.4.4"
-
-    testImplementation 'junit:junit:4.13.2'
-}
-
-repositories {
-    mavenCentral()
-    google()
+    implementation libs.sqldelight.android.driver
+    implementation libs.sqldelight.coroutines.extensions
 }

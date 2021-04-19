@@ -19,6 +19,6 @@ java {
 dependencies {
     implementation project(":model")
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
-    implementation "com.squareup.sqldelight:coroutines-extensions:1.4.4"
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.sqldelight.coroutines.extensions
 }

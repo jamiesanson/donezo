@@ -8,15 +8,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-dependencies {
-    implementation project(':backend')
-
-    implementation "androidx.compose.runtime:runtime:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
-}
-
 android {
     compileSdkVersion 30
 
@@ -25,13 +16,23 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.0.0-beta04"
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
-}
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = '1.8'
     }
 }
 
+dependencies {
+    implementation project(':backend')
+
+    implementation libs.bundles.compose
+
+    implementation libs.kotlinx.coroutines.core
+}
