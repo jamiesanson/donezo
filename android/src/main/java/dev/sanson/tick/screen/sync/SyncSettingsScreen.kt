@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
 import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.backend.PresentableBackend

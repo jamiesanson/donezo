@@ -1,6 +1,6 @@
 package dev.sanson.tick.backend.git.github
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +16,7 @@ object GitHubMenuItem : BackendMenuItem {
         Icon(
             painter = painterResource(id = R.drawable.ic_github),
             contentDescription = "GitHub logo",
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.size(32.dp)
         )
     }
 
