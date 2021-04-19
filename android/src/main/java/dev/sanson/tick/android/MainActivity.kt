@@ -12,8 +12,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dev.sanson.tick.App
 import dev.sanson.tick.backend.git.github.GitHubBackend
+import dev.sanson.tick.db.Database
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,12 +31,6 @@ import dev.sanson.tick.todo.createApp
  */
 val LocalDispatch = compositionLocalOf<(Any) -> Any> { error("No default dispatch") }
 
-/**
- * Backends available to the Android application
- */
-private val availableBackends = listOf(
-    GitHubBackend
-)
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,12 +38,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel: TickViewModel = viewModel()
-            
+
             val finishActivity = viewModel.finishActivityTrigger.collectAsState(initial = false)
             if (finishActivity.value) {
                 finish()
             }
-            
+
             // Make the splash screen last half a second - replace with animations at some point
             lifecycleScope.launch {
                 delay(500)
@@ -55,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             DisposableEffect(onBackPressedDispatcher) {
-                val callback = object: OnBackPressedCallback(true) {
+                val callback = object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
                         viewModel.store.dispatch(Action.Navigation.Back)
                     }
@@ -79,14 +75,28 @@ class MainActivity : AppCompatActivity() {
 }
 
 class TickViewModel : ViewModel() {
+
+    /**
+     * Backends available to the Android application
+     */
+    private val availableBackends = listOf(
+        GitHubBackend
+    )
+
+    /**
+     * Database driver for the Android platform
+     */
+    private val databaseDriver
+        get() = AndroidSqliteDriver(Database.Schema, TickApplication.context, "todo.db")
+
     /**
      * The store holding the whole app's state. We scope all internal
      * coroutines calls to this ViewModel, which represents the lifecycle of the entire application.
      */
     val store = createApp(
-        context = TickApplication.context,
         applicationScope = viewModelScope,
         appConfiguration = Configuration(
+            databaseDriver = databaseDriver,
             availableBackends = availableBackends
         ),
         closeApp = {

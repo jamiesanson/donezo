@@ -40,6 +40,5 @@ dependencies {
 
     implementation libs.kotlinx.coroutines.core
 
-    implementation libs.sqldelight.android.driver
     implementation libs.sqldelight.coroutines.extensions
 }

@@ -1,6 +1,6 @@
 package dev.sanson.tick.todo
 
-import android.content.Context
+import com.squareup.sqldelight.db.SqlDriver
 import kotlinx.coroutines.CoroutineScope
 import dev.sanson.tick.todo.di.ApplicationModule
 import dev.sanson.tick.todo.feature.list.ListObservationMiddleware
@@ -15,6 +15,7 @@ import org.reduxkotlin.combineReducers
 import org.reduxkotlin.createThreadSafeStore
 
 data class Configuration(
+    val databaseDriver: SqlDriver,
     val availableBackends: List<Backend>
 )
 
@@ -23,13 +24,12 @@ data class Configuration(
  * frontend.
  */
 fun createApp(
-    context: Context,
     applicationScope: CoroutineScope,
     appConfiguration: Configuration,
     closeApp: () -> Unit
 ): Store<AppState> {
     startKoin {
-        modules(ApplicationModule(context, applicationScope, appConfiguration))
+        modules(ApplicationModule(applicationScope, appConfiguration))
     }
 
     val reducer = combineReducers(NavigationReducer, RootReducer)

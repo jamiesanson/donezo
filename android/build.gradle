@@ -70,6 +70,9 @@ dependencies {
     implementation libs.bundles.compose
     implementation libs.activity.compose
 
+    implementation libs.sqldelight.android.driver
+
     implementation project(":todo")
     implementation project(":git")
+    implementation project(":db")
 }
