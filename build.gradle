@@ -16,7 +16,7 @@ plugins {
     id "com.diffplug.spotless" version "5.12.1"
 }
 
-apply from: rootProject.file("spotless.gradle")
+apply from: rootProject.file("gradle/spotless.gradle")
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {

@@ -49,7 +49,7 @@ android {
         exclude("META-INF/*.kotlin_module")
         exclude 'plugin.properties'
     }
-    
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
