@@ -1,8 +1,8 @@
-package nz.sanson.tick.todo.feature.navigation
+package dev.sanson.tick.todo.feature.navigation
 
-import nz.sanson.tick.todo.Action
-import nz.sanson.tick.todo.AppState
-import nz.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.Action
+import dev.sanson.tick.todo.AppState
+import dev.sanson.tick.todo.Screen
 import org.reduxkotlin.middleware
 import org.reduxkotlin.reducerForActionType
 

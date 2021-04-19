@@ -1,4 +1,4 @@
-package nz.sanson.tick.todo.feature.list
+package dev.sanson.tick.todo.feature.list
 
 import dev.sanson.tick.arch.di.inject
 import dev.sanson.tick.db.Database
@@ -7,9 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import nz.sanson.tick.todo.Action
-import nz.sanson.tick.todo.AppState
-import nz.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.Action
+import dev.sanson.tick.todo.AppState
+import dev.sanson.tick.todo.Screen
 import org.reduxkotlin.Reducer
 import org.reduxkotlin.middleware
 

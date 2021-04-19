@@ -19,10 +19,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import nz.sanson.tick.todo.Action
-import nz.sanson.tick.todo.AppState
-import nz.sanson.tick.todo.Configuration
-import nz.sanson.tick.todo.createApp
+import dev.sanson.tick.todo.Action
+import dev.sanson.tick.todo.AppState
+import dev.sanson.tick.todo.Configuration
+import dev.sanson.tick.todo.createApp
 
 /**
  * Composition local providing convenient access to the store dispatch function

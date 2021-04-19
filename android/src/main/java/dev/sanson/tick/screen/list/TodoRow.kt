@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.theme.TickTheme
-import nz.sanson.tick.todo.Action
+import dev.sanson.tick.todo.Action
 import dev.sanson.tick.model.Todo
 
 @Composable

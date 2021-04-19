@@ -10,8 +10,8 @@ import dev.sanson.tick.screen.list.ListScreen
 import dev.sanson.tick.screen.splash.SplashScreen
 import dev.sanson.tick.screen.sync.SyncSettingsScreen
 import dev.sanson.tick.theme.TickTheme
-import nz.sanson.tick.todo.AppState
-import nz.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.AppState
+import dev.sanson.tick.todo.Screen
 
 @Composable
 fun App(state: AppState) {

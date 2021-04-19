@@ -1,8 +1,8 @@
-package nz.sanson.tick.todo
+package dev.sanson.tick.todo
 
-import nz.sanson.tick.todo.feature.list.ListsReducer
-import nz.sanson.tick.todo.feature.splash.SplashReducer
-import nz.sanson.tick.todo.feature.sync.SyncReducer
+import dev.sanson.tick.todo.feature.list.ListsReducer
+import dev.sanson.tick.todo.feature.splash.SplashReducer
+import dev.sanson.tick.todo.feature.sync.SyncReducer
 import org.reduxkotlin.Reducer
 
 /**

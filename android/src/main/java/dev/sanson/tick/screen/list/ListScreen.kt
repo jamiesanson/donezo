@@ -17,10 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.theme.TickTheme
-import nz.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.Screen
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
-import nz.sanson.tick.todo.Action
+import dev.sanson.tick.todo.Action
 
 @Composable
 fun ListScreen(state: Screen.Lists) {

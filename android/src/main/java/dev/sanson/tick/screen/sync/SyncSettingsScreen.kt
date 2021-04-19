@@ -8,8 +8,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.backend.PresentableBackend
-import nz.sanson.tick.todo.Action
-import nz.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.Action
+import dev.sanson.tick.todo.Screen
 
 @Composable
 fun SyncSettingsScreen(state: Screen.SyncSettings) {

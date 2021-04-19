@@ -1,13 +1,13 @@
-package nz.sanson.tick.todo
+package dev.sanson.tick.todo
 
 import android.content.Context
 import kotlinx.coroutines.CoroutineScope
-import nz.sanson.tick.todo.di.ApplicationModule
-import nz.sanson.tick.todo.feature.list.ListObservationMiddleware
-import nz.sanson.tick.todo.feature.navigation.NavigationReducer
+import dev.sanson.tick.todo.di.ApplicationModule
+import dev.sanson.tick.todo.feature.list.ListObservationMiddleware
+import dev.sanson.tick.todo.feature.navigation.NavigationReducer
 import dev.sanson.tick.arch.redux.createThunkMiddleware
 import dev.sanson.tick.backend.Backend
-import nz.sanson.tick.todo.feature.navigation.BackNavigationMiddleware
+import dev.sanson.tick.todo.feature.navigation.BackNavigationMiddleware
 import org.koin.core.context.startKoin
 import org.reduxkotlin.Store
 import org.reduxkotlin.applyMiddleware

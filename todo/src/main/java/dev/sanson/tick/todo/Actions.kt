@@ -1,6 +1,6 @@
 @file:Suppress("FunctionName")
 
-package nz.sanson.tick.todo
+package dev.sanson.tick.todo
 
 import dev.sanson.tick.arch.di.inject
 import dev.sanson.tick.db.Database

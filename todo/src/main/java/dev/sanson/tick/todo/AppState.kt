@@ -1,4 +1,4 @@
-package nz.sanson.tick.todo
+package dev.sanson.tick.todo
 
 import dev.sanson.tick.backend.Backend
 import dev.sanson.tick.backend.PresentableBackend
