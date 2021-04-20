@@ -22,6 +22,9 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
         useIr = true
-        freeCompilerArgs += ["-Xallow-jvm-ir-dependencies"]
+        freeCompilerArgs += [
+                "-Xallow-jvm-ir-dependencies",
+                "-Xopt-in=kotlin.RequiresOptIn"
+        ]
     }
 }

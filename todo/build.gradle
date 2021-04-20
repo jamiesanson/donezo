@@ -41,4 +41,6 @@ dependencies {
     implementation libs.kotlinx.coroutines.core
 
     implementation libs.sqldelight.coroutines.extensions
+
+    testImplementation libs.bundles.unittesting
 }

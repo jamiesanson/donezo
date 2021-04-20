@@ -5,7 +5,7 @@ import dev.sanson.tick.backend.PresentableBackend
 import dev.sanson.tick.model.TodoList
 
 data class AppState(
-    val backends: List<Backend>,
+    val backends: List<Backend> = emptyList(),
     val backstack: List<Screen> = emptyList(),
     val currentScreen: Screen = Screen.Splash
 )
@@ -25,7 +25,7 @@ sealed class Screen {
     ) : Screen()
 
     data class SyncSettings(
-        val backends: List<PresentableBackend>
+        val backends: List<PresentableBackend> = emptyList()
     ) : Screen() {
         companion object {
             fun fromBackends(backends: List<Backend>) = SyncSettings(backends = backends.mapNotNull { it as? PresentableBackend })

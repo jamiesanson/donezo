@@ -17,7 +17,7 @@ fun BackNavigationMiddleware(exitApplication: () -> Unit) = middleware<AppState>
 val NavigationReducer = reducerForActionType<AppState, Action.Navigation> { state, action ->
     when (action) {
         Action.Navigation.Back -> state.pop()
-        Action.Navigation.SyncSettings -> state.push(Screen.SyncSettings.fromBackends(state.backends))
+        Action.Navigation.SyncSettings -> if (state.currentScreen is Screen.Lists) state.push(Screen.SyncSettings.fromBackends(state.backends)) else state
         Action.Navigation.Todo -> if (state.currentScreen == Screen.Splash) state.replace(Screen.Lists()) else state
     }
 }
