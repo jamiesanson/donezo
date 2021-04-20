@@ -13,25 +13,24 @@ import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
 
 @RunWith(TestParameterInjector::class)
-class NavigationTests : StoreTest() {
+class NavigationTests : ReduxAppTest() {
 
     //region parameterised tests
     data class AllowedTransition(val from: Screen, val to: Screen, val on: Action.Navigation)
 
     private val allowedTransitions = listOf(
-        AllowedTransition(Screen.Splash, Screen.Lists(), Action.Navigation.Todo),
         AllowedTransition(Screen.Lists(), Screen.SyncSettings(), Action.Navigation.SyncSettings),
     )
 
-    private class ScreenProvider: TestParameter.TestParameterValuesProvider {
+    private class ScreenProvider : TestParameter.TestParameterValuesProvider {
         override fun provideValues(): MutableList<*> {
-            return mutableListOf(Screen.Splash, Screen.Lists(), Screen.SyncSettings())
+            return mutableListOf(Screen.Lists(), Screen.SyncSettings())
         }
     }
 
-    private class ActionProvider: TestParameter.TestParameterValuesProvider {
+    private class ActionProvider : TestParameter.TestParameterValuesProvider {
         override fun provideValues(): MutableList<*> {
-            return mutableListOf(Action.Navigation.SyncSettings, Action.Navigation.Todo)
+            return mutableListOf(Action.Navigation.SyncSettings)
         }
     }
 
@@ -57,20 +56,8 @@ class NavigationTests : StoreTest() {
     //endregion
 
     @Test
-    fun `splash screen is initial destination`() {
-        store.state.currentScreen shouldBe Screen.Splash
-    }
-
-    @Test
-    fun `splash screen isnt added to backstack`() {
-        // Start on splash screen
-        store.state.currentScreen shouldBe Screen.Splash
-
-        // Navigate away
-        store.dispatch(Action.Navigation.Todo)
-
-        // Backstack should be empty
-        store.state.backstack shouldBe emptyList()
+    fun `list screen is initial destination`() {
+        store.state.currentScreen shouldBe Screen.Lists()
     }
 
     @Test
@@ -79,9 +66,6 @@ class NavigationTests : StoreTest() {
 
         var closeAppCalled = false
         val store = createApp { closeAppCalled = true }
-
-        // Navigate to todo list screen
-        store.dispatch(Action.Navigation.Todo)
 
         // Backstack should be empty
         store.state.backstack shouldBe emptyList()

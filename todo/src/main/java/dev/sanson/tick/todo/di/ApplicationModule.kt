@@ -1,8 +1,8 @@
 package dev.sanson.tick.todo.di
 
 import dev.sanson.tick.db.Database
-import kotlinx.coroutines.CoroutineScope
 import dev.sanson.tick.todo.Configuration
+import kotlinx.coroutines.CoroutineScope
 import org.koin.dsl.module
 
 fun ApplicationModule(applicationScope: CoroutineScope, configuration: Configuration) = module {

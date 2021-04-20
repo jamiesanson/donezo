@@ -1,13 +1,12 @@
 package dev.sanson.tick.todo
 
 import com.squareup.sqldelight.db.SqlDriver
-import kotlinx.coroutines.CoroutineScope
-import dev.sanson.tick.todo.di.ApplicationModule
-import dev.sanson.tick.todo.feature.list.ListObservationMiddleware
-import dev.sanson.tick.todo.feature.navigation.NavigationReducer
 import dev.sanson.tick.arch.redux.createThunkMiddleware
 import dev.sanson.tick.backend.Backend
+import dev.sanson.tick.todo.di.ApplicationModule
 import dev.sanson.tick.todo.feature.navigation.BackNavigationMiddleware
+import dev.sanson.tick.todo.feature.navigation.NavigationReducer
+import kotlinx.coroutines.CoroutineScope
 import org.koin.core.context.startKoin
 import org.reduxkotlin.Store
 import org.reduxkotlin.applyMiddleware
@@ -36,7 +35,6 @@ fun createApp(
 
     val middleware = applyMiddleware(
         createThunkMiddleware(),
-        ListObservationMiddleware,
         BackNavigationMiddleware(closeApp)
     )
 
@@ -44,7 +42,7 @@ fun createApp(
 
     val store = createThreadSafeStore(reducer, initialState, middleware)
 
-    store.dispatch(Action.SeedDatabaseIfEmpty())
+    store.dispatch(Action.LoadFromDatabase())
 
     return store
 }

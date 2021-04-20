@@ -7,7 +7,7 @@ import dev.sanson.tick.model.TodoList
 data class AppState(
     val backends: List<Backend> = emptyList(),
     val backstack: List<Screen> = emptyList(),
-    val currentScreen: Screen = Screen.Splash
+    val currentScreen: Screen = Screen.Lists()
 )
 
 /**
@@ -16,8 +16,6 @@ data class AppState(
  * Tick is.
  */
 sealed class Screen {
-
-    object Splash : Screen()
 
     data class Lists(
         val loading: Boolean = true,

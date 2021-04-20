@@ -1,7 +1,7 @@
 package dev.sanson.tick.arch.redux
 
-import kotlinx.coroutines.CoroutineScope
 import dev.sanson.tick.arch.di.inject
+import kotlinx.coroutines.CoroutineScope
 import org.reduxkotlin.Dispatcher
 import org.reduxkotlin.GetState
 import org.reduxkotlin.Middleware

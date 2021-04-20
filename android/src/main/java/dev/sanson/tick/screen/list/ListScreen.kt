@@ -16,11 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.android.LocalDispatch
-import dev.sanson.tick.theme.TickTheme
-import dev.sanson.tick.todo.Screen
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
+import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.todo.Action
+import dev.sanson.tick.todo.Screen
 
 @Composable
 fun ListScreen(state: Screen.Lists) {
@@ -28,9 +28,12 @@ fun ListScreen(state: Screen.Lists) {
         val dispatch = LocalDispatch.current
         TopAppBar {
             Text("")
-            Icon(Icons.Filled.Settings, contentDescription = "Sync settings", Modifier.clickable {
-                dispatch(Action.Navigation.SyncSettings)
-            })
+            Icon(
+                Icons.Filled.Settings, contentDescription = "Sync settings",
+                Modifier.clickable {
+                    dispatch(Action.Navigation.SyncSettings)
+                }
+            )
         }
         state.lists.forEach { list ->
             LazyColumn {

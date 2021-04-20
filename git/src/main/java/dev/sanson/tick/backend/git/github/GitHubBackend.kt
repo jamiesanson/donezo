@@ -9,7 +9,8 @@ import dev.sanson.tick.backend.git.internal.GitBackend
 /**
  * [Backend] for syncing to do items to and from a git repo hosted on GitHub.
  */
-object GitHubBackend: PresentableBackend,
+object GitHubBackend :
+    PresentableBackend,
     Backend by GitBackend(repoSshUrl = "TODO"),
     BackendMenuItem by GitHubMenuItem,
     BackendSetupFlow by GitHubSetupFlow

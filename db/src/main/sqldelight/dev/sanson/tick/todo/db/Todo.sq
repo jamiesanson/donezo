@@ -10,6 +10,11 @@ SELECT *
 FROM todo
 WHERE id = :id;
 
+selectByListId:
+SELECT *
+FROM todo
+WHERE listId = :listId;
+
 selectAll:
 SELECT *
 FROM todo;

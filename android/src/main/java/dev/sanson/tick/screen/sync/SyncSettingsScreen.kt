@@ -2,7 +2,13 @@ package dev.sanson.tick.screen.sync
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.ListItem
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -21,7 +27,7 @@ fun SyncSettingsScreen(state: Screen.SyncSettings) {
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                           dispatch(Action.Navigation.Back)
+                            dispatch(Action.Navigation.Back)
                         }
                     ) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back to Lists")
@@ -36,7 +42,6 @@ fun SyncSettingsScreen(state: Screen.SyncSettings) {
             }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)

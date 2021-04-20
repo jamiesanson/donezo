@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * [Backend] implementation exposing UI for presenting in menu item and perform first time setup.
  */
-interface PresentableBackend: Backend, BackendMenuItem, BackendSetupFlow
+interface PresentableBackend : Backend, BackendMenuItem, BackendSetupFlow
 
 /**
  * A [Backend] is a remote destination for syncing todo items to. Backend implementations, when enabled,

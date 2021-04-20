@@ -27,9 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import dev.sanson.tick.android.LocalDispatch
+import dev.sanson.tick.model.Todo
 import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.todo.Action
-import dev.sanson.tick.model.Todo
 
 @Composable
 fun TodoRow(item: Todo) {
@@ -37,13 +37,13 @@ fun TodoRow(item: Todo) {
     TodoRow(
         item = item,
         onTodoChange = { todo ->
-            dispatch(Action.OnTodoChange(item = todo))
+            dispatch(Action.UpdateTodo(item = todo))
         },
         onDoneAction = {
-            dispatch(Action.NewTodoItemInSameList(item))
+            dispatch(Action.AddTodoAsSibling(item))
         },
         onDeleteItem = {
-            dispatch(Action.DeleteTodoItem(item))
+            dispatch(Action.DeleteTodo(item))
         }
     )
 }
@@ -131,10 +131,13 @@ private fun TodoRow(
 fun TodoPreview() {
     TickTheme {
         Scaffold {
-            TodoRow(item = Todo(
-                text = "Hang the washing out",
-                isDone = false
-            ), {}, {}, {})
+            TodoRow(
+                item = Todo(
+                    text = "Hang the washing out",
+                    isDone = false
+                ),
+                {}, {}, {}
+            )
         }
     }
 }

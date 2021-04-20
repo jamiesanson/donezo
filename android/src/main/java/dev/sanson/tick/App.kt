@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dev.sanson.tick.screen.list.ListScreen
-import dev.sanson.tick.screen.splash.SplashScreen
 import dev.sanson.tick.screen.sync.SyncSettingsScreen
 import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.todo.AppState
@@ -18,7 +17,6 @@ fun App(state: AppState) {
     TickTheme {
         Surface(color = MaterialTheme.colors.surface, modifier = Modifier.fillMaxSize()) {
             when (val screen = state.currentScreen) {
-                is Screen.Splash -> SplashScreen()
                 is Screen.Lists -> ListScreen(state = screen)
                 is Screen.SyncSettings -> SyncSettingsScreen(state = screen)
             }
@@ -29,5 +27,5 @@ fun App(state: AppState) {
 @Preview
 @Composable
 fun AppPreview() {
-    App(state = AppState(currentScreen = Screen.Splash, backends = listOf()))
+    App(state = AppState(currentScreen = Screen.Lists(), backends = listOf()))
 }

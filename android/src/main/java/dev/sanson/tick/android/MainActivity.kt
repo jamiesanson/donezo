@@ -9,28 +9,25 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dev.sanson.tick.App
 import dev.sanson.tick.backend.git.github.GitHubBackend
 import dev.sanson.tick.db.Database
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.AppState
 import dev.sanson.tick.todo.Configuration
 import dev.sanson.tick.todo.createApp
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 /**
  * Composition local providing convenient access to the store dispatch function
  */
 val LocalDispatch = compositionLocalOf<(Any) -> Any> { error("No default dispatch") }
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,12 +39,6 @@ class MainActivity : AppCompatActivity() {
             val finishActivity = viewModel.finishActivityTrigger.collectAsState(initial = false)
             if (finishActivity.value) {
                 finish()
-            }
-
-            // Make the splash screen last half a second - replace with animations at some point
-            lifecycleScope.launch {
-                delay(500)
-                viewModel.store.dispatch(Action.Navigation.Todo)
             }
 
             DisposableEffect(onBackPressedDispatcher) {

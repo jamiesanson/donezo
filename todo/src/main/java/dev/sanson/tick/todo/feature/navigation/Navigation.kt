@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName", "unused")
+
 package dev.sanson.tick.todo.feature.navigation
 
 import dev.sanson.tick.todo.Action
@@ -6,19 +8,23 @@ import dev.sanson.tick.todo.Screen
 import org.reduxkotlin.middleware
 import org.reduxkotlin.reducerForActionType
 
-fun BackNavigationMiddleware(exitApplication: () -> Unit) = middleware<AppState> { store, next, action ->
-    if (action == Action.Navigation.Back && store.state.backstack.isEmpty()) {
-        exitApplication()
-    } else {
-        next(action)
+fun BackNavigationMiddleware(exitApplication: () -> Unit) =
+    middleware<AppState> { store, next, action ->
+        if (action == Action.Navigation.Back && store.state.backstack.isEmpty()) {
+            exitApplication()
+        } else {
+            next(action)
+        }
     }
-}
 
 val NavigationReducer = reducerForActionType<AppState, Action.Navigation> { state, action ->
     when (action) {
         Action.Navigation.Back -> state.pop()
-        Action.Navigation.SyncSettings -> if (state.currentScreen is Screen.Lists) state.push(Screen.SyncSettings.fromBackends(state.backends)) else state
-        Action.Navigation.Todo -> if (state.currentScreen == Screen.Splash) state.replace(Screen.Lists()) else state
+        Action.Navigation.SyncSettings -> if (state.currentScreen is Screen.Lists) state.push(
+            Screen.SyncSettings.fromBackends(
+                state.backends
+            )
+        ) else state
     }
 }
 

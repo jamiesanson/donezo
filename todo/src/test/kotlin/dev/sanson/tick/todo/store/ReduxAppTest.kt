@@ -4,7 +4,6 @@ import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import dev.sanson.tick.db.Database
 import dev.sanson.tick.todo.AppState
 import dev.sanson.tick.todo.Configuration
-import dev.sanson.tick.todo.createApp as createAppImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -12,8 +11,9 @@ import org.junit.After
 import org.junit.Before
 import org.koin.core.context.stopKoin
 import org.reduxkotlin.Store
+import dev.sanson.tick.todo.createApp as createAppImpl
 
-abstract class StoreTest {
+abstract class ReduxAppTest {
 
     lateinit var store: Store<AppState>
 

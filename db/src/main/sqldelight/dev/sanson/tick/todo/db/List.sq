@@ -7,6 +7,12 @@ selectAll:
 SELECT *
 FROM list;
 
+selectById:
+SELECT *
+FROM list
+WHERE id = :id
+LIMIT 1;
+
 insert:
 INSERT INTO list(title)
 VALUES (:title);

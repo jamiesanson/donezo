@@ -1,13 +1,13 @@
 package dev.sanson.tick.backend.git.internal
 
-import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.backend.Backend
+import dev.sanson.tick.model.TodoList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class GitBackend(
     private val repoSshUrl: String
-): Backend {
+) : Backend {
 
     override val status: StateFlow<Backend.Status> = MutableStateFlow(Backend.Status.Disabled)
 

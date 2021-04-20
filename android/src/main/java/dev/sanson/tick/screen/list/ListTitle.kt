@@ -25,10 +25,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.android.LocalDispatch
+import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.theme.purple200
 import dev.sanson.tick.todo.Action
-import dev.sanson.tick.model.TodoList
 
 @Composable
 fun ListTitle(list: TodoList) {
@@ -36,10 +36,10 @@ fun ListTitle(list: TodoList) {
     ListTitleTextField(
         value = list.title,
         onValueChange = {
-            dispatch(Action.OnListTitleChange(list = list, title = it))
+            dispatch(Action.UpdateListTitle(list = list, title = it))
         },
         onDoneAction = {
-            dispatch(Action.NewTodoItem(list = list))
+            dispatch(Action.AddTodo(list = list))
         },
         modifier = Modifier.padding(start = Dp(16f))
     )
