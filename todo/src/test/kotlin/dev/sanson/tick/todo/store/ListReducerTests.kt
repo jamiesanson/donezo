@@ -29,11 +29,11 @@ class ListReducerTests {
 
     @Test
     fun `editing todo item updates state`() {
-
+        // TODO - fill in
     }
 
     @Test
     fun `removing todo item updates state`() {
-
+        // TODO - fill in
     }
 }
