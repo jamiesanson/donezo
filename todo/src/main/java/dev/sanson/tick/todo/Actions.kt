@@ -12,7 +12,8 @@ sealed class Action {
     }
 
     data class UpdateListTitle(val list: TodoList, val title: String): Action()
-    data class UpdateTodo(val item: Todo): Action()
+    data class UpdateTodoDone(val item: Todo, val isDone: Boolean): Action()
+    data class UpdateTodoText(val item: Todo, val text: String): Action()
     data class AddTodo(val list: TodoList): Action()
     data class AddTodoAsSibling(val sibling: Todo): Action()
     data class DeleteTodo(val item: Todo): Action()

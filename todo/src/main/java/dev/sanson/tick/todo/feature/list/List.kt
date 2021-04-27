@@ -21,12 +21,25 @@ val ListsReducer: Reducer<Screen.Lists> = { state, action ->
                 }
             }
         )
-        is Action.UpdateTodo -> state.copy(
+        is Action.UpdateTodoText -> state.copy(
             lists = state.lists.map { list ->
                 list.copy(
                     items = list.items.map { item ->
                         if (item == action.item) {
-                            action.item
+                            item.copy(text = action.text)
+                        } else {
+                            item
+                        }
+                    }
+                )
+            }
+        )
+        is Action.UpdateTodoDone -> state.copy(
+            lists = state.lists.map { list ->
+                list.copy(
+                    items = list.items.map { item ->
+                        if (item == action.item) {
+                            item.copy(isDone = action.isDone)
                         } else {
                             item
                         }

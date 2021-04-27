@@ -11,7 +11,6 @@ import dev.sanson.tick.todo.feature.navigation.BackNavigationMiddleware
 import dev.sanson.tick.todo.feature.navigation.NavigationReducer
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.context.startKoin
-import org.koin.java.KoinJavaComponent.getKoin
 import org.reduxkotlin.Store
 import org.reduxkotlin.applyMiddleware
 import org.reduxkotlin.combineReducers
@@ -38,12 +37,13 @@ fun createApp(
     val reducer = combineReducers(
         DatabaseReducer,
         NavigationReducer,
-        RootReducer)
+        RootReducer
+    )
 
     val middleware = applyMiddleware(
-        createThunkMiddleware(),
+        DatabaseMiddleware,
         BackNavigationMiddleware(closeApp),
-        DatabaseMiddleware(scope = applicationScope, database = getKoin().get())
+        createThunkMiddleware()
     )
 
     val initialState = AppState(backends = appConfiguration.availableBackends)

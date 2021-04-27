@@ -12,7 +12,6 @@ class ListReducerTests {
     @Test
     fun `adding todo item updates state`() {
         val list = TodoList(
-            id = 1,
             title = "",
             items = emptyList()
         )
@@ -21,7 +20,7 @@ class ListReducerTests {
             lists = listOf(list)
         )
 
-        val newState = ListsReducer(initialState, Action.AddNewTodo(list = list))
+        val newState = ListsReducer(initialState, Action.AddTodo(list = list))
 
         newState.lists.first().items.isNotEmpty() shouldBe true
     }

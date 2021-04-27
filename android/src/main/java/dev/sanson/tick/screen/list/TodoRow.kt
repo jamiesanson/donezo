@@ -37,8 +37,11 @@ fun TodoRow(item: Todo) {
     val dispatch = LocalDispatch.current
     TodoRow(
         item = item,
-        onTodoChange = { todo ->
-            dispatch(Action.UpdateTodo(item = todo))
+        onTodoCheckedChange = {
+            dispatch(Action.UpdateTodoDone(item, it))
+        },
+        onTodoTextChange = {
+            dispatch(Action.UpdateTodoText(item, it))
         },
         onDoneAction = {
             dispatch(Action.AddTodoAsSibling(item))
@@ -52,7 +55,8 @@ fun TodoRow(item: Todo) {
 @Composable
 private fun TodoRow(
     item: Todo,
-    onTodoChange: (Todo) -> Unit = {},
+    onTodoTextChange: (String) -> Unit,
+    onTodoCheckedChange: (Boolean) -> Unit,
     onDoneAction: () -> Unit,
     onDeleteItem: () -> Unit,
 ) {
@@ -69,9 +73,7 @@ private fun TodoRow(
 
         Checkbox(
             checked = item.isDone,
-            onCheckedChange = {
-                onTodoChange(item.copy(isDone = !item.isDone))
-            }
+            onCheckedChange = onTodoCheckedChange
         )
 
         Spacer(
@@ -85,11 +87,7 @@ private fun TodoRow(
             onValueChange = {
                 textFieldValue.value = it.copy(text = it.text.replace("\n", ""))
 
-                onTodoChange(
-                    item.copy(
-                        text = it.text
-                    )
-                )
+                onTodoTextChange(it.text)
             },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -137,7 +135,7 @@ fun TodoPreview() {
                     text = "Hang the washing out",
                     isDone = false
                 ),
-                {}, {}, {}
+                {}, {}, {}, {}
             )
         }
     }
