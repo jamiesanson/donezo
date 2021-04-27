@@ -1,6 +1,7 @@
 package dev.sanson.tick.todo.feature.list
 
 import dev.sanson.tick.model.Todo
+import dev.sanson.tick.model.copy
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.Screen
 import org.reduxkotlin.Reducer
@@ -11,21 +12,21 @@ import org.reduxkotlin.Reducer
 val ListsReducer: Reducer<Screen.Lists> = { state, action ->
     when (action) {
         is Action.ListsLoaded -> state.copy(lists = action.lists)
-        is Action.ListTitleChanged -> state.copy(
+        is Action.UpdateListTitle -> state.copy(
             lists = state.lists.map {
-                if (it.id == action.list.id) {
-                    it.copy(title = action.newTitle)
+                if (it == action.list) {
+                    it.copy(title = action.title)
                 } else {
                     it
                 }
             }
         )
-        is Action.TodoUpdated -> state.copy(
+        is Action.UpdateTodo -> state.copy(
             lists = state.lists.map { list ->
                 list.copy(
                     items = list.items.map { item ->
-                        if (item.id == action.todo.id) {
-                            action.todo
+                        if (item == action.item) {
+                            action.item
                         } else {
                             item
                         }
@@ -33,26 +34,7 @@ val ListsReducer: Reducer<Screen.Lists> = { state, action ->
                 )
             }
         )
-        is Action.TodoIdPopulated -> state.copy(
-            lists = state.lists.map { list ->
-                if (list.id == action.listId) {
-                    list.copy(
-                        items = list.items
-                            .reversed()
-                            .map { item ->
-                                if (item.id == null) {
-                                    item.copy(id = action.id)
-                                } else {
-                                    item
-                                }
-                            }.reversed()
-                    )
-                } else {
-                    list
-                }
-            }
-        )
-        is Action.AddNewTodo -> state.copy(
+        is Action.AddTodo -> state.copy(
             lists = state.lists.map {
                 if (it == action.list) {
                     it.copy(items = it.items + Todo(text = "", isDone = false))
@@ -61,10 +43,24 @@ val ListsReducer: Reducer<Screen.Lists> = { state, action ->
                 }
             }
         )
-        is Action.RemoveTodo -> state.copy(
+        is Action.AddTodoAsSibling -> {
+            val list = state.lists.find { it.items.contains(action.sibling) }
+                ?: throw IllegalArgumentException("No list found for sibling: ${action.sibling}")
+
+            state.copy(
+                lists = state.lists.map {
+                    if (it == list) {
+                        it.copy(items = it.items + Todo(text = "", isDone = false))
+                    } else {
+                        it
+                    }
+                }
+            )
+        }
+        is Action.DeleteTodo -> state.copy(
             lists = state.lists.map { list ->
-                if (list.items.contains(action.todo)) {
-                    list.copy(items = list.items - action.todo)
+                if (list.items.contains(action.item)) {
+                    list.copy(items = list.items - action.item)
                 } else {
                     list
                 }
