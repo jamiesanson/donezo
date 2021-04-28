@@ -101,6 +101,7 @@ fun DatabaseMiddleware(
     val screen = store.state.currentScreen as? Screen.Lists ?: return@middleware Unit
 
     when {
+        // TODO: Move the following actions into Thunks, which can then be dispatched.
         /**
          * Adding a todo to the database
          */
