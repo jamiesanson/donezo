@@ -15,7 +15,7 @@ androidx-viewmodel-compose = "1.0.0-alpha04"
 kotlinx-coroutines = "1.4.3"
 kotlinx-collections-immutable = "0.3.4"
 
-sqldelight = "1.4.4"
+sqldelight = "1.5.0"
 
 reduxkotlin = "0.5.5"
 

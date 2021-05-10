@@ -1,7 +1,6 @@
 package dev.sanson.tick.todo.feature.list
 
 import dev.sanson.tick.model.Todo
-import dev.sanson.tick.model.copy
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.Screen
 import org.reduxkotlin.Reducer
@@ -26,7 +25,7 @@ val ListsReducer: Reducer<Screen.Lists> = { state, action ->
                 list.copy(
                     items = list.items.map { item ->
                         if (item == action.item) {
-                            item.copy(text = action.text)
+                            item.copy(text = action.text, isDone = item.isDone)
                         } else {
                             item
                         }
@@ -39,7 +38,7 @@ val ListsReducer: Reducer<Screen.Lists> = { state, action ->
                 list.copy(
                     items = list.items.map { item ->
                         if (item == action.item) {
-                            item.copy(isDone = action.isDone)
+                            item.copy(isDone = action.isDone, text = item.text)
                         } else {
                             item
                         }

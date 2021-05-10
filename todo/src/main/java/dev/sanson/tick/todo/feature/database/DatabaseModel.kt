@@ -3,23 +3,24 @@ package dev.sanson.tick.todo.feature.database
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
 
-interface DatabaseTodoList : TodoList {
-    val id: Long
+data class DatabaseTodoList(
+    val id: Long,
+    override val title: String,
+    override val items: List<Todo>
+) : TodoList {
+
+    override fun copy(title: String, items: List<Todo>): DatabaseTodoList {
+        return DatabaseTodoList(id, title, items)
+    }
 }
 
-interface DatabaseTodo : Todo {
-    val id: Long
-}
+data class DatabaseTodo(
+    val id: Long,
+    override val text: String,
+    override val isDone: Boolean
+) : Todo {
 
-internal fun DatabaseTodo.copyInternal(text: String) = object : DatabaseTodo by this {
-    override val text: String = text
-}
-
-internal fun DatabaseTodo.copyInternal(isDone: Boolean) = object : DatabaseTodo by this {
-    override val isDone: Boolean = isDone
-}
-
-
-internal fun Todo.copy(id: Long): DatabaseTodo = object : DatabaseTodo, Todo by this {
-    override val id: Long = id
+    override fun copy(text: String, isDone: Boolean): DatabaseTodo {
+        return DatabaseTodo(id, text, isDone)
+    }
 }

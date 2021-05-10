@@ -25,12 +25,13 @@ internal sealed class DatabaseAction {
         /**
          * Updates the title of [list] to be [title]
          */
-        internal fun UpdateListTitle(list: DatabaseTodoList, title: String): Thunk<AppState> = { _, _, _ ->
-            launch(Dispatchers.IO) {
-                val database by inject<Database>()
-                database.listQueries.update(id = list.id, title = title)
+        internal fun UpdateListTitle(list: DatabaseTodoList, title: String): Thunk<AppState> =
+            { _, _, _ ->
+                launch(Dispatchers.IO) {
+                    val database by inject<Database>()
+                    database.listQueries.update(id = list.id, title = title)
+                }
             }
-        }
 
         /**
          * Updates a Todo [item]
@@ -45,30 +46,31 @@ internal sealed class DatabaseAction {
         /**
          * Add a new [Todo] to [list]
          */
-        internal fun AddTodo(list: DatabaseTodoList, state: Screen.Lists): Thunk<AppState> = { dispatch, _, _ ->
-            launch {
-                val database by inject<Database>()
+        internal fun AddTodo(list: DatabaseTodoList, state: Screen.Lists): Thunk<AppState> =
+            { dispatch, _, _ ->
+                launch {
+                    val database by inject<Database>()
 
-                val id = withContext(Dispatchers.IO) {
-                    with(database.todoQueries) {
-                        insert(listId = list.id, text = "")
+                    val id = withContext(Dispatchers.IO) {
+                        with(database.todoQueries) {
+                            insert(listId = list.id, text = "")
 
-                        selectByListId(listId = list.id)
-                            .executeAsList()
-                            .last()
-                            .id
+                            selectByListId(listId = list.id)
+                                .executeAsList()
+                                .last()
+                                .id
+                        }
                     }
+
+                    val original = state.lists
+                        .first { (it as? DatabaseTodoList)?.id == list.id }
+                        .items
+                        .last { it !is DatabaseTodo }
+
+                    dispatch(HydrateTodo(original, id))
                 }
 
-                val original = state.lists
-                    .first { (it as? DatabaseTodoList)?.id == list.id }
-                    .items
-                    .last { it !is DatabaseTodo }
-
-                dispatch(HydrateTodo(original, id))
             }
-
-        }
 
         /**
          * Delete a given [Todo] item
@@ -92,18 +94,19 @@ internal sealed class DatabaseAction {
                     val todos = database.todoQueries.selectAll().executeAsList()
 
                     return lists.map { list ->
-                        val todoItems = todos.filter { it.listId == list.id }
-                        object : DatabaseTodoList {
-                            override val id = list.id
-                            override val title = list.title
-                            override val items = todoItems.map {
-                                object : DatabaseTodo {
-                                    override val id: Long = it.id
-                                    override val text: String = it.text
-                                    override val isDone: Boolean = it.isDone
+                        DatabaseTodoList(
+                            id = list.id,
+                            title = list.title,
+                            items = todos
+                                .filter { it.listId == list.id }
+                                .map {
+                                    DatabaseTodo(
+                                        id = it.id,
+                                        text = it.text,
+                                        isDone = it.isDone
+                                    )
                                 }
-                            }
-                        }
+                        )
                     }
                 }
 

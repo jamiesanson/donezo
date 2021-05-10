@@ -1,6 +1,5 @@
 package dev.sanson.tick.todo.feature.database
 
-import dev.sanson.tick.model.copy
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.AppState
 import dev.sanson.tick.todo.Screen
@@ -17,7 +16,7 @@ val DatabaseReducer = reducerForActionType<AppState, DatabaseAction> { state, ac
                     list.copy(
                         items = list.items.map {
                             if (it == action.original) {
-                                it.copy(id = action.id)
+                                DatabaseTodo(id = action.id, text = it.text, isDone = it.isDone)
                             } else {
                                 it
                             }
@@ -77,13 +76,13 @@ val DatabaseMiddleware = middleware<AppState> { store, dispatch, action ->
          * Updating a todo
          */
         action is Action.UpdateTodoText && action.item is DatabaseTodo ->
-            dispatch(DatabaseAction.UpdateTodo(action.item.copyInternal(text = action.text)))
+            dispatch(DatabaseAction.UpdateTodo(action.item.copy(text = action.text)))
 
         /**
          * Updating a todo
          */
         action is Action.UpdateTodoDone && action.item is DatabaseTodo ->
-            dispatch(DatabaseAction.UpdateTodo(action.item.copyInternal(isDone = action.isDone)))
+            dispatch(DatabaseAction.UpdateTodo(action.item.copy(isDone = action.isDone)))
 
 
         /**

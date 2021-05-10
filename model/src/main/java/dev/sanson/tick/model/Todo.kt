@@ -4,21 +4,18 @@ interface Todo {
     val text: String
     val isDone: Boolean
 
+    fun copy(text: String = this.text, isDone: Boolean = this.isDone): Todo
+
     companion object {
-        operator fun invoke(
-            text: String,
-            isDone: Boolean
-        ): Todo = object: Todo {
-            override val text: String = text
-            override val isDone: Boolean = isDone
-        }
+        operator fun invoke(text: String, isDone: Boolean) = DefaultTodo(text, isDone)
     }
 }
 
-fun Todo.copy(text: String) = object: Todo by this {
-    override val text: String = text
-}
-
-fun Todo.copy(isDone: Boolean) = object: Todo by this {
-    override val isDone: Boolean = isDone
+class DefaultTodo(
+    override val text: String,
+    override val isDone: Boolean
+): Todo {
+    override fun copy(text: String, isDone: Boolean): Todo {
+        return DefaultTodo(text, isDone)
+    }
 }

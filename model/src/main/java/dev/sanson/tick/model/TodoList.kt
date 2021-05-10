@@ -4,21 +4,22 @@ interface TodoList {
     val title: String
     val items: List<Todo>
 
+    fun copy(title: String = this.title, items: List<Todo> = this.items): TodoList
+
     companion object {
         operator fun invoke(
             title: String,
             items: List<Todo>
-        ): TodoList = object : TodoList {
-            override val title: String = title
-            override val items: List<Todo> = items
-        }
+        ): TodoList = DefaultTodoList(title, items)
     }
 }
 
-fun TodoList.copy(title: String) = object : TodoList by this {
-    override val title: String = title
-}
+class DefaultTodoList(
+    override val title: String,
+    override val items: List<Todo>
+): TodoList {
 
-fun TodoList.copy(items: List<Todo>) = object: TodoList by this {
-    override val items: List<Todo> = items
+    override fun copy(title: String, items: List<Todo>): TodoList {
+        return DefaultTodoList(title, items)
+    }
 }
