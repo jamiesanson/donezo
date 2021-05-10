@@ -1,7 +1,7 @@
 [versions]
 app = "0.0"
 
-compose = "1.0.0-beta05"
+compose = "1.0.0-beta06"
 kotlin = "1.4.32"
 android-gradle-plugin = "7.0.0-alpha15"
 
