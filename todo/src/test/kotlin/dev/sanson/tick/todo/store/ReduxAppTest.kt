@@ -3,7 +3,7 @@ package dev.sanson.tick.todo.store
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import dev.sanson.tick.db.Database
 import dev.sanson.tick.todo.AppState
-import dev.sanson.tick.todo.Configuration
+import dev.sanson.tick.todo.AppSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -17,13 +17,14 @@ abstract class ReduxAppTest {
 
     lateinit var store: Store<AppState>
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val coroutineScope = TestCoroutineScope()
 
     private val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).also {
         Database.Schema.create(it)
     }
 
-    private val configuration = Configuration(
+    private val configuration = AppSettings(
         databaseDriver = driver,
         availableBackends = emptyList()
     )
@@ -41,7 +42,7 @@ abstract class ReduxAppTest {
 
     protected fun createApp(
         scope: CoroutineScope = coroutineScope,
-        config: Configuration = configuration,
+        config: AppSettings = configuration,
         closeApp: () -> Unit = {}
     ): Store<AppState> {
         return createAppImpl(scope, config, closeApp)

@@ -16,7 +16,7 @@ import org.reduxkotlin.applyMiddleware
 import org.reduxkotlin.combineReducers
 import org.reduxkotlin.createThreadSafeStore
 
-data class Configuration(
+data class AppSettings(
     val databaseDriver: SqlDriver,
     val availableBackends: List<Backend>
 )
@@ -27,11 +27,11 @@ data class Configuration(
  */
 fun createApp(
     applicationScope: CoroutineScope,
-    appConfiguration: Configuration,
+    appSettings: AppSettings,
     closeApp: () -> Unit
 ): Store<AppState> {
     startKoin {
-        modules(ApplicationModule(applicationScope, appConfiguration))
+        modules(ApplicationModule(applicationScope, appSettings))
     }
 
     val reducer = combineReducers(
@@ -46,7 +46,7 @@ fun createApp(
         createThunkMiddleware()
     )
 
-    val initialState = AppState(backends = appConfiguration.availableBackends)
+    val initialState = AppState(backends = appSettings.availableBackends)
 
     val store = createThreadSafeStore(reducer, initialState, middleware)
 

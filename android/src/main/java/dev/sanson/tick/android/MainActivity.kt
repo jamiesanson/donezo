@@ -17,7 +17,7 @@ import dev.sanson.tick.backend.git.github.GitHubBackend
 import dev.sanson.tick.db.Database
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.AppState
-import dev.sanson.tick.todo.Configuration
+import dev.sanson.tick.todo.AppSettings
 import dev.sanson.tick.todo.createApp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -86,7 +86,7 @@ class TickViewModel : ViewModel() {
      */
     val store = createApp(
         applicationScope = viewModelScope,
-        appConfiguration = Configuration(
+        appSettings = AppSettings(
             databaseDriver = databaseDriver,
             availableBackends = availableBackends
         ),
