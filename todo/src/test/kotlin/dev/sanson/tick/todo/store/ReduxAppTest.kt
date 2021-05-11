@@ -18,7 +18,7 @@ abstract class ReduxAppTest {
     lateinit var store: Store<AppState>
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val coroutineScope = TestCoroutineScope()
+    val testScope = TestCoroutineScope()
 
     private val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).also {
         Database.Schema.create(it)
@@ -32,7 +32,7 @@ abstract class ReduxAppTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun initialiseStore() {
-        store = createApp(coroutineScope, configuration) {}
+        store = createApp(testScope, configuration) {}
     }
 
     @After
@@ -41,7 +41,7 @@ abstract class ReduxAppTest {
     }
 
     protected fun createApp(
-        scope: CoroutineScope = coroutineScope,
+        scope: CoroutineScope = testScope,
         config: AppSettings = configuration,
         closeApp: () -> Unit = {}
     ): Store<AppState> {

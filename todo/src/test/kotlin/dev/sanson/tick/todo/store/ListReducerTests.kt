@@ -1,5 +1,6 @@
 package dev.sanson.tick.todo.store
 
+import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.Screen
@@ -28,11 +29,47 @@ class ListReducerTests {
 
     @Test
     fun `editing todo item updates state`() {
-        // TODO - fill in
+        val todo = Todo(
+            text = "",
+            isDone = false
+        )
+
+        val initialState = Screen.Lists(
+            lists = listOf(
+                TodoList(
+                    title = "",
+                    items = listOf(todo)
+                )
+            )
+        )
+
+        val action = Action.UpdateTodoText(item = todo, text = "Hello world!")
+
+        val newState = ListsReducer(initialState, action)
+
+        newState.lists.first().items.first().text shouldBe "Hello world!"
     }
 
     @Test
     fun `removing todo item updates state`() {
-        // TODO - fill in
+        val todo = Todo(
+            text = "",
+            isDone = false
+        )
+
+        val initialState = Screen.Lists(
+            lists = listOf(
+                TodoList(
+                    title = "",
+                    items = listOf(todo)
+                )
+            )
+        )
+
+        val action = Action.DeleteTodo(todo)
+
+        val newState = ListsReducer(initialState, action)
+
+        newState.lists.first().items.size shouldBe 0
     }
 }
