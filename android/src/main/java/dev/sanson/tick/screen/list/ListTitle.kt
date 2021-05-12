@@ -86,11 +86,8 @@ fun ListTitleTextField(
  * Visual transformation allowing for syntax highlighting
  */
 private val TickTitleVisualTransformation = VisualTransformation { text ->
-    // Titles shouldn't contain a #, but we put one on there to feel like a wysiwyg editor
-    val textToTransform = "# ${text.text}"
-
     val markedUpString = AnnotatedString(
-        text = textToTransform,
+        text = text.toString(),
         spanStyles = listOf(
             AnnotatedString.Range(
                 item = SpanStyle(color = purple200),
@@ -100,13 +97,9 @@ private val TickTitleVisualTransformation = VisualTransformation { text ->
         )
     )
 
-    val offsetMapping = object : OffsetMapping {
-        override fun originalToTransformed(offset: Int): Int = offset + 2
-        override fun transformedToOriginal(offset: Int): Int = offset - 2
-    }
     TransformedText(
         text = markedUpString,
-        offsetMapping = offsetMapping
+        offsetMapping = OffsetMapping.Identity
     )
 }
 
@@ -115,13 +108,11 @@ private val TickTitleVisualTransformation = VisualTransformation { text ->
 @Composable
 fun TickTitleTextFieldPreview() {
     TickTheme {
-        Scaffold(modifier = Modifier.padding(Dp(8f))) {
-            ListTitleTextField(
-                value = "Live literals are neat",
-                onValueChange = { /*TODO*/ },
-                onDoneAction = {}
-            )
-        }
+        ListTitleTextField(
+            value = "# Live literals are neat",
+            onValueChange = { /*TODO*/ },
+            onDoneAction = {}
+        )
     }
 }
 //endregion

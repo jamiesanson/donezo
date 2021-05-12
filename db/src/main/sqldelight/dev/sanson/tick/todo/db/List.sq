@@ -9,7 +9,7 @@ FROM list;
 
 seed:
 INSERT INTO list(title)
-SELECT "TODO('Title')" WHERE NOT EXISTS (SELECT * FROM list);
+SELECT "# TODO('Title')" WHERE NOT EXISTS (SELECT * FROM list);
 
 update:
 UPDATE list
