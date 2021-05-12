@@ -46,15 +46,19 @@ val ListsReducer: Reducer<Screen.Lists> = reducer@ { state, action ->
                 )
             }
         )
-        is Action.AddTodo -> state.copy(
-            lists = state.lists.map {
-                if (it == action.list) {
-                    it.copy(items = it.items + Todo(text = "", isDone = false))
-                } else {
-                    it
+        is Action.AddTodo -> {
+            if (action.list.items.lastOrNull()?.text?.isBlank() == true) return@reducer state
+
+            state.copy(
+                lists = state.lists.map {
+                    if (it == action.list) {
+                        it.copy(items = it.items + Todo(text = "", isDone = false))
+                    } else {
+                        it
+                    }
                 }
-            }
-        )
+            )
+        }
         is Action.AddTodoAsSibling -> {
             if (action.sibling.text.isBlank()) return@reducer state
 
