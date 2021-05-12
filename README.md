@@ -3,10 +3,11 @@ A todo list that can sync anywhere.
 
 Inspired by [press](https://github.com/saket/press), this project serves as a technical demo for modern Android technologies, such as Compose. 
 
-## Documentation
+### Documentation
 * [Architecture/Module structure](docs/ARCHITECTURE.md)
 * [Coding Conventions followed in Tick](docs/CONVENTIONS.md)
 
+### License
 ```
 Copyright 2021 Jamie Sanson.
 
