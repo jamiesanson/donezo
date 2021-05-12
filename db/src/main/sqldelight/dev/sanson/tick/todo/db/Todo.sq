@@ -5,11 +5,6 @@ CREATE TABLE todo (
     text TEXT NOT NULL DEFAULT ""
 );
 
-select:
-SELECT *
-FROM todo
-WHERE id = :id;
-
 selectByListId:
 SELECT *
 FROM todo
