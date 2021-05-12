@@ -8,7 +8,7 @@ import org.reduxkotlin.Reducer
 /**
  * Reducer for the main list screen
  */
-val ListsReducer: Reducer<Screen.Lists> = { state, action ->
+val ListsReducer: Reducer<Screen.Lists> = reducer@ { state, action ->
     when (action) {
         is Action.ListsLoaded -> state.copy(lists = action.lists)
         is Action.UpdateListTitle -> state.copy(
@@ -56,6 +56,8 @@ val ListsReducer: Reducer<Screen.Lists> = { state, action ->
             }
         )
         is Action.AddTodoAsSibling -> {
+            if (action.sibling.text.isBlank()) return@reducer state
+
             val list = state.lists.find { it.items.contains(action.sibling) }
                 ?: throw IllegalArgumentException("No list found for sibling: ${action.sibling}")
 

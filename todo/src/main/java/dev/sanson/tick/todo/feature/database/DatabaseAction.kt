@@ -47,7 +47,10 @@ internal sealed class DatabaseAction {
          * Add a new [Todo] to [list]
          */
         internal fun AddTodo(list: DatabaseTodoList, state: Screen.Lists): Thunk<AppState> =
-            { dispatch, _, _ ->
+            thunk@ { dispatch, _, _ ->
+                // If there aren't any items to hydrate, return early
+                if (list.items.none { it !is DatabaseTodo }) return@thunk Unit
+
                 launch {
                     val database by inject<Database>()
 
