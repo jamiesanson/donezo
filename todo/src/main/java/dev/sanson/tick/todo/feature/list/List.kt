@@ -60,10 +60,11 @@ val ListsReducer: Reducer<Screen.Lists> = reducer@ { state, action ->
             )
         }
         is Action.AddTodoAsSibling -> {
-            if (action.sibling.text.isBlank()) return@reducer state
-
             val list = state.lists.find { it.items.contains(action.sibling) }
                 ?: throw IllegalArgumentException("No list found for sibling: ${action.sibling}")
+
+            // Don't permit duplicate blank items
+            if (list.items.last().text.isBlank()) return@reducer state
 
             state.copy(
                 lists = state.lists.map {
