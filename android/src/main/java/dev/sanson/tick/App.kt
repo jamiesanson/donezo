@@ -10,15 +10,15 @@ import dev.sanson.tick.screen.list.ListScreen
 import dev.sanson.tick.screen.sync.SyncSettingsScreen
 import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.todo.AppState
-import dev.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.feature.navigation.Screen
 
 @Composable
 fun App(state: AppState) {
     TickTheme {
         Surface(color = MaterialTheme.colors.surface, modifier = Modifier.fillMaxSize()) {
-            when (val screen = state.currentScreen) {
-                is Screen.Lists -> ListScreen(state = screen)
-                is Screen.SyncSettings -> SyncSettingsScreen(state = screen)
+            when (state.navigation.currentScreen) {
+                is Screen.Lists -> ListScreen(state = state)
+                is Screen.SyncSettings -> SyncSettingsScreen(state = state)
             }
         }
     }
@@ -27,5 +27,5 @@ fun App(state: AppState) {
 @Preview
 @Composable
 fun AppPreview() {
-    App(state = AppState(currentScreen = Screen.Lists(), backends = listOf()))
+    App(state = AppState())
 }

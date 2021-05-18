@@ -4,9 +4,10 @@ import com.squareup.sqldelight.db.SqlDriver
 import dev.sanson.tick.arch.redux.createThunkMiddleware
 import dev.sanson.tick.backend.Backend
 import dev.sanson.tick.todo.di.ApplicationModule
-import dev.sanson.tick.todo.feature.database.DatabaseAction
-import dev.sanson.tick.todo.feature.database.DatabaseMiddleware
-import dev.sanson.tick.todo.feature.database.DatabaseReducer
+import dev.sanson.tick.todo.feature.list.ListsReducer
+import dev.sanson.tick.todo.feature.list.database.DatabaseAction
+import dev.sanson.tick.todo.feature.list.database.DatabaseMiddleware
+import dev.sanson.tick.todo.feature.list.database.DatabaseReducer
 import dev.sanson.tick.todo.feature.navigation.BackNavigationMiddleware
 import dev.sanson.tick.todo.feature.navigation.NavigationReducer
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +38,7 @@ fun createApp(
     val reducer = combineReducers(
         DatabaseReducer,
         NavigationReducer,
-        RootReducer
+        ListsReducer
     )
 
     val middleware = applyMiddleware(

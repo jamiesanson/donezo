@@ -15,10 +15,10 @@ import androidx.compose.runtime.Composable
 import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.backend.PresentableBackend
 import dev.sanson.tick.todo.Action
-import dev.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.AppState
 
 @Composable
-fun SyncSettingsScreen(state: Screen.SyncSettings) {
+fun SyncSettingsScreen(state: AppState) {
     val dispatch = LocalDispatch.current
     Scaffold(
         topBar = {
@@ -38,7 +38,7 @@ fun SyncSettingsScreen(state: Screen.SyncSettings) {
     ) {
         LazyColumn {
             items(state.backends) {
-                BackendRow(backend = it)
+                BackendRow(backend = it as PresentableBackend)
             }
         }
     }

@@ -1,7 +1,10 @@
 package dev.sanson.tick.arch.redux
 
 import dev.sanson.tick.arch.di.inject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.reduxkotlin.Dispatcher
 import org.reduxkotlin.GetState
 import org.reduxkotlin.Middleware
@@ -23,10 +26,20 @@ import org.reduxkotlin.Middleware
  *
  *    store.dispatch(myNetworkThunk("query"))
  */
-typealias Thunk<State> = CoroutineScope.(dispatch: Dispatcher, getState: GetState<State>, extraArg: Any?) -> Any
-typealias ThunkMiddleware<State> = Middleware<State>
+typealias Thunk<State> = (dispatch: Dispatcher, getState: GetState<State>) -> Any
 
-fun <State> createThunkMiddleware(extraArgument: Any? = null): ThunkMiddleware<State> =
+/**
+ * Convenience function for wrapping thunk functionality in a coroutine
+ */
+fun <State> asyncAction(
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    block: suspend CoroutineScope.(dispatch: Dispatcher, getState: GetState<State>) -> Any
+): Thunk<State> = { dispatch, getState ->
+    val scope by inject<CoroutineScope>()
+    scope.launch(dispatcher) { block(dispatch, getState) }
+}
+
+fun <State> createThunkMiddleware(): Middleware<State> =
     { store ->
         { next: Dispatcher ->
             { action: Any ->
@@ -40,8 +53,8 @@ fun <State> createThunkMiddleware(extraArgument: Any? = null): ThunkMiddleware<S
                             e
                         )
                     }
-                    val scope by inject<CoroutineScope>()
-                    scope.thunk(store.dispatch, store.getState, extraArgument)
+
+                    thunk(store.dispatch, store.getState)
                 } else {
                     next(action)
                 }

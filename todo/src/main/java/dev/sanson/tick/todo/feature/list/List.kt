@@ -2,13 +2,13 @@ package dev.sanson.tick.todo.feature.list
 
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.todo.Action
-import dev.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.AppState
 import org.reduxkotlin.Reducer
 
 /**
  * Reducer for the main list screen
  */
-val ListsReducer: Reducer<Screen.Lists> = reducer@ { state, action ->
+val ListsReducer: Reducer<AppState> = reducer@ { state, action ->
     when (action) {
         is Action.ListsLoaded -> state.copy(lists = action.lists)
         is Action.UpdateListTitle -> state.copy(

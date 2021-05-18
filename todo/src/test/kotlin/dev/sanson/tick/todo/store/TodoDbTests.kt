@@ -2,8 +2,8 @@ package dev.sanson.tick.todo.store
 
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.AppState
-import dev.sanson.tick.todo.Screen
-import dev.sanson.tick.todo.feature.database.DatabaseTodo
+import dev.sanson.tick.todo.feature.list.database.DatabaseTodo
+import dev.sanson.tick.todo.feature.navigation.Screen
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,10 +34,9 @@ class TodoDbTests : ReduxAppTest() {
             testScope.launch {
                 delay(100)
 
-                stateFlow.value.currentScreen::class shouldBe Screen.Lists::class
+                stateFlow.value.navigation.currentScreen::class shouldBe Screen.Lists::class
 
-                val screen = stateFlow.value.currentScreen as Screen.Lists
-                screen.lists.size shouldNotBe 0
+                stateFlow.value.lists.size shouldNotBe 0
             }
         }
     }
@@ -49,12 +48,11 @@ class TodoDbTests : ReduxAppTest() {
                 delay(100)
 
                 // Add todo
-                store.dispatch(Action.AddTodo(list = (stateFlow.value.currentScreen as Screen.Lists).lists.first()))
+                store.dispatch(Action.AddTodo(list = stateFlow.value.lists.first()))
 
                 delay(100)
 
-                val firstItem =
-                    (stateFlow.value.currentScreen as Screen.Lists).lists.first().items.first()
+                val firstItem = stateFlow.value.lists.first().items.first()
                 firstItem::class shouldBe DatabaseTodo::class
             }
         }

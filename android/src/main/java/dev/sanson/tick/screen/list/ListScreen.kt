@@ -12,10 +12,10 @@ import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.theme.TickTheme
-import dev.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.AppState
 
 @Composable
-fun ListScreen(state: Screen.Lists) {
+fun ListScreen(state: AppState) {
     Column(modifier = Modifier.padding(top = Dp(16f))) {
         state.lists.forEach { list ->
             LazyColumn {
@@ -37,8 +37,7 @@ fun ListPreview() {
     TickTheme {
         Scaffold {
             ListScreen(
-                state = Screen.Lists(
-                    loading = false,
+                state = AppState(
                     lists = listOf(
                         TodoList(
                             title = "Work, 23rd Feb",

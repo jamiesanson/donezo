@@ -4,11 +4,12 @@ package dev.sanson.tick.todo
 
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
+import dev.sanson.tick.todo.feature.navigation.Screen
 
 sealed class Action {
     sealed class Navigation : Action() {
         object Back : Navigation()
-        object SyncSettings : Navigation()
+        data class To(val screen: Screen): Navigation()
     }
 
     data class UpdateListTitle(val list: TodoList, val title: String): Action()

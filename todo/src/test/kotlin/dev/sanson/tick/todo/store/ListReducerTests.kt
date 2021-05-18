@@ -3,7 +3,7 @@ package dev.sanson.tick.todo.store
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.todo.Action
-import dev.sanson.tick.todo.Screen
+import dev.sanson.tick.todo.AppState
 import dev.sanson.tick.todo.feature.list.ListsReducer
 import io.kotest.matchers.shouldBe
 import org.junit.Test
@@ -17,7 +17,7 @@ class ListReducerTests {
             items = emptyList()
         )
 
-        val initialState = Screen.Lists(
+        val initialState = AppState(
             lists = listOf(list)
         )
 
@@ -34,7 +34,7 @@ class ListReducerTests {
             isDone = false
         )
 
-        val initialState = Screen.Lists(
+        val initialState = AppState(
             lists = listOf(
                 TodoList(
                     title = "",
@@ -57,7 +57,7 @@ class ListReducerTests {
             isDone = false
         )
 
-        val initialState = Screen.Lists(
+        val initialState = AppState(
             lists = listOf(
                 TodoList(
                     title = "",
