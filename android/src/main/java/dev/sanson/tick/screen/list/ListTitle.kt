@@ -12,6 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusOrderModifier
+import androidx.compose.ui.focus.FocusRequesterModifier
+import androidx.compose.ui.focus.focusOrder
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -31,30 +35,12 @@ import dev.sanson.tick.theme.purple200
 import dev.sanson.tick.todo.Action
 
 @Composable
-fun ListTitle(list: TodoList) {
-    val dispatch = LocalDispatch.current
-    ListTitleTextField(
-        value = list.title,
-        onValueChange = {
-            dispatch(Action.UpdateListTitle(list = list, title = it))
-        },
-        onDoneAction = {
-            dispatch(Action.AddTodo(list = list))
-        },
-        modifier = Modifier.padding(start = Dp(16f))
-    )
-
-    Spacer(modifier = Modifier.height(Dp(8f)))
-}
-
-@Composable
-fun ListTitleTextField(
-    value: String,
+fun ListTitle(
+    title: String,
     onValueChange: (String) -> Unit,
     onDoneAction: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
-    val textFieldValue = remember { mutableStateOf(TextFieldValue(value)) }
+    val textFieldValue = remember { mutableStateOf(TextFieldValue(title)) }
 
     BasicTextField(
         value = textFieldValue.value,
@@ -62,7 +48,6 @@ fun ListTitleTextField(
             textFieldValue.value = it
             onValueChange(it.text)
         },
-        modifier = modifier,
         keyboardOptions = KeyboardOptions.Default.copy(
             capitalization = KeyboardCapitalization.Sentences,
             imeAction = ImeAction.Next
@@ -73,6 +58,7 @@ fun ListTitleTextField(
             }
         ),
         maxLines = 1,
+        modifier = Modifier.padding(start = Dp(16f)),
         cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
         textStyle = MaterialTheme.typography.h4.copy(
             color = MaterialTheme.colors.onSurface,
@@ -80,6 +66,8 @@ fun ListTitleTextField(
         ),
         visualTransformation = TickTitleVisualTransformation,
     )
+
+    Spacer(modifier = Modifier.height(Dp(8f)))
 }
 
 /**
@@ -108,8 +96,8 @@ private val TickTitleVisualTransformation = VisualTransformation { text ->
 @Composable
 fun TickTitleTextFieldPreview() {
     TickTheme {
-        ListTitleTextField(
-            value = "# Live literals are neat",
+        ListTitle(
+            title = "# Live literals are neat",
             onValueChange = { /*TODO*/ },
             onDoneAction = {}
         )
