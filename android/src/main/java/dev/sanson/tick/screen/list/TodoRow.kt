@@ -31,7 +31,7 @@ import dev.sanson.tick.theme.TickTheme
 
 @Composable
 fun TodoRow(
-    item: Todo,
+    item: ListBloc.Item,
     onTodoTextChange: (String) -> Unit,
     onTodoCheckedChange: (Boolean) -> Unit,
     onImeAction: () -> Unit,
@@ -109,9 +109,11 @@ fun TodoPreview() {
     TickTheme {
         Scaffold {
             TodoRow(
-                item = Todo(
+                item = ListBloc.Item(
+                    id = null,
                     text = "Hang the washing out",
-                    isDone = false
+                    isDone = false,
+                    hasFocus = false
                 ),
                 {}, {}, {}, {}
             )

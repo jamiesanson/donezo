@@ -16,6 +16,8 @@ import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.Screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import org.reduxkotlin.Dispatcher
 
 // Focus-related actions intercepted in [ListScreen]
@@ -23,7 +25,7 @@ private data class OnFocusRequested(val item: Any)
 private object OnFocusCleared
 
 @Composable
-fun ListScreen(state: Screen.Lists) {
+fun _ListScreen(state: Screen.Lists) {
     val dispatch = LocalDispatch.current
 
     val currentFocus = remember { mutableStateOf<Any?>(null) }
@@ -49,51 +51,78 @@ fun ListScreen(state: Screen.Lists) {
 }
 
 @Composable
-fun TodoLists(lists: List<TodoList>, currentFocus: Any?, dispatch: (Any) -> Any) {
+fun <T: Bloc<InState, OutState>, InState, OutState> rememberBloc(inState: InState, bloc: T): T {
+    val rememberedBloc = remember { bloc }
+
+    SideEffect {
+        rememberedBloc.onStateChange(inState)
+    }
+
+    return rememberedBloc
+}
+
+interface Bloc<InState, OutState> {
+    val state: State<OutState>
+    fun onStateChange(newState: InState)
+}
+
+
+@Composable
+fun ListScreen(_state: Screen.Lists) {
+    val dispatch = LocalDispatch.current
+    val bloc = rememberBloc(_state.lists, ListBloc(dispatch = dispatch))
+
+    val rows by bloc.state
+    TodoLists(rows = rows, bloc = bloc)
+}
+
+@Composable
+fun TodoLists(rows: List<ListBloc.Row>, bloc: ListBloc) {
     Column(
         modifier = Modifier
             .padding(top = Dp(16f))
-            .onFocusEvent { if (!it.isFocused) dispatch(OnFocusCleared) }
+            .onFocusEvent { if (!it.isFocused) bloc.onFocusCleared() }
     ) {
         LazyColumn {
-            lists.forEach { list ->
-                item {
-                    val requester = remember { FocusRequester() }
-                    ListTitle(
-                        title = list.title,
-                        onValueChange = { dispatch(Action.UpdateListTitle(list, it)) },
-                        onDoneAction = { dispatch(Action.AddTodo(list)) },
-                        modifier = Modifier
-                            .focusRequester(requester)
-                            .onFocusChanged { if (it.isFocused) dispatch(OnFocusRequested(list)) }
-                    )
+            items(rows) { row ->
+                when (row) {
+                    is ListBloc.Title -> {
+                        val requester = remember { FocusRequester() }
+                        ListTitle(
+                            title = row.title,
+                            onValueChange = { bloc.updateTitle(row, it) },
+                            onDoneAction = { bloc.addTodo(row) },
+                            modifier = Modifier
+                                .focusRequester(requester)
+                                .onFocusChanged { if (it.isFocused) bloc.onFocusRequested(row) }
+                        )
 
-                    SideEffect {
-                        if (list == currentFocus) {
-                            requester.requestFocus()
+                        SideEffect {
+                            if (row.hasFocus) {
+                                requester.requestFocus()
+                            }
                         }
                     }
-                }
+                    is ListBloc.Item -> {
+                        val requester = remember { FocusRequester() }
 
-                items(list.items) { item ->
-                    val requester = remember { FocusRequester() }
+                        TodoRow(
+                            item = row,
+                            onTodoTextChange = { dispatch(Action.UpdateTodoText(item, it)) },
+                            onTodoCheckedChange = { dispatch(Action.UpdateTodoDone(item, it)) },
+                            onDeleteItem = { dispatch(Action.DeleteTodo(item)) },
+                            onImeAction = {
+                                dispatch(Action.AddTodoAsSibling(item))
+                            },
+                            modifier = Modifier
+                                .focusRequester(requester)
+                                .onFocusChanged { if (it.isFocused) dispatch(OnFocusRequested(item)) }
+                        )
 
-                    TodoRow(
-                        item = item,
-                        onTodoTextChange = { dispatch(Action.UpdateTodoText(item, it)) },
-                        onTodoCheckedChange = { dispatch(Action.UpdateTodoDone(item, it)) },
-                        onDeleteItem = { dispatch(Action.DeleteTodo(item)) },
-                        onImeAction = {
-                            dispatch(Action.AddTodoAsSibling(item))
-                        },
-                        modifier = Modifier
-                            .focusRequester(requester)
-                            .onFocusChanged { if (it.isFocused) dispatch(OnFocusRequested(item)) }
-                    )
-
-                    SideEffect {
-                        if (item == currentFocus) {
-                            requester.requestFocus()
+                        SideEffect {
+                            if (row.hasFocus) {
+                                requester.requestFocus()
+                            }
                         }
                     }
                 }
