@@ -26,37 +26,15 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.theme.TickTheme
-import dev.sanson.tick.todo.Action
 
 @Composable
-fun TodoRow(item: Todo) {
-    val dispatch = LocalDispatch.current
-    TodoRow(
-        item = item,
-        onTodoCheckedChange = {
-            dispatch(Action.UpdateTodoDone(item, it))
-        },
-        onTodoTextChange = {
-            dispatch(Action.UpdateTodoText(item, it))
-        },
-        onDoneAction = {
-            dispatch(Action.AddTodoAsSibling(item))
-        },
-        onDeleteItem = {
-            dispatch(Action.DeleteTodo(item))
-        }
-    )
-}
-
-@Composable
-private fun TodoRow(
+fun TodoRow(
     item: Todo,
     onTodoTextChange: (String) -> Unit,
     onTodoCheckedChange: (Boolean) -> Unit,
-    onDoneAction: () -> Unit,
+    onImeAction: () -> Unit,
     onDeleteItem: () -> Unit,
 ) {
     Row(
@@ -94,7 +72,7 @@ private fun TodoRow(
             ),
             keyboardActions = KeyboardActions(
                 onNext = {
-                    onDoneAction()
+                    onImeAction()
                 }
             ),
             cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
@@ -113,7 +91,7 @@ private fun TodoRow(
                         }
                     }
                     Key.Enter -> {
-                        onDoneAction()
+                        onImeAction()
                         true
                     }
                     else -> false
