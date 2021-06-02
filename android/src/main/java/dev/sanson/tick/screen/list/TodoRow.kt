@@ -36,6 +36,7 @@ fun TodoRow(
     onTodoCheckedChange: (Boolean) -> Unit,
     onImeAction: () -> Unit,
     onDeleteItem: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = Modifier
@@ -80,7 +81,7 @@ fun TodoRow(
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 18.sp
             ),
-            modifier = Modifier.onKeyEvent {
+            modifier = modifier.onKeyEvent {
                 when (it.key) {
                     Key.Backspace, Key.Delete -> {
                         if (textFieldValue.value.text.isEmpty()) {

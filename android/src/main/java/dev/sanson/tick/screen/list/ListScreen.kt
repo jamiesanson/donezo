@@ -7,8 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.focus.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.android.LocalDispatch
@@ -17,29 +16,68 @@ import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.Screen
-import kotlinx.coroutines.delay
+import org.reduxkotlin.Dispatcher
+
+// Focus-related actions intercepted in [ListScreen]
+private data class OnFocusRequested(val item: Any)
+private object OnFocusCleared
 
 @Composable
 fun ListScreen(state: Screen.Lists) {
     val dispatch = LocalDispatch.current
-    val focusManager = LocalFocusManager.current
 
-    // TODO: Figure out a better way to react to state changes after the composition was successful
-    val needsFocusDown = remember { mutableStateOf(false) }
-    val updatedFocusDownState by rememberUpdatedState(needsFocusDown.value)
+    val currentFocus = remember { mutableStateOf<Any?>(null) }
+    val updatedState = rememberUpdatedState(state)
 
-    Column(modifier = Modifier.padding(top = Dp(16f))) {
+    val wrappedDispatch: Dispatcher = { action ->
+        when (action) {
+            is OnFocusRequested -> currentFocus.value = action.item
+            OnFocusCleared -> currentFocus.value = null
+            is Action.AddTodo -> {
+                dispatch(action)
+                val focus = updatedState.value.lists
+                    .first { it == action.list }
+                    .items.last()
+
+                currentFocus.value = focus
+            }
+            else -> dispatch(action)
+        }
+    }
+
+    TodoLists(lists = state.lists, currentFocus = currentFocus.value, dispatch = wrappedDispatch)
+}
+
+@Composable
+fun TodoLists(lists: List<TodoList>, currentFocus: Any?, dispatch: (Any) -> Any) {
+    Column(
+        modifier = Modifier
+            .padding(top = Dp(16f))
+            .onFocusEvent { if (!it.isFocused) dispatch(OnFocusCleared) }
+    ) {
         LazyColumn {
-            state.lists.forEach { list ->
+            lists.forEach { list ->
                 item {
+                    val requester = remember { FocusRequester() }
                     ListTitle(
                         title = list.title,
                         onValueChange = { dispatch(Action.UpdateListTitle(list, it)) },
                         onDoneAction = { dispatch(Action.AddTodo(list)) },
+                        modifier = Modifier
+                            .focusRequester(requester)
+                            .onFocusChanged { if (it.isFocused) dispatch(OnFocusRequested(list)) }
                     )
+
+                    SideEffect {
+                        if (list == currentFocus) {
+                            requester.requestFocus()
+                        }
+                    }
                 }
 
                 items(list.items) { item ->
+                    val requester = remember { FocusRequester() }
+
                     TodoRow(
                         item = item,
                         onTodoTextChange = { dispatch(Action.UpdateTodoText(item, it)) },
@@ -47,20 +85,19 @@ fun ListScreen(state: Screen.Lists) {
                         onDeleteItem = { dispatch(Action.DeleteTodo(item)) },
                         onImeAction = {
                             dispatch(Action.AddTodoAsSibling(item))
-                            needsFocusDown.value = true
-                        }
+                        },
+                        modifier = Modifier
+                            .focusRequester(requester)
+                            .onFocusChanged { if (it.isFocused) dispatch(OnFocusRequested(item)) }
                     )
+
+                    SideEffect {
+                        if (item == currentFocus) {
+                            requester.requestFocus()
+                        }
+                    }
                 }
             }
-        }
-    }
-
-    LaunchedEffect(needsFocusDown.value) {
-        delay(100)
-
-        if (updatedFocusDownState) {
-            focusManager.moveFocus(FocusDirection.Down)
-            needsFocusDown.value = false
         }
     }
 }
