@@ -26,38 +26,17 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.theme.TickTheme
-import dev.sanson.tick.todo.Action
 
 @Composable
-fun TodoRow(item: Todo) {
-    val dispatch = LocalDispatch.current
-    TodoRow(
-        item = item,
-        onTodoCheckedChange = {
-            dispatch(Action.UpdateTodoDone(item, it))
-        },
-        onTodoTextChange = {
-            dispatch(Action.UpdateTodoText(item, it))
-        },
-        onDoneAction = {
-            dispatch(Action.AddTodoAsSibling(item))
-        },
-        onDeleteItem = {
-            dispatch(Action.DeleteTodo(item))
-        }
-    )
-}
-
-@Composable
-private fun TodoRow(
-    item: Todo,
+fun TodoRow(
+    item: ListBloc.Item,
     onTodoTextChange: (String) -> Unit,
     onTodoCheckedChange: (Boolean) -> Unit,
-    onDoneAction: () -> Unit,
+    onImeAction: () -> Unit,
     onDeleteItem: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = Modifier
@@ -94,7 +73,7 @@ private fun TodoRow(
             ),
             keyboardActions = KeyboardActions(
                 onNext = {
-                    onDoneAction()
+                    onImeAction()
                 }
             ),
             cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
@@ -102,7 +81,7 @@ private fun TodoRow(
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 18.sp
             ),
-            modifier = Modifier.onKeyEvent {
+            modifier = modifier.onKeyEvent {
                 when (it.key) {
                     Key.Backspace, Key.Delete -> {
                         if (textFieldValue.value.text.isEmpty()) {
@@ -113,7 +92,7 @@ private fun TodoRow(
                         }
                     }
                     Key.Enter -> {
-                        onDoneAction()
+                        onImeAction()
                         true
                     }
                     else -> false
@@ -130,9 +109,11 @@ fun TodoPreview() {
     TickTheme {
         Scaffold {
             TodoRow(
-                item = Todo(
+                item = ListBloc.Item(
+                    id = null,
                     text = "Hang the washing out",
-                    isDone = false
+                    isDone = false,
+                    hasFocus = false
                 ),
                 {}, {}, {}, {}
             )

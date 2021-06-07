@@ -17,7 +17,7 @@ fun App(state: AppState) {
     TickTheme {
         Surface(color = MaterialTheme.colors.surface, modifier = Modifier.fillMaxSize()) {
             when (state.navigation.currentScreen) {
-                is Screen.Lists -> ListScreen(state = state)
+                is Screen.Lists -> ListScreen(lists = state.lists)
                 is Screen.SyncSettings -> SyncSettingsScreen(state = state)
             }
         }
