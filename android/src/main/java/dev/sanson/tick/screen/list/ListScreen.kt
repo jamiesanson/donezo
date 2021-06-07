@@ -14,7 +14,6 @@ import dev.sanson.tick.android.LocalDispatch
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.theme.TickTheme
-import dev.sanson.tick.todo.Action
 
 //@Composable
 //fun _ListScreen(state: Screen.Lists) {
@@ -100,15 +99,17 @@ fun TodoLists(rows: List<ListBloc.Row>, bloc: ListBloc) {
 
                         TodoRow(
                             item = row,
-                            onTodoTextChange = { dispatch(Action.UpdateTodoText(item, it)) },
-                            onTodoCheckedChange = { dispatch(Action.UpdateTodoDone(item, it)) },
-                            onDeleteItem = { dispatch(Action.DeleteTodo(item)) },
+                            onTodoTextChange = { /* dispatch(Action.UpdateTodoText(item, it)) */ },
+                            onTodoCheckedChange = { /* dispatch(Action.UpdateTodoDone(item, it)) */},
+                            onDeleteItem = { /* dispatch(Action.DeleteTodo(item)) */ },
                             onImeAction = {
-                                dispatch(Action.AddTodoAsSibling(item))
+                                // dispatch(Action.AddTodoAsSibling(item))
                             },
                             modifier = Modifier
                                 .focusRequester(requester)
-                                .onFocusChanged { if (it.isFocused) dispatch(OnFocusRequested(item)) }
+                                .onFocusChanged {
+                                //    if (it.isFocused) dispatch(OnFocusRequested(item))
+                                }
                         )
 
                         SideEffect {

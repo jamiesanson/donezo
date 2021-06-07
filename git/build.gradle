@@ -29,10 +29,6 @@ android {
         freeCompilerArgs += [
                 "-Xopt-in=kotlin.RequiresOptIn"
         ]
-
-        compileOptions {
-            languageVersion = "1.5" // TODO(Kotlin 1.5.0): Remove this
-        }
     }
 }
 

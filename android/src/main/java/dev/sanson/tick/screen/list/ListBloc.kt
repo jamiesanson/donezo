@@ -4,7 +4,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.todo.Action
-import dev.sanson.tick.todo.feature.database.DatabaseTodoList
 
 // This class must be remember'd
 class ListBloc(
@@ -21,7 +20,7 @@ class ListBloc(
     private val internalState = mutableStateOf(InternalState())
 
     private fun computeState(internalState: InternalState): List<Row> {
-
+        return emptyList()
     }
 
     sealed interface Row {
@@ -42,7 +41,6 @@ class ListBloc(
     ): Row
 
     override fun onStateChange(newState: List<TodoList>) {
-        currentExternalState = newState
 
     }
 
@@ -64,6 +62,7 @@ class ListBloc(
     }
 
     private fun listFor(row: Title): TodoList {
-        return currentExternalState.find { (it as? DatabaseTodoList)?.id?.toString() == row.id }!!
+        //return currentExternalState.find { (it as? DatabaseTodoList)?.id?.toString() == row.id }!!
+        return TodoList("", emptyList())
     }
 }
