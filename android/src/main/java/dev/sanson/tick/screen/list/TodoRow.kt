@@ -28,14 +28,38 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import dev.sanson.tick.model.Todo
 import dev.sanson.tick.theme.TickTheme
+import dev.sanson.tick.todo.Action
+
+interface TodoRowCallbacks {
+    fun onTodoTextChange(newText: String)
+    fun onTodoCheckedChange(isDone: Boolean)
+    fun onImeAction() {}
+    fun onDelete() {}
+}
+
+fun TodoRowCallbacks(item: Todo, dispatch: (Any) -> Any) = object: TodoRowCallbacks {
+    override fun onTodoTextChange(newText: String) {
+        dispatch(Action.UpdateTodoText(item, newText))
+    }
+
+    override fun onTodoCheckedChange(isDone: Boolean) {
+        dispatch(Action.UpdateTodoDone(item, isDone))
+    }
+
+    override fun onDelete() {
+        dispatch(Action.DeleteTodo(item))
+    }
+
+    override fun onImeAction() {
+        dispatch(Action.AddTodoAsSibling(item))
+    }
+}
 
 @Composable
 fun TodoRow(
-    item: ListBloc.Item,
-    onTodoTextChange: (String) -> Unit,
-    onTodoCheckedChange: (Boolean) -> Unit,
-    onImeAction: () -> Unit,
-    onDeleteItem: () -> Unit,
+    text: String,
+    isDone: Boolean,
+    callbacks: TodoRowCallbacks,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -50,22 +74,22 @@ fun TodoRow(
         )
 
         Checkbox(
-            checked = item.isDone,
-            onCheckedChange = onTodoCheckedChange
+            checked = isDone,
+            onCheckedChange = callbacks::onTodoCheckedChange
         )
 
         Spacer(
             modifier = Modifier.width(width = Dp(16f))
         )
 
-        val textFieldValue = remember { mutableStateOf(TextFieldValue(item.text)) }
+        val textFieldValue = remember { mutableStateOf(TextFieldValue(text)) }
 
         BasicTextField(
             value = textFieldValue.value,
             onValueChange = {
                 textFieldValue.value = it.copy(text = it.text.replace("\n", ""))
 
-                onTodoTextChange(it.text)
+                callbacks.onTodoTextChange(it.text)
             },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -73,7 +97,7 @@ fun TodoRow(
             ),
             keyboardActions = KeyboardActions(
                 onNext = {
-                    onImeAction()
+                    callbacks.onImeAction()
                 }
             ),
             cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
@@ -85,14 +109,14 @@ fun TodoRow(
                 when (it.key) {
                     Key.Backspace, Key.Delete -> {
                         if (textFieldValue.value.text.isEmpty()) {
-                            onDeleteItem()
+                            callbacks.onDelete()
                             true
                         } else {
                             false
                         }
                     }
                     Key.Enter -> {
-                        onImeAction()
+                        callbacks.onImeAction()
                         true
                     }
                     else -> false
@@ -109,13 +133,17 @@ fun TodoPreview() {
     TickTheme {
         Scaffold {
             TodoRow(
-                item = ListBloc.Item(
-                    id = null,
-                    text = "Hang the washing out",
-                    isDone = false,
-                    hasFocus = false
-                ),
-                {}, {}, {}, {}
+                text = "Hang the washing out",
+                isDone = false,
+                callbacks = object : TodoRowCallbacks {
+                    override fun onTodoTextChange(newText: String) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onTodoCheckedChange(isDone: Boolean) {
+                        TODO("Not yet implemented")
+                    }
+                }
             )
         }
     }

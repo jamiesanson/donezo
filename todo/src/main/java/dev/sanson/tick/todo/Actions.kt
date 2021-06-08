@@ -19,5 +19,8 @@ sealed class Action {
     data class AddTodoAsSibling(val sibling: Todo): Action()
     data class DeleteTodo(val item: Todo): Action()
 
+    data class RequestFocus(val item: Any): Action()
+    object ClearFocus: Action()
+
     data class ListsLoaded(val lists: List<TodoList>): Action()
 }
