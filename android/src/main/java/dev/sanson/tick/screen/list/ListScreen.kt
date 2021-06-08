@@ -1,5 +1,7 @@
 package dev.sanson.tick.screen.list
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +10,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.tick.android.LocalDispatch
@@ -47,14 +50,22 @@ fun ListScreen(lists: List<TodoList>, currentFocus: Any?) {
                 items(list.items) { item ->
                     val requester = remember { FocusRequester() }
 
-                    TodoRow(
-                        text = item.text,
-                        isDone = item.isDone,
-                        callbacks = TodoRowCallbacks(item, dispatch),
-                        modifier = Modifier
-                            .focusRequester(requester)
-                            .onFocusChanged { if (it.isFocused) dispatch(Action.RequestFocus(item)) }
-                    )
+                    AnimatedTodoVisibility {
+                        TodoRow(
+                            text = item.text,
+                            isDone = item.isDone,
+                            callbacks = TodoRowCallbacks(item, dispatch),
+                            modifier = Modifier
+                                .focusRequester(requester)
+                                .onFocusChanged {
+                                    if (it.isFocused) dispatch(
+                                        Action.RequestFocus(
+                                            item
+                                        )
+                                    )
+                                }
+                        )
+                    }
 
                     SideEffect {
                         if (item == currentFocus) {
@@ -65,6 +76,19 @@ fun ListScreen(lists: List<TodoList>, currentFocus: Any?) {
             }
 
         }
+    }
+}
+
+@Composable
+fun AnimatedTodoVisibility(block: @Composable () -> Unit) {
+    val alpha = remember { Animatable(0F) }
+
+    LaunchedEffect(true) {
+        alpha.animateTo(1F)
+    }
+
+    Box(modifier = Modifier.graphicsLayer(alpha = alpha.value)) {
+        block()
     }
 }
 

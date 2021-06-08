@@ -105,7 +105,9 @@ fun TodoRow(
                 color = MaterialTheme.colors.onSurface,
                 fontSize = 18.sp
             ),
-            modifier = modifier.onKeyEvent {
+            modifier = modifier
+                .fillMaxWidth()
+                .onKeyEvent {
                 when (it.key) {
                     Key.Backspace, Key.Delete -> {
                         if (textFieldValue.value.text.isEmpty()) {
