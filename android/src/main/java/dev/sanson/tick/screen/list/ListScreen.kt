@@ -30,7 +30,7 @@ fun ListScreen(lists: List<TodoList>, currentFocus: Any?) {
         LazyColumn {
             for (list in lists) {
                 item {
-                    val requester = remember { FocusRequester() }
+                    val requester = FocusRequester()
                     ListTitle(
                         title = list.title,
                         onValueChange = { dispatch(Action.UpdateListTitle(list, it)) },
@@ -48,7 +48,7 @@ fun ListScreen(lists: List<TodoList>, currentFocus: Any?) {
                 }
 
                 items(list.items) { item ->
-                    val requester = remember { FocusRequester() }
+                    val requester = FocusRequester()
 
                     AnimatedTodoVisibility {
                         TodoRow(

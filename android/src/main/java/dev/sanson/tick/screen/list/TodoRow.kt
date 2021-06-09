@@ -1,10 +1,6 @@
 package dev.sanson.tick.screen.list
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -37,7 +33,7 @@ interface TodoRowCallbacks {
     fun onDelete() {}
 }
 
-fun TodoRowCallbacks(item: Todo, dispatch: (Any) -> Any) = object: TodoRowCallbacks {
+fun TodoRowCallbacks(item: Todo, dispatch: (Any) -> Any) = object : TodoRowCallbacks {
     override fun onTodoTextChange(newText: String) {
         dispatch(Action.UpdateTodoText(item, newText))
     }
@@ -64,22 +60,16 @@ fun TodoRow(
 ) {
     Row(
         modifier = Modifier
-            .height(Dp(56f))
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = Dp(56f)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        Spacer(
-            modifier = Modifier.width(width = Dp(16f))
-        )
-
         Checkbox(
             checked = isDone,
-            onCheckedChange = callbacks::onTodoCheckedChange
-        )
-
-        Spacer(
-            modifier = Modifier.width(width = Dp(16f))
+            onCheckedChange = callbacks::onTodoCheckedChange,
+            modifier = Modifier
+                .alignByBaseline()
+                .padding(Dp(16f))
         )
 
         val textFieldValue = remember { mutableStateOf(TextFieldValue(text)) }
@@ -107,23 +97,26 @@ fun TodoRow(
             ),
             modifier = modifier
                 .fillMaxWidth()
+                .wrapContentHeight()
+                .alignByBaseline()
+                .padding(top = Dp(16f), bottom = Dp(16f), end = Dp(16f))
                 .onKeyEvent {
-                when (it.key) {
-                    Key.Backspace, Key.Delete -> {
-                        if (textFieldValue.value.text.isEmpty()) {
-                            callbacks.onDelete()
-                            true
-                        } else {
-                            false
+                    when (it.key) {
+                        Key.Backspace, Key.Delete -> {
+                            if (textFieldValue.value.text.isEmpty()) {
+                                callbacks.onDelete()
+                                true
+                            } else {
+                                false
+                            }
                         }
+                        Key.Enter -> {
+                            callbacks.onImeAction()
+                            true
+                        }
+                        else -> false
                     }
-                    Key.Enter -> {
-                        callbacks.onImeAction()
-                        true
-                    }
-                    else -> false
                 }
-            }
         )
     }
 }
