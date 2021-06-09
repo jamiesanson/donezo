@@ -16,11 +16,8 @@ import dev.sanson.tick.todo.feature.navigation.Screen
 fun App(state: AppState) {
     TickTheme {
         Surface(color = MaterialTheme.colors.surface, modifier = Modifier.fillMaxSize()) {
-            when (val screen = state.navigation.currentScreen) {
-                is Screen.Lists -> ListScreen(
-                    lists = state.lists,
-                    currentFocus = screen.focussedItem
-                )
+            when (state.navigation.currentScreen) {
+                is Screen.Lists -> ListScreen(lists = state.lists)
                 is Screen.SyncSettings -> SyncSettingsScreen(state = state)
             }
         }

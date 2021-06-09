@@ -15,7 +15,7 @@ data class Navigation(
      * Backstack of previous screens, with index zero being the bottom of the stack
      */
     val backstack: List<Screen> = emptyList(),
-    val currentScreen: Screen = Screen.Lists()
+    val currentScreen: Screen = Screen.Lists
 )
 
 /**
@@ -23,9 +23,7 @@ data class Navigation(
  * Additionally, these keys can contain screen-related state.
  */
 sealed class Screen {
-    data class Lists(
-        val focussedItem: Any? = null
-    ) : Screen()
+    object Lists : Screen()
 
     object SyncSettings : Screen()
 }

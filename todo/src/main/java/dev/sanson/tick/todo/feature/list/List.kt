@@ -1,85 +1,11 @@
 package dev.sanson.tick.todo.feature.list
 
 import dev.sanson.tick.model.Todo
-import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.AppState
-import dev.sanson.tick.todo.feature.list.database.DatabaseTodoList
-import dev.sanson.tick.todo.feature.navigation.Screen
 import org.reduxkotlin.Reducer
 
-/**
- * Reducer for the main list screen. Includes focusing
- */
 val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
-    val interimState = SimpleListReducer(state, action)
-
-    when (state.navigation.currentScreen) {
-        is Screen.Lists -> {
-            when (action) {
-                // Focus the new item
-                is Action.AddTodo, is Action.AddTodoAsSibling -> {
-                    val oldItems = state.lists.flatMap { it.items }
-                    val newItems = interimState.lists.flatMap { it.items }
-
-                    interimState.copy(
-                        navigation = state.navigation.copy(
-                            currentScreen = state.navigation.currentScreen.copy(
-                                focussedItem = newItems.find { it !in oldItems }
-                            )
-                        )
-                    )
-                }
-
-                // Shift focus up one item
-                is Action.DeleteTodo -> {
-                    val containingList = state.lists.find { it.items.contains(action.item) }!!
-
-                    // If the item to be deleted was top of the list, focus the title, else shift it up one
-                    val newFocus: Any? = if (containingList.items.indexOf(action.item) == 0) {
-                        interimState.lists.find { (it as? DatabaseTodoList)?.id == (containingList as? DatabaseTodoList)?.id }
-                    } else {
-                        containingList.items[containingList.items.indexOf(action.item) - 1]
-                    }
-
-                    interimState.copy(
-                        navigation = state.navigation.copy(
-                            currentScreen = state.navigation.currentScreen.copy(
-                                focussedItem = newFocus
-                            )
-                        )
-                    )
-                }
-
-                is Action.RequestFocus -> {
-                    interimState.copy(
-                        navigation = state.navigation.copy(
-                            currentScreen = state.navigation.currentScreen.copy(
-                                focussedItem = if (action.item is TodoList || action.item is Todo) action.item else null
-                            )
-                        )
-                    )
-                }
-
-                is Action.ClearFocus -> {
-                    interimState.copy(
-                        navigation = state.navigation.copy(
-                            currentScreen = state.navigation.currentScreen.copy(
-                                focussedItem = null
-                            )
-                        )
-                    )
-                }
-
-                else -> interimState
-            }
-
-        }
-        else -> interimState
-    }
-}
-
-val SimpleListReducer: Reducer<AppState> = reducer@{ state, action ->
     when (action) {
         is Action.ListsLoaded -> state.copy(lists = action.lists)
         is Action.UpdateListTitle -> state.copy(
