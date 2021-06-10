@@ -23,23 +23,19 @@ fun ListScreen(lists: List<TodoList>) {
     val focusManager = LocalFocusManager.current
     var focusDirectionToMove by remember { mutableStateOf<FocusDirection?>(null) }
 
-    val _dispatch = LocalDispatch.current
-    val dispatch: (Any) -> Any = { action ->
+    val dispatch = LocalDispatch.current
+    val wrappedDispatch: (Any) -> Any = { action ->
         when (action) {
             is Action.AddTodo, is Action.AddTodoAsSibling -> focusDirectionToMove = FocusDirection.Down
             is Action.DeleteTodo -> focusDirectionToMove = FocusDirection.Up
         }
 
-        _dispatch(action)
+        dispatch(action)
     }
 
-    TodoListColumn(lists, dispatch)
+    TodoListColumn(lists, wrappedDispatch)
 
     LaunchedEffect(lists) {
-        // This is a hack. Ideally we'd use [SideEffect], but everything happens so quickly
-        // post-recomposition that the root FocusModifier doesn't include the new node yet.
-        delay(1)
-
         focusDirectionToMove?.let(focusManager::moveFocus)
         focusDirectionToMove = null
     }
