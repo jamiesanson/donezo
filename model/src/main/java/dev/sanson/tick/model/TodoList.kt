@@ -17,7 +17,7 @@ interface TodoList {
 class DefaultTodoList(
     override val title: String,
     override val items: List<Todo>
-): TodoList {
+) : TodoList {
 
     override fun copy(title: String, items: List<Todo>): TodoList {
         return DefaultTodoList(title, items)

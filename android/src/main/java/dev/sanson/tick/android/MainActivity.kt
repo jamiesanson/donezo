@@ -16,8 +16,8 @@ import dev.sanson.tick.App
 import dev.sanson.tick.backend.git.github.GitHubBackend
 import dev.sanson.tick.db.Database
 import dev.sanson.tick.todo.Action
-import dev.sanson.tick.todo.AppState
 import dev.sanson.tick.todo.AppSettings
+import dev.sanson.tick.todo.AppState
 import dev.sanson.tick.todo.createApp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

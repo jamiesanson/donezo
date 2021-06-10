@@ -76,7 +76,6 @@ val DatabaseMiddleware = middleware<AppState> { store, dispatch, action ->
         action is Action.UpdateTodoDone && action.item is DatabaseTodo ->
             dispatch(DatabaseAction.UpdateTodo(action.item.copy(isDone = action.isDone)))
 
-
         /**
          * Else, no DB ops to perform
          */

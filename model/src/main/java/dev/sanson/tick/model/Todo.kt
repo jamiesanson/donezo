@@ -14,7 +14,7 @@ interface Todo {
 class DefaultTodo(
     override val text: String,
     override val isDone: Boolean
-): Todo {
+) : Todo {
     override fun copy(text: String, isDone: Boolean): Todo {
         return DefaultTodo(text, isDone)
     }

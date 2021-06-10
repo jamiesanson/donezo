@@ -1,7 +1,7 @@
 # Tick
 A todo list that follows you everywhere.
 
-Inspired by [press](https://github.com/saket/press), this project serves as a technical demo for modern Android technologies, such as Compose and KMM. 
+Inspired by [press](https://github.com/saket/press), this project serves as a technical demo for modern Android technologies, such as Compose and KMM.
 
 ### Documentation
 * [Architecture/Module structure](docs/ARCHITECTURE.md)

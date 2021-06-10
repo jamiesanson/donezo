@@ -26,7 +26,6 @@ class ListReducerTests {
         newState.lists.first().items.isNotEmpty() shouldBe true
     }
 
-
     @Test
     fun `editing todo item updates state`() {
         val todo = Todo(

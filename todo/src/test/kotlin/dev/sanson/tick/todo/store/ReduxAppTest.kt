@@ -2,8 +2,8 @@ package dev.sanson.tick.todo.store
 
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import dev.sanson.tick.db.Database
-import dev.sanson.tick.todo.AppState
 import dev.sanson.tick.todo.AppSettings
+import dev.sanson.tick.todo.AppState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
