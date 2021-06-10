@@ -60,7 +60,7 @@ private fun TodoListColumn(
                 )
             }
 
-            items(list.items) { item ->
+            items(list.items, key = { it.id }) { item ->
                 AnimatedTodoVisibility {
                     TodoRow(
                         text = item.text,
