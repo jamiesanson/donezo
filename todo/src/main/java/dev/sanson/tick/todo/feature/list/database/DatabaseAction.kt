@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 internal sealed class DatabaseAction {
 
     /**
-     * Turn a plain old [Todo] into a [DatabaseTodo]
+     * Add an [id] to a [Todo]
      */
     internal data class HydrateTodo(val original: Todo, val id: Long) : DatabaseAction()
 
@@ -23,7 +23,7 @@ internal sealed class DatabaseAction {
         /**
          * Updates the title of [list] to be [title]
          */
-        internal fun UpdateListTitle(list: DatabaseTodoList, title: String) =
+        internal fun UpdateListTitle(list: TodoList, title: String) =
             asyncAction<AppState> { _, _ ->
                 val database by inject<Database>()
                 database.listQueries.update(id = list.id, title = title)
@@ -32,7 +32,7 @@ internal sealed class DatabaseAction {
         /**
          * Updates a Todo [item]
          */
-        internal fun UpdateTodo(item: DatabaseTodo) = asyncAction<AppState> { _, _ ->
+        internal fun UpdateTodo(item: Todo) = asyncAction<AppState> { _, _ ->
             val database by inject<Database>()
             database.todoQueries.update(id = item.id, text = item.text, isDone = item.isDone)
         }
@@ -40,15 +40,12 @@ internal sealed class DatabaseAction {
         /**
          * Add a new [Todo] to [list]
          */
-        internal fun AddTodo(list: DatabaseTodoList) =
+        internal fun AddTodo(list: TodoList, index: Int) =
             asyncAction<AppState> thunk@{ dispatch, getState ->
-                // If there aren't any items to hydrate, return early
-                if (list.items.none { it !is DatabaseTodo }) return@thunk Unit
-
                 val database by inject<Database>()
 
                 val id = with(database.todoQueries) {
-                    insert(listId = list.id, text = "")
+                    insert(listId = list.id, text = "", index = index)
 
                     selectByListId(listId = list.id)
                         .executeAsList()
@@ -57,9 +54,9 @@ internal sealed class DatabaseAction {
                 }
 
                 val original = getState().lists
-                    .first { (it as? DatabaseTodoList)?.id == list.id }
+                    .first { it.id == list.id }
                     .items
-                    .last { it !is DatabaseTodo }
+                    .last { it.id == -1L }
 
                 withContext(Dispatchers.Main) {
                     dispatch(HydrateTodo(original, id))
@@ -69,9 +66,15 @@ internal sealed class DatabaseAction {
         /**
          * Delete a given [Todo] item
          */
-        internal fun DeleteTodoById(id: Long) = asyncAction<AppState> { _, _ ->
+        internal fun DeleteTodo(item: Todo) = asyncAction<AppState> { _, _ ->
             val database by inject<Database>()
-            database.todoQueries.delete(id = id)
+            with (database.todoQueries) {
+                transaction {
+                    val currentIndex = selectById(item.id).executeAsOne().idx
+                    delete(id = item.id)
+                    decrementAllFrom(index = currentIndex)
+                }
+            }
         }
 
         /**
@@ -85,13 +88,14 @@ internal sealed class DatabaseAction {
                 val todos = database.todoQueries.selectAll().executeAsList()
 
                 return lists.map { list ->
-                    DatabaseTodoList(
+                    TodoList(
                         id = list.id,
                         title = list.title,
                         items = todos
                             .filter { it.listId == list.id }
+                            .sortedBy { it.idx }
                             .map {
-                                DatabaseTodo(
+                                Todo(
                                     id = it.id,
                                     text = it.text,
                                     isDone = it.isDone

@@ -44,12 +44,10 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
             }
         )
         is Action.AddTodo -> {
-            if (action.list.items.lastOrNull()?.text?.isBlank() == true) return@reducer state
-
             state.copy(
                 lists = state.lists.map {
                     if (it == action.list) {
-                        it.copy(items = it.items + Todo(text = "", isDone = false))
+                        it.copy(items = listOf(Todo(text = "", isDone = false), *it.items.toTypedArray()))
                     } else {
                         it
                     }
@@ -59,9 +57,6 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
         is Action.AddTodoAsSibling -> {
             val list = state.lists.find { it.items.contains(action.sibling) }
                 ?: throw IllegalArgumentException("No list found for sibling: ${action.sibling}")
-
-            // Don't permit duplicate blank items
-            if (list.items.last().text.isBlank()) return@reducer state
 
             state.copy(
                 lists = state.lists.map {

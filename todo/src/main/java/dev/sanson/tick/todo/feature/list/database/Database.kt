@@ -12,7 +12,7 @@ val DatabaseReducer = reducerForActionType<AppState, DatabaseAction> { state, ac
                 list.copy(
                     items = list.items.map {
                         if (it == action.original) {
-                            DatabaseTodo(id = action.id, text = it.text, isDone = it.isDone)
+                            it.copy(id = action.id)
                         } else {
                             it
                         }
@@ -34,47 +34,45 @@ val DatabaseMiddleware = middleware<AppState> { store, dispatch, action ->
     // Pass everything through immediately, this middleware only deals with side-effects
     dispatch(action)
 
-    when {
+    when (action) {
         /**
          * Adding a todo to a given list
          */
-        action is Action.AddTodo && action.list is DatabaseTodoList -> {
-            dispatch(DatabaseAction.AddTodo(list = action.list))
+        is Action.AddTodo -> {
+            dispatch(DatabaseAction.AddTodo(list = action.list, index = 0))
         }
 
         /**
          * Add a todo as a sibling of the input todo
          */
-        action is Action.AddTodoAsSibling -> {
-            val list = store.state.lists.find { it.items.contains(action.sibling) } as? DatabaseTodoList
+        is Action.AddTodoAsSibling -> {
+            val list = store.state.lists.find { it.items.contains(action.sibling) }
                 ?: throw IllegalArgumentException("No list found for sibling: ${action.sibling}")
 
-            dispatch(DatabaseAction.AddTodo(list = list))
+            val index = list.items.indexOf(action.sibling) + 1
+
+            dispatch(DatabaseAction.AddTodo(list = list, index = index))
         }
 
         /**
          * Deleting a todo
          */
-        action is Action.DeleteTodo && action.item is DatabaseTodo ->
-            dispatch(DatabaseAction.DeleteTodoById(id = action.item.id))
+        is Action.DeleteTodo -> dispatch(DatabaseAction.DeleteTodo(item = action.item))
 
         /**
          * Updating a list's title
          */
-        action is Action.UpdateListTitle && action.list is DatabaseTodoList ->
-            dispatch(DatabaseAction.UpdateListTitle(action.list, action.title))
+        is Action.UpdateListTitle -> dispatch(DatabaseAction.UpdateListTitle(action.list, action.title))
 
         /**
          * Updating a todo
          */
-        action is Action.UpdateTodoText && action.item is DatabaseTodo ->
-            dispatch(DatabaseAction.UpdateTodo(action.item.copy(text = action.text)))
+        is Action.UpdateTodoText -> dispatch(DatabaseAction.UpdateTodo(action.item.copy(text = action.text)))
 
         /**
          * Updating a todo
          */
-        action is Action.UpdateTodoDone && action.item is DatabaseTodo ->
-            dispatch(DatabaseAction.UpdateTodo(action.item.copy(isDone = action.isDone)))
+        is Action.UpdateTodoDone -> dispatch(DatabaseAction.UpdateTodo(action.item.copy(isDone = action.isDone)))
 
         /**
          * Else, no DB ops to perform
