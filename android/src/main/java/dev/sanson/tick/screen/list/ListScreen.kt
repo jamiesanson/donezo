@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.*
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,7 +19,6 @@ import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.todo.Action
-import kotlinx.coroutines.delay
 
 @Composable
 fun ListScreen(lists: List<TodoList>) {
@@ -68,7 +70,6 @@ private fun TodoListColumn(
         }
     }
 }
-
 
 @Composable
 fun AnimatedTodoVisibility(block: @Composable () -> Unit) {

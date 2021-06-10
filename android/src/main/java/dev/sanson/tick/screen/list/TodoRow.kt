@@ -1,6 +1,10 @@
 package dev.sanson.tick.screen.list
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -56,7 +60,6 @@ fun TodoRow(
     text: String,
     isDone: Boolean,
     callbacks: TodoRowCallbacks,
-    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = Modifier
@@ -93,9 +96,10 @@ fun TodoRow(
             cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
             textStyle = MaterialTheme.typography.body1.copy(
                 color = MaterialTheme.colors.onSurface,
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                lineHeight = 28.sp
             ),
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .alignByBaseline()
