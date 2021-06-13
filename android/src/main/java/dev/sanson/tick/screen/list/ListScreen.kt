@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,7 +40,8 @@ fun ListScreen(lists: List<TodoList>) {
 
     TodoListColumn(lists, wrappedDispatch)
 
-    LaunchedEffect(lists) {
+    val itemCount = derivedStateOf { lists.fold(0) { acc, list -> acc + 1 + list.items.size } }
+    LaunchedEffect(itemCount) {
         focusDirectionToMove?.let(focusManager::moveFocus)
         focusDirectionToMove = null
     }
