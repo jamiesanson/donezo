@@ -1,6 +1,14 @@
 [versions]
+# App Versions
 app = "0.0"
+versioncode = "1"
 
+# Android build specifications
+minsdk = "24"
+compilesdk = "30"
+targetsdk = "30"
+
+# Libraries
 compose = "1.0.0-rc02"
 kotlin = "1.5.10"
 android-gradle-plugin = "7.1.0-alpha03"
@@ -22,7 +30,7 @@ reduxkotlin = "0.5.5"
 koin = "3.1.2"
 
 junit = "4.12"
-kotest = "4.6.1"
+kotest = "4.0.7"
 test-parameter-injector = "1.4"
 
 [libraries]

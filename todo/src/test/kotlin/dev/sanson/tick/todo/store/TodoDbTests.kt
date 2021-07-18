@@ -2,7 +2,6 @@ package dev.sanson.tick.todo.store
 
 import dev.sanson.tick.todo.Action
 import dev.sanson.tick.todo.AppState
-import dev.sanson.tick.todo.feature.list.database.DatabaseTodo
 import dev.sanson.tick.todo.feature.navigation.Screen
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -53,7 +52,7 @@ class TodoDbTests : ReduxAppTest() {
                 delay(100)
 
                 val firstItem = stateFlow.value.lists.first().items.first()
-                firstItem::class shouldBe DatabaseTodo::class
+                firstItem.id shouldNotBe -1
             }
         }
     }

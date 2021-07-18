@@ -4,13 +4,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion libs.versions.compilesdk.get().toInteger()
 
     defaultConfig {
         applicationId "dev.sanson.tick"
-        minSdkVersion 24
-        targetSdkVersion 30
-        versionCode 1
+        minSdkVersion libs.versions.minsdk.get().toInteger()
+        targetSdkVersion libs.versions.targetsdk.get().toInteger()
+
+        versionCode libs.versions.versioncode.get().toInteger()
         versionName libs.versions.app.get()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

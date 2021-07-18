@@ -20,12 +20,12 @@ class NavigationTests : ReduxAppTest() {
     data class AllowedTransition(val from: Screen, val to: Screen, val on: Action.Navigation)
 
     private val allowedTransitions = listOf(
-        AllowedTransition(Screen.Lists(), Screen.SyncSettings, Action.Navigation.To(Screen.SyncSettings)),
+        AllowedTransition(Screen.Lists, Screen.SyncSettings, Action.Navigation.To(Screen.SyncSettings)),
     )
 
     private class ScreenProvider : TestParameter.TestParameterValuesProvider {
         override fun provideValues(): MutableList<*> {
-            return mutableListOf(Screen.Lists(), Screen.SyncSettings)
+            return mutableListOf(Screen.Lists, Screen.SyncSettings)
         }
     }
 
@@ -58,7 +58,7 @@ class NavigationTests : ReduxAppTest() {
 
     @Test
     fun `list screen is initial destination`() {
-        store.state.navigation.currentScreen shouldBe Screen.Lists()
+        store.state.navigation.currentScreen shouldBe Screen.Lists
     }
 
     @Test

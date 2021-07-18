@@ -9,7 +9,12 @@ java {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion libs.versions.compilesdk.get().toInteger()
+
+    defaultConfig {
+        minSdkVersion libs.versions.minsdk.get().toInteger()
+        targetSdkVersion libs.versions.targetsdk.get().toInteger()
+    }
 
     buildFeatures {
         compose true
