@@ -22,6 +22,7 @@ import dev.sanson.tick.model.Todo
 import dev.sanson.tick.model.TodoList
 import dev.sanson.tick.theme.TickTheme
 import dev.sanson.tick.todo.Action
+import kotlinx.coroutines.delay
 
 @Composable
 fun ListScreen(lists: List<TodoList>) {
@@ -42,6 +43,9 @@ fun ListScreen(lists: List<TodoList>) {
 
     val itemCount = derivedStateOf { lists.fold(0) { acc, list -> acc + 1 + list.items.size } }
     LaunchedEffect(itemCount) {
+        // This makes focus traversals more consistent for now. Ideally we'd be able to use the focus node state as
+        // the key for this effect, only traversing after an item can be moved to.
+        delay(10)
         focusDirectionToMove?.let(focusManager::moveFocus)
         focusDirectionToMove = null
     }
