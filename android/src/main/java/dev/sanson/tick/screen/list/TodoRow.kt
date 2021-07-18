@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
@@ -55,6 +56,7 @@ fun TodoRowCallbacks(item: Todo, dispatch: (Any) -> Any) = object : TodoRowCallb
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class) // Opt-in for Key._Blah_ APIs
 @Composable
 fun TodoRow(
     text: String,
