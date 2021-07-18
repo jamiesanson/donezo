@@ -1,9 +1,11 @@
 package dev.sanson.tick.screen.list
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -69,6 +71,8 @@ fun TodoRow(
             .defaultMinSize(minHeight = Dp(56f)),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Spacer(modifier = Modifier.width(Dp(8f)))
+
         Checkbox(
             checked = isDone,
             onCheckedChange = callbacks::onTodoCheckedChange,
@@ -105,7 +109,7 @@ fun TodoRow(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .alignByBaseline()
-                .padding(top = Dp(16f), bottom = Dp(16f), end = Dp(16f))
+                .padding(top = Dp(16f), bottom = Dp(16f), end = Dp(24f))
                 .onKeyEvent {
                     when (it.key) {
                         Key.Backspace, Key.Delete -> {

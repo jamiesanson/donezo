@@ -68,7 +68,7 @@ internal sealed class DatabaseAction {
          */
         internal fun DeleteTodo(item: Todo) = asyncAction<AppState> { _, _ ->
             val database by inject<Database>()
-            with (database.todoQueries) {
+            with(database.todoQueries) {
                 transaction {
                     val currentIndex = selectById(item.id).executeAsOne().idx
                     delete(id = item.id)
@@ -107,7 +107,12 @@ internal sealed class DatabaseAction {
 
             val allLists = fetchAll()
                 .ifEmpty {
-                    database.listQueries.seed()
+                    database.transaction {
+                        database.listQueries.seed()
+
+                        val list = database.listQueries.selectAll().executeAsOne()
+                        database.todoQueries.seed(list.id)
+                    }
                     fetchAll()
                 }
 

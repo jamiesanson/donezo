@@ -38,3 +38,8 @@ decrementAllFrom:
 UPDATE todo
 SET idx = idx - 1
 WHERE idx > :index;
+
+seed:
+INSERT INTO todo(listId, text, isDone) VALUES
+(:listId, "Hi, I'm a todo item!", 1),
+(:listId, "<-- Try checking me off", 0);
