@@ -1,4 +1,5 @@
-# Donezo
+<img width="100" height="100" align="center" src="https://github.com/jamiesanson/donezo/raw/main/assets/play-store-icon.png?raw=true"> 
+
 A todo list that follows you everywhere.
 
 Inspired by [press](https://github.com/saket/press), this project serves as a technical demo for modern Android technologies, such as Compose and KMM.
