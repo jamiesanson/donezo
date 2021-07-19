@@ -20,6 +20,8 @@ androidx-activity-compose = "1.3.0-rc02"
 androidx-lifecycle = "2.3.1"
 androidx-viewmodel-compose = "1.0.0-alpha07"
 
+core-library-desugaring = "1.1.5"
+
 kotlinx-coroutines = "1.5.1"
 kotlinx-collections-immutable = "0.3.4"
 
@@ -38,6 +40,8 @@ android-plugin = { module = "com.android.tools.build:gradle", version.ref = "and
 kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 sqldelight-plugin = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
+
+corelibrarydesugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "core-library-desugaring" }
 
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }

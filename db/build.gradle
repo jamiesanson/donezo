@@ -7,7 +7,7 @@ apply plugin: 'com.squareup.sqldelight'
 
 sqldelight {
     Database {
-        packageName = "dev.sanson.tick.db"
+        packageName = "dev.sanson.donezo.db"
     }
 }
 

@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.sanson.tick">
+    package="dev.sanson.donezo">
 
     <application
         android:allowBackup="true"
+        android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".android.TickApplication"
-        android:theme="@style/Theme.Tick">
+        android:name="dev.sanson.donezo.android.DonezoApplication"
+        android:theme="@style/Theme.Donezo">
 
         <activity
-            android:name=".android.MainActivity"
+            android:name="dev.sanson.donezo.android.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Tick.NoActionBar">
+            android:theme="@style/Theme.Donezo.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
