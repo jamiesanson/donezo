@@ -1,9 +1,9 @@
-# Tick
+# Donezo
 A todo list that follows you everywhere.
 
 Inspired by [press](https://github.com/saket/press), this project serves as a technical demo for modern Android technologies, such as Compose and KMM.
 
-I'm currently working towards an initial release without any backend implementation, and am not currently accepting contributions. Follow my progress in the [Initial Release project](https://github.com/jamiesanson/tick/projects/1)
+I'm currently working towards an initial release without any backend implementation, and am not currently accepting contributions. Follow my progress in the [Initial Release project](https://github.com/jamiesanson/donezo/projects/1)
 
 
 ### License
