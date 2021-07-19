@@ -5,8 +5,8 @@ versioncode = "1"
 
 # Android build specifications
 minsdk = "24"
-compilesdk = "30"
-targetsdk = "30"
+compilesdk = "31"
+targetsdk = "31"
 
 # Libraries
 compose = "1.0.0-rc02"

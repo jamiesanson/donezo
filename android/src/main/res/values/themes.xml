@@ -12,6 +12,8 @@
 
         <item name="colorSurface">#455a64</item>
 
+        <item name="android:windowSplashScreenBackground">#F4F4E8</item>
+
         <item name="android:colorBackground">?colorSurface</item>
         <item name="android:statusBarColor" tools:targetApi="l">?colorSurface</item>
         <item name="android:navigationBarColor">?colorSurface</item>
