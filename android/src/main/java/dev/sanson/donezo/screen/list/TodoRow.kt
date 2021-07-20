@@ -68,17 +68,17 @@ fun TodoRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = Dp(56f)),
+            .defaultMinSize(minHeight = Dp(52f)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Spacer(modifier = Modifier.width(Dp(8f)))
+        Spacer(modifier = Modifier.width(Dp(4f)))
 
         Checkbox(
             checked = isDone,
             onCheckedChange = callbacks::onTodoCheckedChange,
             modifier = Modifier
                 .alignByBaseline()
-                .padding(Dp(16f))
+                .padding(top = Dp(14f), bottom = Dp(12f), start = Dp(16f), end = Dp(16f))
         )
 
         val textFieldValue = remember { mutableStateOf(TextFieldValue(text)) }
@@ -102,14 +102,12 @@ fun TodoRow(
             cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
             textStyle = MaterialTheme.typography.body1.copy(
                 color = MaterialTheme.colors.onSurface,
-                fontSize = 18.sp,
-                lineHeight = 28.sp
             ),
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .alignByBaseline()
-                .padding(top = Dp(16f), bottom = Dp(16f), end = Dp(24f))
+                .padding(top = Dp(12f), bottom = Dp(12f), end = Dp(16f))
                 .onKeyEvent {
                     when (it.key) {
                         Key.Backspace, Key.Delete -> {

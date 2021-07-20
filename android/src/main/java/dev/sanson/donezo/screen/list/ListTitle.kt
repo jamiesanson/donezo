@@ -43,11 +43,10 @@ fun ListTitle(
             }
         ),
         modifier = modifier
-            .padding(start = Dp(24f), end = Dp(24f), top = Dp(16f), bottom = Dp(8f)),
+            .padding(start = Dp(16f), end = Dp(16f), top = Dp(24f), bottom = Dp(16f)),
         cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
-        textStyle = MaterialTheme.typography.h4.copy(
+        textStyle = MaterialTheme.typography.h5.copy(
             color = MaterialTheme.colors.onSurface,
-            fontWeight = FontWeight.Medium
         ),
     )
 }
