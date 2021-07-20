@@ -19,10 +19,10 @@ import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppSettings
 import dev.sanson.donezo.todo.AppState
 import dev.sanson.donezo.todo.createApp
+import dev.sanson.donezo.todo.destroyApp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 /**
  * Composition local providing convenient access to the store dispatch function
@@ -116,9 +116,11 @@ class DonezoViewModel : ViewModel() {
         // There's a very slim chance this could race and suspend forever.
         // We'll cross that bridge when we come to it :shrug:
         store.subscribe {
-            viewModelScope.launch {
-                stateFlow.compareAndSet(stateFlow.value, store.state)
-            }
+            stateFlow.compareAndSet(stateFlow.value, store.state)
         }
+    }
+
+    override fun onCleared() {
+        destroyApp()
     }
 }

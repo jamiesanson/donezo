@@ -12,6 +12,7 @@ import dev.sanson.donezo.todo.feature.navigation.BackNavigationMiddleware
 import dev.sanson.donezo.todo.feature.navigation.NavigationReducer
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.reduxkotlin.Store
 import org.reduxkotlin.applyMiddleware
 import org.reduxkotlin.combineReducers
@@ -54,4 +55,11 @@ fun createApp(
     store.dispatch(DatabaseAction.FetchAll())
 
     return store
+}
+
+/**
+ * [destroyApp] does any tidy-up necessary, when shutting down the app under normal operating conditions
+ */
+fun destroyApp() {
+    stopKoin()
 }
