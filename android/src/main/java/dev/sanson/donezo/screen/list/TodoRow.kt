@@ -1,5 +1,6 @@
 package dev.sanson.donezo.screen.list
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -107,6 +108,7 @@ fun TodoRow(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .alignByBaseline()
+                .animateContentSize()
                 .padding(top = Dp(12f), bottom = Dp(12f), end = Dp(16f))
                 .onKeyEvent {
                     when (it.key) {

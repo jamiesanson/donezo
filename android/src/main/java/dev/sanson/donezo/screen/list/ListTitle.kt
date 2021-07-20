@@ -1,5 +1,6 @@
 package dev.sanson.donezo.screen.list
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -43,7 +44,8 @@ fun ListTitle(
             }
         ),
         modifier = modifier
-            .padding(start = Dp(16f), end = Dp(16f), top = Dp(24f), bottom = Dp(16f)),
+            .padding(Dp(24f))
+            .animateContentSize(),
         cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
         textStyle = MaterialTheme.typography.h5.copy(
             color = MaterialTheme.colors.onSurface,

@@ -16,6 +16,7 @@
             android:name="dev.sanson.donezo.android.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Donezo.NoActionBar"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
