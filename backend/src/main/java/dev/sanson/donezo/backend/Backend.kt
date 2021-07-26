@@ -15,7 +15,7 @@ interface PresentableBackend : Backend, BackendMenuItem, BackendSetupFlow
  * in a [Snapshot].
  */
 interface Backend {
-    val status: StateFlow<Status>
+    val status: StateFlow<Status> = MutableStateFlow()
 
     fun update(items: List<TodoList>)
 
