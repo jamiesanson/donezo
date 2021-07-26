@@ -11,7 +11,7 @@ class GitBackend(
     private val repoSshUrl: String
 ) : Backend {
 
-    override val ui: Backend.UI = object: Backend.UI {
+    override val ui: Backend.UI = object : Backend.UI {
         override val setupFlow: BackendSetupFlow = GitHubSetupFlow
         override val backendMenuItem: BackendMenuItem = GitHubMenuItem
     }

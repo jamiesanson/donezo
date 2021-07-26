@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.sp
 import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.theme.DonezoTheme
 import dev.sanson.donezo.todo.Action

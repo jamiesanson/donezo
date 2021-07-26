@@ -1,4 +1,4 @@
-<img width="100" height="100" align="center" src="https://github.com/jamiesanson/donezo/raw/main/assets/play-store-icon.png?raw=true"> 
+<img width="100" height="100" align="center" src="https://github.com/jamiesanson/donezo/raw/main/assets/play-store-icon.png?raw=true">
 
 A todo list that follows you everywhere.
 

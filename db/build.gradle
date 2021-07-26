@@ -50,7 +50,7 @@ repositories {
 dependencies {
     implementation project(":model")
     compileOnly project(":backend")
-    
+
     implementation libs.bundles.compose
 
     implementation libs.kotlinx.coroutines.core
