@@ -7,7 +7,6 @@ import dev.sanson.donezo.todo.di.ApplicationModule
 import dev.sanson.donezo.todo.feature.list.ListsReducer
 import dev.sanson.donezo.todo.feature.list.database.DatabaseAction
 import dev.sanson.donezo.todo.feature.list.database.DatabaseMiddleware
-import dev.sanson.donezo.todo.feature.list.database.DatabaseReducer
 import dev.sanson.donezo.todo.feature.navigation.BackNavigationMiddleware
 import dev.sanson.donezo.todo.feature.navigation.NavigationReducer
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +36,6 @@ fun createApp(
     }
 
     val reducer = combineReducers(
-        DatabaseReducer,
         NavigationReducer,
         ListsReducer
     )
