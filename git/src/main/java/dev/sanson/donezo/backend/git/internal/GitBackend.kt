@@ -1,23 +1,21 @@
 package dev.sanson.donezo.backend.git.internal
 
 import dev.sanson.donezo.backend.Backend
-import dev.sanson.donezo.model.TodoList
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import dev.sanson.donezo.backend.BackendDataSource
+import dev.sanson.donezo.backend.BackendMenuItem
+import dev.sanson.donezo.backend.BackendSetupFlow
+import dev.sanson.donezo.backend.git.github.GitHubMenuItem
+import dev.sanson.donezo.backend.git.github.GitHubSetupFlow
 
 class GitBackend(
     private val repoSshUrl: String
 ) : Backend {
 
-    override val status: StateFlow<Backend.Status> = MutableStateFlow(Backend.Status.Disabled)
-
-    // TODO: Add reference to repository
-
-    override fun update(items: List<TodoList>) {
-        TODO("Implement generic list -> file -> commit whenever functionality")
+    override val ui: Backend.UI = object: Backend.UI {
+        override val setupFlow: BackendSetupFlow = GitHubSetupFlow
+        override val backendMenuItem: BackendMenuItem = GitHubMenuItem
     }
 
-    override fun syncNow() {
-        TODO("Implement generic git syncnow functionality")
-    }
+    override val dataSource: BackendDataSource
+        get() = TODO("Not yet implemented")
 }

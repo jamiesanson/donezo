@@ -9,5 +9,7 @@ data class Snapshot(
 ) {
     companion object {
         val Empty = Snapshot(asAt = Instant.EPOCH, items = emptyList())
+
+        fun now(items: List<TodoList>) = Snapshot(asAt = Instant.now(), items)
     }
 }

@@ -13,7 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import dev.sanson.donezo.android.LocalDispatch
-import dev.sanson.donezo.backend.PresentableBackend
+import dev.sanson.donezo.backend.BackendMenuItem
 import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppState
 
@@ -38,7 +38,7 @@ fun SyncSettingsScreen(state: AppState) {
     ) {
         LazyColumn {
             items(state.backends) {
-                BackendRow(backend = it as PresentableBackend)
+                BackendRow(backend = it.ui.backendMenuItem)
             }
         }
     }
@@ -46,7 +46,7 @@ fun SyncSettingsScreen(state: AppState) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BackendRow(backend: PresentableBackend) {
+fun BackendRow(backend: BackendMenuItem) {
     ListItem(
         icon = {
             backend.Icon()

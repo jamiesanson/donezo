@@ -4,24 +4,31 @@ import dev.sanson.donezo.model.TodoList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-/**
- * [Backend] implementation exposing UI for presenting in menu item and perform first time setup.
- */
-interface PresentableBackend : Backend, BackendMenuItem, BackendSetupFlow
+interface Backend {
+
+    val dataSource: BackendDataSource
+
+    val ui: UI
+
+    interface UI {
+        val setupFlow: BackendSetupFlow
+        val backendMenuItem: BackendMenuItem
+    }
+}
 
 /**
- * A [Backend] is a remote destination for syncing todo items to. Backend implementations, when enabled,
+ * A [BackendDataSource] is a remote destination for syncing todo items to. Backend implementations, when enabled,
  * are responsible for syncing content on their own schedule, and providing synced todo items
  * in a [Snapshot].
  */
-interface Backend {
-    val status: StateFlow<Status> = MutableStateFlow()
+abstract class BackendDataSource {
+    val status: StateFlow<Status> = MutableStateFlow(value = Status.Disabled)
 
-    fun update(items: List<TodoList>)
+    abstract fun update(items: List<TodoList>)
 
-    fun syncNow()
+    abstract fun syncNow()
 
-    fun updateStatus(
+    private fun updateStatus(
         enabled: Boolean = status.value.enabled,
         currentSnapshot: Snapshot = status.value.currentSnapshot,
         syncState: State = status.value.syncState
