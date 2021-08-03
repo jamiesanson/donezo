@@ -88,7 +88,9 @@ fun TodoRow(
             onValueChange = {
                 textFieldValue.value = it.copy(text = it.text.replace("\n", ""))
 
-                callbacks.onTodoTextChange(it.text)
+                if (it.text != text) {
+                    callbacks.onTodoTextChange(it.text)
+                }
             },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences,

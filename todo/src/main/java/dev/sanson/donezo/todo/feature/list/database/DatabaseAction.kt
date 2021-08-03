@@ -9,8 +9,6 @@ import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 internal object DatabaseAction {
 
@@ -47,9 +45,7 @@ internal object DatabaseAction {
                     .id
             }
 
-            withContext(Dispatchers.Main) {
-                dispatch(DatabaseMiddleware.HydrateMapping(id))
-            }
+            dispatch(HydrateItem(listId = listId, newItemId = id))
         }
 
     /**
@@ -64,10 +60,6 @@ internal object DatabaseAction {
                 decrementAllFrom(index = currentIndex)
             }
         }
-
-        withContext(Dispatchers.Main) {
-            dispatch(DatabaseMiddleware.FlushMapping(id = itemId))
-        }
     }
 
     /**
@@ -80,26 +72,22 @@ internal object DatabaseAction {
             val dbLists = database.listQueries.selectAll().executeAsList()
             val todos = database.todoQueries.selectAll().executeAsList()
 
-            val mapping = mutableMapOf<Any, Long>()
-
-            val lists = dbLists.map { list ->
+            return dbLists.map { list ->
                 TodoList(
+                    id = list.id,
                     title = list.title,
                     items = todos
                         .filter { it.listId == list.id }
                         .sortedBy { it.idx }
                         .map { todo ->
                             Todo(
+                                id = todo.id,
                                 text = todo.text,
                                 isDone = todo.isDone
-                            ).also { mapping[it] = todo.id }
+                            )
                         }
-                ).also { mapping[it] = list.id }
+                )
             }
-
-            dispatch(DatabaseMiddleware.InitialiseMapping(mapping))
-
-            return lists
         }
 
         val allLists = fetchAll()
@@ -113,8 +101,14 @@ internal object DatabaseAction {
                 fetchAll()
             }
 
-        withContext(Dispatchers.Main) {
-            dispatch(Action.ListsLoaded(allLists))
-        }
+        dispatch(Action.ListsLoaded(allLists))
     }
+
+    /**
+     * Fill in the ID of a newly added Todo item, added to the set with a blank ID by the core List actions
+     *
+     * @param listId ID of the list the new item is in
+     * @param newItemId ID of the new item
+     */
+    data class HydrateItem(val listId: Long, val newItemId: Long)
 }

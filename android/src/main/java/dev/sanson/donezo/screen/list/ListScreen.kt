@@ -1,7 +1,5 @@
 package dev.sanson.donezo.screen.list
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
@@ -12,9 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import dev.sanson.donezo.android.LocalDispatch
@@ -45,7 +41,7 @@ fun ListScreen(lists: List<TodoList>) {
     LaunchedEffect(itemCount) {
         // This makes focus traversals more consistent for now. Ideally we'd be able to use the focus node state as
         // the key for this effect, only traversing after an item can be moved to.
-        delay(10)
+        if (focusDirectionToMove == FocusDirection.Down) delay(10)
         focusDirectionToMove?.let(focusManager::moveFocus)
         focusDirectionToMove = null
     }
@@ -66,31 +62,17 @@ private fun TodoListColumn(
                 )
             }
 
-            items(list.items, key = { it.hashCode() }) { item ->
-                AnimatedTodoVisibility {
-                    TodoRow(
-                        text = item.text,
-                        isDone = item.isDone,
-                        callbacks = TodoRowCallbacks(item, dispatch)
-                    )
-                }
+            items(list.items, key = { it.id }) { item ->
+                TodoRow(
+                    text = item.text,
+                    isDone = item.isDone,
+                    callbacks = TodoRowCallbacks(item, dispatch)
+                )
             }
         }
     }
 }
 
-@Composable
-fun AnimatedTodoVisibility(block: @Composable () -> Unit) {
-    val alpha = remember { Animatable(0F) }
-
-    LaunchedEffect(true) {
-        alpha.animateTo(1F)
-    }
-
-    Box(modifier = Modifier.graphicsLayer(alpha = alpha.value)) {
-        block()
-    }
-}
 
 @Preview(showBackground = true, name = "Single todo list")
 @Composable

@@ -1,8 +1,5 @@
 package dev.sanson.donezo.todo.feature.list.database
 
-import dev.sanson.donezo.arch.redux.Thunk
-import dev.sanson.donezo.model.Todo
-import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppState
 import org.reduxkotlin.Dispatcher
@@ -17,43 +14,6 @@ import org.reduxkotlin.Store
  * by emitting actions which are then
  */
 object DatabaseMiddleware : Middleware<AppState> {
-
-    fun InitialiseMapping(mapping: Map<Any, Long>): Thunk<AppState> = { _, _ ->
-        idMapping.putAll(from = mapping)
-        Unit
-    }
-
-    fun HydrateMapping(id: Long): Thunk<AppState> = { _, getState ->
-        val state = getState()
-
-        // Find an item without an ID - it's probably that one that needs to be added to the mapping
-        val newKey =
-            state.lists.find { !idMapping.containsKey(it) }
-                ?: state.lists.flatMap { it.items }.find { !idMapping.containsKey(it) }
-                ?: throw IllegalStateException("Hydrate called before new item added to state")
-
-        idMapping[newKey] = id
-        Unit
-    }
-
-    fun FlushMapping(item: Any? = null, id: Long? = null): Thunk<AppState> = { _, _ ->
-        when {
-            item != null -> idMapping.remove(item)
-            id != null ->
-                idMapping
-                    .filterValues { id == id }
-                    .also { results -> idMapping.remove(results.keys.first()) }
-        }
-
-        Unit
-    }
-
-    // TODO: This approach doesn't actually work. If you change an item structurally, you change
-    // the map key. This is a tomorrow job.
-    private val idMapping = mutableMapOf<Any, Long>()
-
-    private val TodoList.id: Long get() = idMapping[this]!!
-    private val Todo.id: Long get() = idMapping[this]!!
 
     override fun invoke(store: Store<AppState>): (next: Dispatcher) -> (action: Any) -> Any =
         { next ->

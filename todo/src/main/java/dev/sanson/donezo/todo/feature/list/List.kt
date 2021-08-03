@@ -3,6 +3,7 @@ package dev.sanson.donezo.todo.feature.list
 import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppState
+import dev.sanson.donezo.todo.feature.list.database.DatabaseAction
 import org.reduxkotlin.Reducer
 
 val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
@@ -47,7 +48,12 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
             state.copy(
                 lists = state.lists.map {
                     if (it == action.list) {
-                        it.copy(items = listOf(Todo(text = "", isDone = false), *it.items.toTypedArray()))
+                        it.copy(
+                            items = listOf(
+                                Todo(text = "", isDone = false),
+                                *it.items.toTypedArray()
+                            )
+                        )
                     } else {
                         it
                     }
@@ -72,6 +78,19 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
             lists = state.lists.map { list ->
                 if (list.items.contains(action.item)) {
                     list.copy(items = list.items - action.item)
+                } else {
+                    list
+                }
+            }
+        )
+        is DatabaseAction.HydrateItem -> state.copy(
+            lists = state.lists.map { list ->
+                if (list.id == action.listId) {
+                    list.copy(
+                        items = list.items.map { item ->
+                            if (item.id == -1L) item.copy(id = action.newItemId) else item
+                        }
+                    )
                 } else {
                     list
                 }
