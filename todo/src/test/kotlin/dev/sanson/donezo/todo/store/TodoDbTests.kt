@@ -1,6 +1,5 @@
 package dev.sanson.donezo.todo.store
 
-import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppState
 import dev.sanson.donezo.todo.feature.navigation.Screen
 import io.kotest.matchers.shouldBe
@@ -36,23 +35,6 @@ class TodoDbTests : ReduxAppTest() {
                 stateFlow.value.navigation.currentScreen::class shouldBe Screen.Lists::class
 
                 stateFlow.value.lists.size shouldNotBe 0
-            }
-        }
-    }
-
-    @Test
-    fun `adding todo item is populated with id`() {
-        runBlocking {
-            testScope.launch {
-                delay(100)
-
-                // Add todo
-                store.dispatch(Action.AddTodo(list = stateFlow.value.lists.first()))
-
-                delay(100)
-
-                val firstItem = stateFlow.value.lists.first().items.first()
-                firstItem.id shouldNotBe -1
             }
         }
     }
