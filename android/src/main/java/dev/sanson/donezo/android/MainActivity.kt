@@ -20,6 +20,7 @@ import dev.sanson.donezo.todo.AppSettings
 import dev.sanson.donezo.todo.AppState
 import dev.sanson.donezo.todo.createApp
 import dev.sanson.donezo.todo.destroyApp
+import dev.sanson.donezo.todo.storage.LocalStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -81,12 +82,18 @@ class DonezoViewModel : ViewModel() {
         get() = AndroidSqliteDriver(Database.Schema, DonezoApplication.context, "todo.db")
 
     /**
+     * Local storage instance for the Android platform
+     */
+    private val localStorage: LocalStorage = AndroidLocalStorage(DonezoApplication.context)
+
+    /**
      * The store holding the whole app's state. We scope all internal
      * coroutines calls to this ViewModel, which represents the lifecycle of the entire application.
      */
     val store = createApp(
         applicationScope = viewModelScope,
         appSettings = AppSettings(
+            localStorage = localStorage,
             databaseDriver = databaseDriver,
             availableBackends = availableBackends
         ),

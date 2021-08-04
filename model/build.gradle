@@ -10,5 +10,5 @@ java {
 }
 
 dependencies {
-    implementation libs.kotlin.serialization.json
+    api libs.kotlin.serialization.json
 }
