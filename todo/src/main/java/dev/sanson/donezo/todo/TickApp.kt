@@ -10,6 +10,7 @@ import dev.sanson.donezo.todo.feature.list.database.DatabaseAction
 import dev.sanson.donezo.todo.feature.list.database.DatabaseMiddleware
 import dev.sanson.donezo.todo.feature.navigation.BackNavigationMiddleware
 import dev.sanson.donezo.todo.feature.navigation.NavigationReducer
+import dev.sanson.donezo.todo.storage.LocalStorage
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -20,6 +21,7 @@ import org.reduxkotlin.createThreadSafeStore
 
 data class AppSettings(
     val databaseDriver: SqlDriver,
+    val localStorage: LocalStorage,
     val availableBackends: List<Backend>
 )
 

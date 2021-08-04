@@ -19,11 +19,13 @@ androidx-core-ktx = "1.6.0"
 androidx-activity-compose = "1.3.0"
 androidx-lifecycle = "2.3.1"
 androidx-viewmodel-compose = "1.0.0-alpha07"
+androidx-datastore = "1.0.0-rc02"
 
 core-library-desugaring = "1.1.5"
 
 kotlinx-coroutines = "1.5.1"
 kotlinx-collections-immutable = "0.3.4"
+kotlinx-serialization-json = "1.2.2"
 
 sqldelight = "1.5.1"
 
@@ -39,6 +41,7 @@ test-parameter-injector = "1.4"
 android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
+kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 sqldelight-plugin = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 
 corelibrarydesugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "core-library-desugaring" }
@@ -56,6 +59,7 @@ activity-compose = { module = "androidx.activity:activity-compose", version.ref 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
+datastore = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 
 redux = { module = "org.reduxkotlin:redux-kotlin-threadsafe-jvm", version.ref = "reduxkotlin" }
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
