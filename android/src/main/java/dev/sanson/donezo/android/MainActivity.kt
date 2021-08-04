@@ -11,10 +11,8 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dev.sanson.donezo.App
 import dev.sanson.donezo.backend.git.github.GitHubBackend
-import dev.sanson.donezo.db.Database
 import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppSettings
 import dev.sanson.donezo.todo.AppState
@@ -76,12 +74,6 @@ class DonezoViewModel : ViewModel() {
     )
 
     /**
-     * Database driver for the Android platform
-     */
-    private val databaseDriver
-        get() = AndroidSqliteDriver(Database.Schema, DonezoApplication.context, "todo.db")
-
-    /**
      * Local storage instance for the Android platform
      */
     private val localStorage: LocalStorage = AndroidLocalStorage(DonezoApplication.context)
@@ -94,7 +86,6 @@ class DonezoViewModel : ViewModel() {
         applicationScope = viewModelScope,
         appSettings = AppSettings(
             localStorage = localStorage,
-            databaseDriver = databaseDriver,
             availableBackends = availableBackends
         ),
         closeApp = {

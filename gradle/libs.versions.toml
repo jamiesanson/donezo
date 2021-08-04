@@ -27,8 +27,6 @@ kotlinx-coroutines = "1.5.1"
 kotlinx-collections-immutable = "0.3.4"
 kotlinx-serialization-json = "1.2.2"
 
-sqldelight = "1.5.1"
-
 reduxkotlin = "0.5.5"
 
 koin = "3.1.2"
@@ -42,7 +40,6 @@ android-plugin = { module = "com.android.tools.build:gradle", version.ref = "and
 kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
-sqldelight-plugin = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 
 corelibrarydesugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "core-library-desugaring" }
 
@@ -68,10 +65,6 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm", version.ref = "kotlinx-collections-immutable" }
 
-sqldelight-android-driver = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
-sqldelight-jdbc-driver = { module = "com.squareup.sqldelight:sqlite-driver", version.ref = "sqldelight" }
-sqldelight-coroutines-extensions = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-
 junit = { module = "junit:junit", version.ref = "junit" }
 kotest-assertions = { module = "io.kotest:kotest-assertions", version.ref = "kotest" }
 test-parameter-injector = { module = "com.google.testparameterinjector:test-parameter-injector", version.ref = "test-parameter-injector" }
@@ -86,4 +79,4 @@ compose = ["compose-ui", "compose-tooling", "compose-material", "kotlinx-collect
 lifecycle = ["lifecycle-runtime", "lifecycle-livedata", "lifecycle-viewmodel-compose"]
 
 # Useful unit testing dependencies
-unittesting = [ "junit", "kotest-assertions", "kotlinx-coroutines-test", "sqldelight-jdbc-driver", "test-parameter-injector" ]
+unittesting = [ "junit", "kotest-assertions", "kotlinx-coroutines-test", "test-parameter-injector" ]

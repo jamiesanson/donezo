@@ -81,9 +81,6 @@ dependencies {
 
     implementation libs.datastore
 
-    implementation libs.sqldelight.android.driver
-
     implementation project(":todo")
     implementation project(":git")
-    implementation project(":db")
 }
