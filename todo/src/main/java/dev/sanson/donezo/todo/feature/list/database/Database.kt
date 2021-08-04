@@ -31,7 +31,7 @@ object DatabaseMiddleware : Middleware<AppState> {
                     /**
                      * Add a todo as a sibling of the input todo
                      */
-                    is Action.AddTodoAsSibling -> {
+                    is Action.AddTodoAfter -> {
                         val list = store.state.lists.find { it.items.contains(action.sibling) }
                             ?: throw IllegalArgumentException("No list found for sibling: ${action.sibling}")
 
@@ -63,6 +63,9 @@ object DatabaseMiddleware : Middleware<AppState> {
                      */
                     is Action.UpdateTodoDone ->
                         DatabaseAction.UpdateTodo(itemId = action.item.id, item = action.item.copy(isDone = action.isDone))
+
+                    is Action.AddListAfter -> TODO("Add new list to DB")
+                    is Action.DeleteList -> TODO("Delete list from DB")
 
                     /**
                      * Else, no DB ops to perform

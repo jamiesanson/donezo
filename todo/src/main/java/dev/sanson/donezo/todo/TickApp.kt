@@ -4,6 +4,7 @@ import com.squareup.sqldelight.db.SqlDriver
 import dev.sanson.donezo.arch.redux.createThunkMiddleware
 import dev.sanson.donezo.backend.Backend
 import dev.sanson.donezo.todo.di.ApplicationModule
+import dev.sanson.donezo.todo.feature.list.ListInteractioMiddleware
 import dev.sanson.donezo.todo.feature.list.ListsReducer
 import dev.sanson.donezo.todo.feature.list.database.DatabaseAction
 import dev.sanson.donezo.todo.feature.list.database.DatabaseMiddleware
@@ -41,6 +42,7 @@ fun createApp(
     )
 
     val middleware = applyMiddleware(
+        ListInteractioMiddleware,
         DatabaseMiddleware,
         BackNavigationMiddleware(closeApp),
         createThunkMiddleware()

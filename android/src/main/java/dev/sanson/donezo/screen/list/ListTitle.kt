@@ -9,8 +9,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
@@ -18,12 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import dev.sanson.donezo.theme.DonezoTheme
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ListTitle(
     title: String,
     onValueChange: (String) -> Unit,
     onDoneAction: () -> Unit,
-    modifier: Modifier = Modifier
+    onDelete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val textFieldValue = remember { mutableStateOf(TextFieldValue(title)) }
 
@@ -44,7 +50,20 @@ fun ListTitle(
         ),
         modifier = modifier
             .padding(Dp(24f))
-            .animateContentSize(),
+            .animateContentSize()
+            .onKeyEvent {
+                when (it.key) {
+                    Key.Backspace, Key.Delete -> {
+                        if (textFieldValue.value.text.isEmpty()) {
+                            onDelete()
+                            true
+                        } else {
+                            false
+                        }
+                    }
+                    else -> false
+                }
+            },
         cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
         textStyle = MaterialTheme.typography.h5.copy(
             color = MaterialTheme.colors.onSurface,
@@ -60,7 +79,8 @@ fun DonezoTitleTextFieldPreview() {
         ListTitle(
             title = "Live literals are neat",
             onValueChange = { /*TODO*/ },
-            onDoneAction = {}
+            onDoneAction = {},
+            onDelete = {}
         )
     }
 }

@@ -28,8 +28,8 @@ fun ListScreen(lists: List<TodoList>) {
     val dispatch = LocalDispatch.current
     val wrappedDispatch: (Any) -> Any = { action ->
         when (action) {
-            is Action.AddTodo, is Action.AddTodoAsSibling -> focusDirectionToMove = FocusDirection.Down
-            is Action.DeleteTodo -> focusDirectionToMove = FocusDirection.Up
+            is Action.AddTodo, is Action.AddTodoAfter -> focusDirectionToMove = FocusDirection.Down
+            is Action.DeleteTodo, is Action.DeleteList -> focusDirectionToMove = FocusDirection.Up
         }
 
         dispatch(action)
@@ -58,7 +58,8 @@ private fun TodoListColumn(
                 ListTitle(
                     title = list.title,
                     onValueChange = { dispatch(Action.UpdateListTitle(list, it)) },
-                    onDoneAction = { dispatch(Action.AddTodo(list)) }
+                    onDoneAction = { dispatch(Action.AddTodo(list)) },
+                    onDelete = { dispatch(Action.DeleteList(list)) }
                 )
             }
 

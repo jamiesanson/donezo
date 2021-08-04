@@ -54,7 +54,7 @@ fun TodoRowCallbacks(item: Todo, dispatch: (Any) -> Any) = object : TodoRowCallb
     }
 
     override fun onImeAction() {
-        dispatch(Action.AddTodoAsSibling(item))
+        dispatch(Action.AddTodoAfter(item))
     }
 }
 
