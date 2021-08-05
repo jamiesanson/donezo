@@ -1,5 +1,6 @@
 package dev.sanson.donezo.android
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
@@ -8,6 +9,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
+import androidx.datastore.dataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,6 +29,11 @@ import kotlinx.coroutines.flow.StateFlow
  * Composition local providing convenient access to the store dispatch function
  */
 val LocalDispatch = compositionLocalOf<(Any) -> Any> { error("No default dispatch") }
+
+/**
+ * Utility function for referencing the datastore singleton
+ */
+private val Context.dataStore by dataStore("todo-lists", TodoListSerializer())
 
 class MainActivity : AppCompatActivity() {
 
@@ -76,7 +83,9 @@ class DonezoViewModel : ViewModel() {
     /**
      * Local storage instance for the Android platform
      */
-    private val localStorage: LocalStorage = AndroidLocalStorage(DonezoApplication.context)
+    private val localStorage: LocalStorage = AndroidLocalStorage(
+        dataStore = DonezoApplication.context.dataStore
+    )
 
     /**
      * The store holding the whole app's state. We scope all internal
