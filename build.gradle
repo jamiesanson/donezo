@@ -8,7 +8,6 @@ buildscript {
         classpath libs.android.plugin
         classpath libs.kotlin.plugin
         classpath libs.kotlin.serialization.plugin
-        classpath libs.sqldelight.plugin
     }
 }
 

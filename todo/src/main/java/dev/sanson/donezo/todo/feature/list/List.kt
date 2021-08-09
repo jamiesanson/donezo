@@ -4,7 +4,6 @@ import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppState
-import dev.sanson.donezo.todo.feature.list.database.DatabaseAction
 import org.reduxkotlin.Dispatcher
 import org.reduxkotlin.Middleware
 import org.reduxkotlin.Reducer
@@ -105,19 +104,6 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
                 lists = state.lists - action.list
             )
         }
-        is DatabaseAction.HydrateItem -> state.copy(
-            lists = state.lists.map { list ->
-                if (list.id == action.listId) {
-                    list.copy(
-                        items = list.items.map { item ->
-                            if (item.id == -1L) item.copy(id = action.newItemId) else item
-                        }
-                    )
-                } else {
-                    list
-                }
-            }
-        )
         else -> state
     }
 }
@@ -125,7 +111,7 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
 /**
  * Middleware for moderating list interactions. Contains most UX-related list side-effects.
  */
-object ListInteractioMiddleware: Middleware<AppState> {
+object ListInteractioMiddleware : Middleware<AppState> {
 
     override fun invoke(store: Store<AppState>): (next: Dispatcher) -> (action: Any) -> Any =
         { next ->
@@ -163,8 +149,6 @@ object ListInteractioMiddleware: Middleware<AppState> {
                     }
                     else -> Unit
                 }
-
             }
         }
-
 }

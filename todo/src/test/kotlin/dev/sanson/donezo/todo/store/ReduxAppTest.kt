@@ -1,9 +1,9 @@
 package dev.sanson.donezo.todo.store
 
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
-import dev.sanson.donezo.db.Database
+import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.todo.AppSettings
 import dev.sanson.donezo.todo.AppState
+import dev.sanson.donezo.todo.storage.LocalStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -20,12 +20,17 @@ abstract class ReduxAppTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     val testScope = TestCoroutineScope()
 
-    private val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).also {
-        Database.Schema.create(it)
-    }
-
     private val configuration = AppSettings(
-        databaseDriver = driver,
+        localStorage = object : LocalStorage {
+            var data = emptyList<TodoList>()
+            override suspend fun load(): List<TodoList> {
+                return data
+            }
+
+            override suspend fun save(todos: List<TodoList>) {
+                data = todos
+            }
+        },
         availableBackends = emptyList()
     )
 
@@ -43,7 +48,7 @@ abstract class ReduxAppTest {
     protected fun createApp(
         scope: CoroutineScope = testScope,
         config: AppSettings = configuration,
-        closeApp: () -> Unit = {}
+        closeApp: () -> Unit = {},
     ): Store<AppState> {
         return createAppImpl(scope, config, closeApp)
     }
