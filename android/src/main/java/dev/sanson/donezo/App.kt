@@ -26,22 +26,28 @@ fun App(state: AppState) {
         ProvideWindowInsets {
             Scaffold(
                 topBar = {
-                    Spacer(Modifier
-                        .statusBarsHeight()
-                        .fillMaxWidth())
+                    Spacer(
+                        Modifier
+                            .statusBarsHeight()
+                            .fillMaxWidth()
+                    )
                 },
                 bottomBar = {
-                    Spacer(Modifier
-                        .navigationBarsHeight()
-                        .fillMaxWidth())
+                    Spacer(
+                        Modifier
+                            .navigationBarsHeight()
+                            .fillMaxWidth()
+                    )
                 },
                 backgroundColor = MaterialTheme.colors.surface,
                 modifier = Modifier
                     .fillMaxSize(),
             ) { contentPadding ->
-                Box(modifier = Modifier
-                    .navigationBarsWithImePadding()
-                    .padding(top = contentPadding.calculateTopPadding())) {
+                Box(
+                    modifier = Modifier
+                        .navigationBarsWithImePadding()
+                        .padding(top = contentPadding.calculateTopPadding())
+                ) {
                     when (state.navigation.currentScreen) {
                         is Screen.Lists -> ListScreen(lists = state.lists)
                         is Screen.SyncSettings -> SyncSettingsScreen(state = state)
@@ -50,7 +56,6 @@ fun App(state: AppState) {
             }
         }
     }
-
 }
 
 @Preview
