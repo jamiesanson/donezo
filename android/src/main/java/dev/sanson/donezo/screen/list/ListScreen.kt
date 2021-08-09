@@ -63,7 +63,7 @@ private fun TodoListColumn(
                 )
             }
 
-            items(list.items, key = { it.id }) { item ->
+            items(list.items) { item ->
                 TodoRow(
                     text = item.text,
                     isDone = item.isDone,

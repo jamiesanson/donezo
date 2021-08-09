@@ -9,7 +9,6 @@ rootProject.name = "Donezo"
 
 include ':android'
 include ':todo'
-include ':db'
 include ':model'
 include ':arch'
 include ':backend'
