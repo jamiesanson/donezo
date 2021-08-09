@@ -5,6 +5,8 @@ import dev.sanson.donezo.arch.redux.asyncAction
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.reduxkotlin.Store
 
 /**
@@ -16,24 +18,20 @@ private fun LoadFromStorage(initialState: List<TodoList>) = asyncAction<AppState
     dispatch(Action.ListsLoaded(storage.load().ifEmpty { initialState }))
 }
 
-/**
- * Thunk function for persisting current state to local storage when it changes
- */
-private val PersistToStorage = asyncAction<AppState> { _, getState ->
-    val storage by inject<LocalStorage>()
-    val state = getState()
-
-    if (storage.load() == state.lists) return@asyncAction Unit
-
-    storage.save(state.lists)
-}
-
 fun Store<AppState>.initialiseLocalStorage(initialState: List<TodoList>) {
     // Load lists from storage immediately
     dispatch(LoadFromStorage(initialState))
 
     // Publish changes back to local storage
     subscribe {
-        dispatch(PersistToStorage)
+        val state = getState()
+        val scope by inject<CoroutineScope>()
+        scope.launch {
+            val storage by inject<LocalStorage>()
+
+            if (storage.load() == state.lists) return@launch
+
+            storage.save(state.lists)
+        }
     }
 }
