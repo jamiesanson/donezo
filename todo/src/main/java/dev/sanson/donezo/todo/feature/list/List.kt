@@ -125,7 +125,7 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
 /**
  * Middleware for moderating list interactions. Contains most UX-related list side-effects.
  */
-object ListInteractioMiddleware: Middleware<AppState> {
+object ListInteractioMiddleware : Middleware<AppState> {
 
     override fun invoke(store: Store<AppState>): (next: Dispatcher) -> (action: Any) -> Any =
         { next ->
@@ -163,8 +163,6 @@ object ListInteractioMiddleware: Middleware<AppState> {
                     }
                     else -> Unit
                 }
-
             }
         }
-
 }

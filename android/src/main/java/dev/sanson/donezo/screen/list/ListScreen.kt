@@ -74,7 +74,6 @@ private fun TodoListColumn(
     }
 }
 
-
 @Preview(showBackground = true, name = "Single todo list")
 @Composable
 fun ListPreview() {
