@@ -36,7 +36,7 @@ junit = "4.12"
 kotest = "4.0.7"
 test-parameter-injector = "1.4"
 
-spotless = "5.12.1"
+spotless = "5.14.3"
 ktlint = "0.42.1"
 
 [plugins]

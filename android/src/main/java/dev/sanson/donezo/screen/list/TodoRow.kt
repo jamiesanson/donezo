@@ -29,41 +29,17 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.theme.DonezoTheme
-import dev.sanson.donezo.todo.Action
-
-interface TodoRowCallbacks {
-    fun onTodoTextChange(newText: String)
-    fun onTodoCheckedChange(isDone: Boolean)
-    fun onImeAction() {}
-    fun onDelete() {}
-}
-
-fun TodoRowCallbacks(item: Todo, dispatch: (Any) -> Any) = object : TodoRowCallbacks {
-    override fun onTodoTextChange(newText: String) {
-        dispatch(Action.UpdateTodoText(item, newText))
-    }
-
-    override fun onTodoCheckedChange(isDone: Boolean) {
-        dispatch(Action.UpdateTodoDone(item, isDone))
-    }
-
-    override fun onDelete() {
-        dispatch(Action.DeleteTodo(item))
-    }
-
-    override fun onImeAction() {
-        dispatch(Action.AddTodoAfter(item))
-    }
-}
 
 @OptIn(ExperimentalComposeUiApi::class) // Opt-in for Key._Blah_ APIs
 @Composable
 fun TodoRow(
     text: String,
     isDone: Boolean,
-    callbacks: TodoRowCallbacks,
+    onTodoTextChange: (String) -> Unit,
+    onTodoCheckedChange: (Boolean) -> Unit,
+    onImeAction: () -> Unit,
+    onDelete: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -75,7 +51,7 @@ fun TodoRow(
 
         Checkbox(
             checked = isDone,
-            onCheckedChange = callbacks::onTodoCheckedChange,
+            onCheckedChange = onTodoCheckedChange,
             modifier = Modifier
                 .alignByBaseline()
                 .padding(top = Dp(14f), bottom = Dp(12f), start = Dp(16f), end = Dp(16f))
@@ -86,11 +62,8 @@ fun TodoRow(
         BasicTextField(
             value = textFieldValue.value,
             onValueChange = {
-                textFieldValue.value = it.copy(text = it.text.replace("\n", ""))
-
-                if (it.text != text) {
-                    callbacks.onTodoTextChange(it.text)
-                }
+                textFieldValue.value = it.copy(text = it.text)
+                onTodoTextChange(it.text)
             },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -98,7 +71,7 @@ fun TodoRow(
             ),
             keyboardActions = KeyboardActions(
                 onNext = {
-                    callbacks.onImeAction()
+                    onImeAction()
                 }
             ),
             cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
@@ -115,14 +88,14 @@ fun TodoRow(
                     when (it.key) {
                         Key.Backspace, Key.Delete -> {
                             if (textFieldValue.value.text.isEmpty()) {
-                                callbacks.onDelete()
+                                onDelete()
                                 true
                             } else {
                                 false
                             }
                         }
                         Key.Enter -> {
-                            callbacks.onImeAction()
+                            onImeAction()
                             true
                         }
                         else -> false
@@ -141,15 +114,10 @@ fun TodoPreview() {
             TodoRow(
                 text = "Hang the washing out",
                 isDone = false,
-                callbacks = object : TodoRowCallbacks {
-                    override fun onTodoTextChange(newText: String) {
-                        TODO("Not yet implemented")
-                    }
-
-                    override fun onTodoCheckedChange(isDone: Boolean) {
-                        TODO("Not yet implemented")
-                    }
-                }
+                onDelete = {},
+                onImeAction = {},
+                onTodoCheckedChange = {},
+                onTodoTextChange = {}
             )
         }
     }

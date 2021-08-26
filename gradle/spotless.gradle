@@ -10,6 +10,6 @@ spotless {
     kotlin {
         target '**/*.kt'
 
-        ktlint(libs.versions.ktlint)
+        ktlint(libs.versions.ktlint.get())
     }
 }

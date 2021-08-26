@@ -21,11 +21,10 @@ import dev.sanson.donezo.todo.Action
 import kotlinx.coroutines.delay
 
 @Composable
-fun ListScreen(lists: List<TodoList>) {
+fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.current) {
     val focusManager = LocalFocusManager.current
     var focusDirectionToMove by remember { mutableStateOf<FocusDirection?>(null) }
 
-    val dispatch = LocalDispatch.current
     val wrappedDispatch: (Any) -> Any = { action ->
         when (action) {
             is Action.AddTodo, is Action.AddTodoAfter -> focusDirectionToMove = FocusDirection.Down
@@ -50,7 +49,7 @@ fun ListScreen(lists: List<TodoList>) {
 @Composable
 private fun TodoListColumn(
     lists: List<TodoList>,
-    dispatch: (Any) -> Any
+    dispatch: (Any) -> Any,
 ) {
     LazyColumn {
         for (list in lists) {
@@ -67,7 +66,10 @@ private fun TodoListColumn(
                 TodoRow(
                     text = item.text,
                     isDone = item.isDone,
-                    callbacks = TodoRowCallbacks(item, dispatch)
+                    onTodoTextChange = { dispatch(Action.UpdateTodoText(item, it)) },
+                    onTodoCheckedChange = { dispatch(Action.UpdateTodoDone(item, it)) },
+                    onImeAction = { dispatch(Action.AddTodoAfter(item)) },
+                    onDelete = { dispatch(Action.DeleteTodo(item)) }
                 )
             }
         }
