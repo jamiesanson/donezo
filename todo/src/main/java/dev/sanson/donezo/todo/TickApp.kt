@@ -5,7 +5,7 @@ import dev.sanson.donezo.backend.Backend
 import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.todo.di.ApplicationModule
-import dev.sanson.donezo.todo.feature.list.ListInteractioMiddleware
+import dev.sanson.donezo.todo.feature.list.ListInteractionMiddleware
 import dev.sanson.donezo.todo.feature.list.ListsReducer
 import dev.sanson.donezo.todo.feature.navigation.BackNavigationMiddleware
 import dev.sanson.donezo.todo.feature.navigation.NavigationReducer
@@ -43,7 +43,7 @@ fun createApp(
     )
 
     val middleware = applyMiddleware(
-        ListInteractioMiddleware,
+        ListInteractionMiddleware,
         BackNavigationMiddleware(closeApp),
         createThunkMiddleware()
     )
