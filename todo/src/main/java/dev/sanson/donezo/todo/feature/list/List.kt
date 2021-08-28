@@ -1,5 +1,6 @@
 package dev.sanson.donezo.todo.feature.list
 
+import android.util.Log
 import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.todo.Action
@@ -10,6 +11,8 @@ import org.reduxkotlin.Reducer
 import org.reduxkotlin.Store
 
 val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
+    Log.d("ListReducer", "On action: $action")
+
     when (action) {
         is Action.ListsLoaded -> state.copy(lists = action.lists)
         is Action.UpdateListTitle -> state.copy(

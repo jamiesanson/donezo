@@ -22,8 +22,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType.Companion.KeyDown
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
@@ -62,8 +65,12 @@ fun TodoRow(
         BasicTextField(
             value = textFieldValue.value,
             onValueChange = {
-                textFieldValue.value = it.copy(text = it.text)
-                onTodoTextChange(it.text)
+                if (it.text != text) {
+                    // Only trigger text change event if the actual text has changed
+                    onTodoTextChange(it.text)
+                }
+
+                textFieldValue.value = it
             },
             keyboardOptions = KeyboardOptions.Default.copy(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -84,19 +91,19 @@ fun TodoRow(
                 .alignByBaseline()
                 .animateContentSize()
                 .padding(top = Dp(12f), bottom = Dp(12f), end = Dp(16f))
-                .onKeyEvent {
-                    when (it.key) {
-                        Key.Backspace, Key.Delete -> {
+                .onPreviewKeyEvent {
+                    when {
+                        it.key == Key.Enter && it.type == KeyDown -> {
+                            onImeAction()
+                            true
+                        }
+                        it.key ==  Key.Backspace && it.type == KeyDown -> {
                             if (textFieldValue.value.text.isEmpty()) {
                                 onDelete()
                                 true
                             } else {
                                 false
                             }
-                        }
-                        Key.Enter -> {
-                            onImeAction()
-                            true
                         }
                         else -> false
                     }
