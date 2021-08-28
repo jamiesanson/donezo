@@ -1,5 +1,7 @@
 package dev.sanson.donezo.screen.list
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
@@ -10,9 +12,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import dev.sanson.donezo.android.LocalDispatch
 import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
@@ -52,6 +56,10 @@ private fun TodoListColumn(
     dispatch: (Any) -> Any,
 ) {
     LazyColumn {
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
         for (list in lists) {
             item {
                 ListTitle(
