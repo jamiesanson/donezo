@@ -81,6 +81,14 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
             )
         }
         is Action.AddListAfter -> {
+            // Guard to ensure we're not adding another empty list if there already is one there
+            val siblingIndex = state.lists.indexOf(action.sibling)
+            val nextList = state.lists.getOrNull(siblingIndex + 1)
+
+            if (nextList != null) {
+                if (nextList.items.isEmpty() && nextList.title.isBlank()) return@reducer state
+            }
+
             state.copy(
                 lists = state.lists.flatMap { list ->
                     if (list == action.sibling) {
