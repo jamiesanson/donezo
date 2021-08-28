@@ -13,8 +13,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
@@ -51,9 +54,13 @@ fun ListTitle(
         modifier = modifier
             .padding(Dp(24f))
             .animateContentSize()
-            .onKeyEvent {
-                when (it.key) {
-                    Key.Backspace, Key.Delete -> {
+            .onPreviewKeyEvent {
+                when {
+                    it.key == Key.Enter && it.type == KeyEventType.KeyDown -> {
+                        onDoneAction()
+                        true
+                    }
+                    it.key ==  Key.Backspace && it.type == KeyEventType.KeyDown -> {
                         if (textFieldValue.value.text.isEmpty()) {
                             onDelete()
                             true
