@@ -1,10 +1,8 @@
 package dev.sanson.donezo.screen.list
 
-import androidx.compose.animation.core.Spring.DampingRatioLowBouncy
 import androidx.compose.animation.core.Spring.StiffnessHigh
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn

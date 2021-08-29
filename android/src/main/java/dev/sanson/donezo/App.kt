@@ -36,11 +36,6 @@ fun App(state: AppState) {
                         is Screen.Lists -> ListScreen(lists = state.lists)
                         is Screen.SyncSettings -> SyncSettingsScreen(state = state)
                     }
-
-                    FloatingActionButton(onClick = { /*TODO*/ },
-                        modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)) {
-                        Text("+")
-                    }
                 }
             }
         }
