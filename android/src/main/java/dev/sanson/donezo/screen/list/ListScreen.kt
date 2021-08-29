@@ -1,5 +1,8 @@
 package dev.sanson.donezo.screen.list
 
+import androidx.compose.animation.core.Spring.DampingRatioLowBouncy
+import androidx.compose.animation.core.Spring.StiffnessHigh
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +30,6 @@ import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.theme.DonezoTheme
 import dev.sanson.donezo.todo.Action
-import kotlinx.coroutines.delay
 
 @Composable
 fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.current) {
@@ -51,13 +53,13 @@ fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.cur
     val itemCount = derivedStateOf { lists.fold(0) { acc, list -> acc + 1 + list.items.size } }
     LaunchedEffect(itemCount) {
         val focusDirection = focusDirectionToMove
-        // This makes focus traversals more consistent for now. Ideally we'd be able to use the focus node state as
-        // the key for this effect, only traversing after an item can be moved to.
-        if (focusDirection == FocusDirection.Down) delay(10)
 
         if (focusDirection != null) {
             val itemHeightPx = density.run { 64.dp.toPx() }
-            listState.animateScrollBy(if (focusDirection == FocusDirection.Down) itemHeightPx else -itemHeightPx)
+            listState.animateScrollBy(
+                value = if (focusDirection == FocusDirection.Down) itemHeightPx else -itemHeightPx,
+                animationSpec = spring(stiffness = StiffnessHigh)
+            )
 
             focusManager.moveFocus(focusDirection = focusDirection)
         }

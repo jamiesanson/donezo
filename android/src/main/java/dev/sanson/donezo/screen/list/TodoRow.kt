@@ -46,7 +46,7 @@ fun TodoRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 64.dp),
+            .defaultMinSize(minHeight = 52.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = Modifier.width(4.dp))

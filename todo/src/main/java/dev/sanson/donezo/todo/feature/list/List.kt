@@ -67,6 +67,10 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
             )
         }
         is Action.AddTodoAfter -> {
+            // If the current item is empty, we shouldn't add another one
+            if (action.sibling.text.isBlank()) return@reducer state
+
+            // Find the containing list
             val list = state.lists.find { it.items.contains(action.sibling) }
                 ?: throw IllegalArgumentException("No list found for sibling: ${action.sibling}")
 
