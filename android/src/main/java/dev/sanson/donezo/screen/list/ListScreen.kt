@@ -1,9 +1,13 @@
 package dev.sanson.donezo.screen.list
 
+import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +32,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.current) {
     val focusManager = LocalFocusManager.current
+    val density = LocalDensity.current
     var focusDirectionToMove by remember { mutableStateOf<FocusDirection?>(null) }
 
     val wrappedDispatch: (Any) -> Any = { action ->
@@ -38,24 +44,35 @@ fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.cur
         dispatch(action)
     }
 
-    TodoListColumn(lists, wrappedDispatch)
+    val listState = rememberLazyListState()
+
+    TodoListColumn(listState, lists, wrappedDispatch)
 
     val itemCount = derivedStateOf { lists.fold(0) { acc, list -> acc + 1 + list.items.size } }
     LaunchedEffect(itemCount) {
+        val focusDirection = focusDirectionToMove
         // This makes focus traversals more consistent for now. Ideally we'd be able to use the focus node state as
         // the key for this effect, only traversing after an item can be moved to.
-        if (focusDirectionToMove == FocusDirection.Down) delay(10)
-        focusDirectionToMove?.let(focusManager::moveFocus)
+        if (focusDirection == FocusDirection.Down) delay(10)
+
+        if (focusDirection != null) {
+            val itemHeightPx = density.run { 64.dp.toPx() }
+            listState.animateScrollBy(if (focusDirection == FocusDirection.Down) itemHeightPx else -itemHeightPx)
+
+            focusManager.moveFocus(focusDirection = focusDirection)
+        }
+
         focusDirectionToMove = null
     }
 }
 
 @Composable
 private fun TodoListColumn(
+    lazyListState: LazyListState,
     lists: List<TodoList>,
     dispatch: (Any) -> Any,
 ) {
-    LazyColumn {
+    LazyColumn(state = lazyListState) {
         item {
             Spacer(modifier = Modifier.height(16.dp))
         }

@@ -24,14 +24,13 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType.Companion.KeyDown
 import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import dev.sanson.donezo.theme.DonezoTheme
 
 @OptIn(ExperimentalComposeUiApi::class) // Opt-in for Key._Blah_ APIs
@@ -47,17 +46,17 @@ fun TodoRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = Dp(52f)),
+            .defaultMinSize(minHeight = 64.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Spacer(modifier = Modifier.width(Dp(4f)))
+        Spacer(modifier = Modifier.width(4.dp))
 
         Checkbox(
             checked = isDone,
             onCheckedChange = onTodoCheckedChange,
             modifier = Modifier
                 .alignByBaseline()
-                .padding(top = Dp(14f), bottom = Dp(12f), start = Dp(16f), end = Dp(16f))
+                .padding(top = 14.dp, bottom = 12.dp, start = 16.dp, end = 16.dp)
         )
 
         val textFieldValue = remember { mutableStateOf(TextFieldValue(text)) }
@@ -90,7 +89,7 @@ fun TodoRow(
                 .wrapContentHeight()
                 .alignByBaseline()
                 .animateContentSize()
-                .padding(top = Dp(12f), bottom = Dp(12f), end = Dp(16f))
+                .padding(top = 12.dp, bottom = 12.dp, end = 16.dp)
                 .onPreviewKeyEvent {
                     when {
                         it.key == Key.Enter && it.type == KeyDown -> {
