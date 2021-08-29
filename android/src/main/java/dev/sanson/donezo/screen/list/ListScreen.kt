@@ -1,8 +1,10 @@
 package dev.sanson.donezo.screen.list
 
+import android.util.Log
 import androidx.compose.animation.core.Spring.StiffnessHigh
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,9 +18,15 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.layout.RelocationRequester
+import androidx.compose.ui.layout.relocationRequester
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,11 +36,16 @@ import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.theme.DonezoTheme
 import dev.sanson.donezo.todo.Action
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.current) {
     val focusManager = LocalFocusManager.current
     val density = LocalDensity.current
+
     var focusDirectionToMove by remember { mutableStateOf<FocusDirection?>(null) }
 
     val wrappedDispatch: (Any) -> Any = { action ->
@@ -66,6 +79,7 @@ fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.cur
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TodoListColumn(
     lazyListState: LazyListState,
@@ -87,15 +101,28 @@ private fun TodoListColumn(
                 )
             }
 
-            items(list.items) { item ->
-                TodoRow(
-                    text = item.text,
-                    isDone = item.isDone,
-                    onTodoTextChange = { dispatch(Action.UpdateTodoText(item, it)) },
-                    onTodoCheckedChange = { dispatch(Action.UpdateTodoDone(item, it)) },
-                    onImeAction = { dispatch(Action.AddTodoAfter(item)) },
-                    onDelete = { dispatch(Action.DeleteTodo(item)) }
-                )
+            item {
+                Column {
+                    for (item in list.items) {
+                        val requester = remember { RelocationRequester() }
+
+                        TodoRow(
+                            text = item.text,
+                            isDone = item.isDone,
+                            onTodoTextChange = { dispatch(Action.UpdateTodoText(item, it)) },
+                            onTodoCheckedChange = { dispatch(Action.UpdateTodoDone(item, it)) },
+                            onImeAction = { dispatch(Action.AddTodoAfter(item)) },
+                            onDelete = { dispatch(Action.DeleteTodo(item)) },
+                            modifier = Modifier
+                                .relocationRequester(requester)
+                                .onFocusEvent {
+                                    if (it.isFocused) {
+                                        requester.bringIntoView()
+                                    }
+                                }
+                        )
+                    }
+                }
             }
         }
     }

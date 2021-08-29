@@ -42,6 +42,7 @@ fun TodoRow(
     onTodoCheckedChange: (Boolean) -> Unit,
     onImeAction: () -> Unit,
     onDelete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = Modifier
@@ -84,7 +85,7 @@ fun TodoRow(
             textStyle = MaterialTheme.typography.body1.copy(
                 color = MaterialTheme.colors.onSurface,
             ),
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .alignByBaseline()
