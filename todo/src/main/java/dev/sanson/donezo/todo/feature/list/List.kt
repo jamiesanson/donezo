@@ -17,7 +17,7 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
         is Action.ListsLoaded -> state.copy(lists = action.lists)
         is Action.UpdateListTitle -> state.copy(
             lists = state.lists.map {
-                if (it == action.list) {
+                if (it === action.list) {
                     it.copy(title = action.title)
                 } else {
                     it
@@ -53,7 +53,7 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
         is Action.AddTodo -> {
             state.copy(
                 lists = state.lists.map {
-                    if (it == action.list) {
+                    if (it === action.list) {
                         it.copy(
                             items = listOf(
                                 Todo(text = "", isDone = false),
@@ -76,7 +76,7 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
 
             state.copy(
                 lists = state.lists.map {
-                    if (it == list) {
+                    if (it === list) {
                         it.copy(items = it.items + Todo(text = "", isDone = false))
                     } else {
                         it
@@ -95,7 +95,7 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
 
             state.copy(
                 lists = state.lists.flatMap { list ->
-                    if (list == action.sibling) {
+                    if (list === action.sibling) {
                         listOf(list, TodoList(title = "", items = emptyList()))
                     } else {
                         listOf(list)
