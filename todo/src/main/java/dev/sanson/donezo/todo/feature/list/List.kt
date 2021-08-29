@@ -28,7 +28,7 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
             lists = state.lists.map { list ->
                 list.copy(
                     items = list.items.map { item ->
-                        if (item == action.item) {
+                        if (item === action.item) {
                             item.copy(text = action.text, isDone = item.isDone)
                         } else {
                             item
@@ -41,7 +41,7 @@ val ListsReducer: Reducer<AppState> = reducer@{ state, action ->
             lists = state.lists.map { list ->
                 list.copy(
                     items = list.items.map { item ->
-                        if (item == action.item) {
+                        if (item === action.item) {
                             item.copy(isDone = action.isDone, text = item.text)
                         } else {
                             item
