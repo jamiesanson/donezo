@@ -15,3 +15,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Keystore directory injected by CD, or used for local release builds
+keystore/

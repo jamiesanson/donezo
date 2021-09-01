@@ -17,16 +17,47 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            // Allow local, unsigned release builds
+            if (!rootProject.file("keystore/").exists()) {
+                return
+            }
+
+            def keystorePropertiesFile = rootProject.file("keystore.properties")
+            def keystoreProperties = new Properties()
+
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+            storeFile rootProject.file("keystore/keystore.jks")
+            storePassword keystoreProperties["storePassword"]
+            keyAlias keystoreProperties["keyAlias"]
+            keyPassword keystoreProperties["keyPassword"]
+        }
+
+        debug {
+            storeFile rootProject.file("debug.keystore")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            if (rootProject.file("keystore/").exists()) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
         }
 
         debug {
             minifyEnabled false
             applicationIdSuffix ".debug"
             versionNameSuffix '-debug'
+
+            signingConfig signingConfigs.debug
         }
     }
 
