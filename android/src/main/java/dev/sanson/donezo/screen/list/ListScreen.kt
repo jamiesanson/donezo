@@ -2,14 +2,13 @@ package dev.sanson.donezo.screen.list
 
 import androidx.compose.animation.core.Spring.StiffnessHigh
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +33,7 @@ import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.theme.DonezoTheme
 import dev.sanson.donezo.todo.Action
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -50,20 +50,26 @@ fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.cur
             is Action.DeleteTodo, is Action.DeleteList -> focusDirectionToMove = FocusDirection.Up
         }
 
+        // Move up immediately, as the composable above the current one probably exists
+        if (focusDirectionToMove == FocusDirection.Up) {
+            focusManager.moveFocus(FocusDirection.Up)
+            focusDirectionToMove = null
+        }
+
         dispatch(action)
     }
 
-    val listState = rememberLazyListState()
+    val scrollState = rememberScrollState()
 
-    TodoListColumn(listState, lists, wrappedDispatch)
+    TodoListColumn(scrollState, lists, wrappedDispatch)
 
     val itemCount = derivedStateOf { lists.fold(0) { acc, list -> acc + 1 + list.items.size } }
     LaunchedEffect(itemCount) {
         val focusDirection = focusDirectionToMove
 
         if (focusDirection != null) {
-            val itemHeightPx = density.run { 64.dp.toPx() }
-            listState.animateScrollBy(
+            val itemHeightPx = density.run { 52.dp.toPx() }
+            scrollState.animateScrollBy(
                 value = if (focusDirection == FocusDirection.Down) itemHeightPx else -itemHeightPx,
                 animationSpec = spring(stiffness = StiffnessHigh)
             )
@@ -75,61 +81,63 @@ fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.cur
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+/**
+ * Custom scroll modifier extension which ties together focus listening and relocation requesting
+ */
+@ExperimentalComposeUiApi
+private fun Modifier.scrollToOnFocus(scope: CoroutineScope, requester: RelocationRequester): Modifier =
+    relocationRequester(requester)
+    .onFocusEvent {
+        if (it.isFocused) {
+            // Wait 250ms for the keyboard to animate in, such that the view
+            // resizes and [bringIntoView] scrolls down entirely.
+            scope.launch {
+                delay(250)
+                requester.bringIntoView()
+            }
+        }
+    }
+
+
+// NOTE: This would be more performant if it was using [items], however due to a current
+// limitation of relocationRequester, the composable being relocated to much be in the composition
+// but off screen. When not in a [Column], the composable offscreen does not exist within the composition
+// and therefore behaves badly
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalStdlibApi::class)
 @Composable
 private fun TodoListColumn(
-    lazyListState: LazyListState,
+    scrollableState: ScrollState,
     lists: List<TodoList>,
     dispatch: (Any) -> Any,
 ) {
     val scope = rememberCoroutineScope()
 
-    LazyColumn(state = lazyListState) {
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+    Column(modifier = Modifier.verticalScroll(scrollableState)) {
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         for (list in lists) {
-            item {
-                ListTitle(
-                    title = list.title,
-                    onValueChange = { dispatch(Action.UpdateListTitle(list, it)) },
-                    onDoneAction = { dispatch(Action.AddTodo(list)) },
-                    onDelete = { dispatch(Action.DeleteList(list)) }
+            val titleRequester = remember { RelocationRequester() }
+            ListTitle(
+                title = list.title,
+                onValueChange = { dispatch(Action.UpdateListTitle(list, it)) },
+                onDoneAction = { dispatch(Action.AddTodo(list)) },
+                onDelete = { dispatch(Action.DeleteList(list)) },
+                modifier = Modifier.scrollToOnFocus(scope, titleRequester)
+            )
+
+            for (item in list.items) {
+                val itemRequester = remember { RelocationRequester() }
+
+                TodoRow(
+                    text = item.text,
+                    isDone = item.isDone,
+                    onTodoTextChange = { dispatch(Action.UpdateTodoText(item, it)) },
+                    onTodoCheckedChange = { dispatch(Action.UpdateTodoDone(item, it)) },
+                    onImeAction = { dispatch(Action.AddTodoAfter(item)) },
+                    onDelete = { dispatch(Action.DeleteTodo(item)) },
+                    modifier = Modifier.scrollToOnFocus(scope, itemRequester)
                 )
-            }
-
-            item {
-                // NOTE: This would be more performant if it was using [items], however due to a current
-                // limitation of relocationRequester, the composable being relocated to much be in the composition
-                // but off screen. When not in a [Column], the composable offscreen does not exist within the composition
-                // and therefore behaves badly
-                Column {
-                    for (item in list.items) {
-                        val requester = remember(item) { RelocationRequester() }
-
-                        TodoRow(
-                            text = item.text,
-                            isDone = item.isDone,
-                            onTodoTextChange = { dispatch(Action.UpdateTodoText(item, it)) },
-                            onTodoCheckedChange = { dispatch(Action.UpdateTodoDone(item, it)) },
-                            onImeAction = { dispatch(Action.AddTodoAfter(item)) },
-                            onDelete = { dispatch(Action.DeleteTodo(item)) },
-                            modifier = Modifier
-                                .relocationRequester(requester)
-                                .onFocusEvent {
-                                    if (it.isFocused) {
-                                        // Wait 250ms for the keyboard to animate in, such that the view
-                                        // resizes and [bringIntoView] scrolls down entirely.
-                                        scope.launch {
-                                            delay(250)
-                                            requester.bringIntoView()
-                                        }
-                                    }
-                                }
-                        )
-                    }
-                }
             }
         }
     }

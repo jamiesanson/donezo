@@ -26,6 +26,7 @@ import androidx.compose.ui.input.key.KeyEventType.Companion.KeyDown
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
@@ -60,7 +61,8 @@ fun TodoRow(
                 .padding(top = 14.dp, bottom = 12.dp, start = 16.dp, end = 16.dp)
         )
 
-        val textFieldValue = remember { mutableStateOf(TextFieldValue(text)) }
+        // Setting selection to the length of the text moves the cursor to the end of the text by default
+        val textFieldValue = remember { mutableStateOf(TextFieldValue(text, selection = TextRange(text.length))) }
 
         BasicTextField(
             value = textFieldValue.value,
