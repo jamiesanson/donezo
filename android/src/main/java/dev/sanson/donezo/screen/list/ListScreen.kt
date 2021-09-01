@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -32,6 +34,8 @@ import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.theme.DonezoTheme
 import dev.sanson.donezo.todo.Action
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.current) {
@@ -78,6 +82,8 @@ private fun TodoListColumn(
     lists: List<TodoList>,
     dispatch: (Any) -> Any,
 ) {
+    val scope = rememberCoroutineScope()
+
     LazyColumn(state = lazyListState) {
         item {
             Spacer(modifier = Modifier.height(16.dp))
@@ -94,9 +100,13 @@ private fun TodoListColumn(
             }
 
             item {
+                // NOTE: This would be more performant if it was using [items], however due to a current
+                // limitation of relocationRequester, the composable being relocated to much be in the composition
+                // but off screen. When not in a [Column], the composable offscreen does not exist within the composition
+                // and therefore behaves badly
                 Column {
                     for (item in list.items) {
-                        val requester = remember { RelocationRequester() }
+                        val requester = remember(item) { RelocationRequester() }
 
                         TodoRow(
                             text = item.text,
@@ -109,7 +119,12 @@ private fun TodoListColumn(
                                 .relocationRequester(requester)
                                 .onFocusEvent {
                                     if (it.isFocused) {
-                                        requester.bringIntoView()
+                                        // Wait 250ms for the keyboard to animate in, such that the view
+                                        // resizes and [bringIntoView] scrolls down entirely.
+                                        scope.launch {
+                                            delay(250)
+                                            requester.bringIntoView()
+                                        }
                                     }
                                 }
                         )
