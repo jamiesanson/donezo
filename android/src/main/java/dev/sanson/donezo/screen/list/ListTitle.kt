@@ -1,6 +1,7 @@
 package dev.sanson.donezo.screen.list
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -54,6 +55,7 @@ fun ListTitle(
         modifier = modifier
             .padding(Dp(24f))
             .animateContentSize()
+            .fillMaxWidth()
             .onPreviewKeyEvent {
                 when {
                     it.key == Key.Enter && it.type == KeyEventType.KeyDown -> {
