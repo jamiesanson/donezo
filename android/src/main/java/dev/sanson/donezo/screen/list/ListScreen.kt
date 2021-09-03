@@ -1,6 +1,7 @@
 package dev.sanson.donezo.screen.list
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -34,6 +36,7 @@ import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.theme.DonezoTheme
 import dev.sanson.donezo.todo.Action
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -110,6 +113,16 @@ private fun TodoListColumn(
     dispatch: (Any) -> Any,
 ) {
     val scrollState = rememberScrollState()
+
+    val imeInsets = LocalWindowInsets.current.ime
+
+    // Ensure the column scrolls as the IME insets change
+    LaunchedEffect(true) {
+        snapshotFlow { imeInsets.bottom }
+            .collect { value ->
+                scrollState.scrollBy(value.toFloat())
+            }
+    }
 
     Column(modifier = Modifier.verticalScroll(scrollState)) {
 
