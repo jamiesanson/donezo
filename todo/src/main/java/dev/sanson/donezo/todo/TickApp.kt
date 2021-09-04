@@ -5,7 +5,6 @@ import dev.sanson.donezo.backend.Backend
 import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
 import dev.sanson.donezo.todo.di.ApplicationModule
-import dev.sanson.donezo.todo.feature.list.ListInteractionMiddleware
 import dev.sanson.donezo.todo.feature.list.ListsReducer
 import dev.sanson.donezo.todo.feature.navigation.BackNavigationMiddleware
 import dev.sanson.donezo.todo.feature.navigation.NavigationReducer
@@ -43,7 +42,6 @@ fun createApp(
     )
 
     val middleware = applyMiddleware(
-        ListInteractionMiddleware,
         BackNavigationMiddleware(closeApp),
         createThunkMiddleware()
     )
@@ -55,10 +53,11 @@ fun createApp(
     store.initialiseLocalStorage(
         initialState = listOf(
             TodoList(
-                title = "// TODO: Add your own title",
+                title = "TODO(\"Change me!\")",
                 items = listOf(
                     Todo(text = "Hi, I'm a todo item!", isDone = true),
-                    Todo(text = "<-- try checking me off", isDone = false)
+                    Todo(text = "<-- try checking me off", isDone = false),
+                    Todo(text = "Want another list? Click the \"Add list\" button", isDone = false),
                 )
             )
         )

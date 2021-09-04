@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import dev.sanson.donezo.theme.DonezoTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -53,7 +54,7 @@ fun ListTitle(
             }
         ),
         modifier = modifier
-            .padding(Dp(24f))
+            .padding(start = 24.dp, top = 16.dp, bottom = 16.dp, end = 16.dp)
             .animateContentSize()
             .fillMaxWidth()
             .onPreviewKeyEvent {

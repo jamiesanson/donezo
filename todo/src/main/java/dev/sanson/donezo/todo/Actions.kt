@@ -18,7 +18,7 @@ sealed class Action {
 
     data class AddTodo(val list: TodoList) : Action()
     data class AddTodoAfter(val sibling: Todo) : Action()
-    data class AddListAfter(val sibling: TodoList) : Action()
+    object AddList : Action()
 
     data class DeleteTodo(val item: Todo) : Action()
     data class DeleteList(val list: TodoList) : Action()
