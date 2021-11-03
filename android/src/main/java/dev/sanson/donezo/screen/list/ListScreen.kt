@@ -1,5 +1,6 @@
 package dev.sanson.donezo.screen.list
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,7 @@ fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.cur
     TodoListColumn(lists, wrappedDispatch)
 }
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalStdlibApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalStdlibApi::class)
 @Composable
 private fun TodoListColumn(
     lists: List<TodoList>,
