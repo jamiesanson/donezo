@@ -1,0 +1,25 @@
+name:  CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: "Checkout ${{ github.ref_name }}"
+      uses: actions/checkout@v4
+
+    - name: "Setup Java"
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+
+    - name: "Build"
+      # language=bash
+      run: ./gradlew build
