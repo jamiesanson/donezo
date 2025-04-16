@@ -26,4 +26,4 @@ jobs:
 
     - name: "Build"
       # language=bash
-      run: ./gradlew build
+      run: ./gradlew assembleDebug
