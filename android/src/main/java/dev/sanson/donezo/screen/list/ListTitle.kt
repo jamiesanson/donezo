@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,14 +16,12 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.sanson.donezo.theme.DonezoTheme
 
@@ -44,40 +42,44 @@ fun ListTitle(
             textFieldValue.value = it
             onValueChange(it.text)
         },
-        keyboardOptions = KeyboardOptions.Default.copy(
-            capitalization = KeyboardCapitalization.Sentences,
-            imeAction = ImeAction.Next
-        ),
-        keyboardActions = KeyboardActions(
-            onNext = {
-                onDoneAction()
-            }
-        ),
-        modifier = modifier
-            .padding(start = 24.dp, top = 16.dp, bottom = 16.dp, end = 16.dp)
-            .animateContentSize()
-            .fillMaxWidth()
-            .onPreviewKeyEvent {
-                when {
-                    it.key == Key.Enter && it.type == KeyEventType.KeyDown -> {
-                        onDoneAction()
-                        true
-                    }
-                    it.key ==  Key.Backspace && it.type == KeyEventType.KeyDown -> {
-                        if (textFieldValue.value.text.isEmpty()) {
-                            onDelete()
+        keyboardOptions =
+            KeyboardOptions.Default.copy(
+                capitalization = KeyboardCapitalization.Sentences,
+                imeAction = ImeAction.Next,
+            ),
+        keyboardActions =
+            KeyboardActions(
+                onNext = {
+                    onDoneAction()
+                },
+            ),
+        modifier =
+            modifier
+                .padding(start = 24.dp, top = 16.dp, bottom = 16.dp, end = 16.dp)
+                .animateContentSize()
+                .fillMaxWidth()
+                .onPreviewKeyEvent {
+                    when {
+                        it.key == Key.Enter && it.type == KeyEventType.KeyDown -> {
+                            onDoneAction()
                             true
-                        } else {
-                            false
                         }
+                        it.key == Key.Backspace && it.type == KeyEventType.KeyDown -> {
+                            if (textFieldValue.value.text.isEmpty()) {
+                                onDelete()
+                                true
+                            } else {
+                                false
+                            }
+                        }
+                        else -> false
                     }
-                    else -> false
-                }
-            },
-        cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
-        textStyle = MaterialTheme.typography.h5.copy(
-            color = MaterialTheme.colors.onSurface,
-        ),
+                },
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.54f)),
+        textStyle =
+            MaterialTheme.typography.headlineMedium.copy(
+                color = MaterialTheme.colorScheme.onSurface,
+            ),
     )
 }
 
@@ -90,7 +92,7 @@ fun DonezoTitleTextFieldPreview() {
             title = "Live literals are neat",
             onValueChange = { /*TODO*/ },
             onDoneAction = {},
-            onDelete = {}
+            onDelete = {},
         )
     }
 }

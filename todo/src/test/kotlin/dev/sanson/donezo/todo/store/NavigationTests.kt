@@ -15,13 +15,13 @@ import org.koin.core.context.stopKoin
 
 @RunWith(TestParameterInjector::class)
 class NavigationTests : ReduxAppTest() {
-
     //region parameterised tests
     data class AllowedTransition(val from: Screen, val to: Screen, val on: Action.Navigation)
 
-    private val allowedTransitions = listOf(
-        AllowedTransition(Screen.Lists, Screen.SyncSettings, Action.Navigation.To(Screen.SyncSettings)),
-    )
+    private val allowedTransitions =
+        listOf(
+            AllowedTransition(Screen.Lists, Screen.SyncSettings, Action.Navigation.To(Screen.SyncSettings)),
+        )
 
     private class ScreenProvider : TestParameter.TestParameterValuesProvider {
         override fun provideValues(): MutableList<*> {
@@ -38,9 +38,8 @@ class NavigationTests : ReduxAppTest() {
     @Test
     fun `validate navigation combinations`(
         @TestParameter(valuesProvider = ScreenProvider::class) initialScreen: Screen,
-        @TestParameter(valuesProvider = ActionProvider::class) navigationAction: Action.Navigation
+        @TestParameter(valuesProvider = ActionProvider::class) navigationAction: Action.Navigation,
     ) {
-
         val state = AppState(navigation = Navigation(currentScreen = initialScreen))
 
         val newScreen = NavigationReducer(state, navigationAction).navigation.currentScreen

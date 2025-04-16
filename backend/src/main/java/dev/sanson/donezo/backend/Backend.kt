@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 interface Backend {
-
     val dataSource: BackendDataSource
 
     val ui: UI
@@ -31,18 +30,18 @@ abstract class BackendDataSource {
     private fun updateStatus(
         enabled: Boolean = status.value.enabled,
         currentSnapshot: Snapshot = status.value.currentSnapshot,
-        syncState: State = status.value.syncState
+        syncState: State = status.value.syncState,
     ) {
         (status as MutableStateFlow).compareAndSet(
             expect = status.value,
-            update = Status(enabled, currentSnapshot, syncState)
+            update = Status(enabled, currentSnapshot, syncState),
         )
     }
 
     data class Status(
         val enabled: Boolean,
         val currentSnapshot: Snapshot,
-        val syncState: State
+        val syncState: State,
     ) {
         companion object {
             val Disabled =
@@ -53,6 +52,6 @@ abstract class BackendDataSource {
     enum class State {
         Idle,
         Syncing,
-        Error
+        Error,
     }
 }

@@ -4,7 +4,10 @@ import dev.sanson.donezo.todo.AppSettings
 import kotlinx.coroutines.CoroutineScope
 import org.koin.dsl.module
 
-fun ApplicationModule(applicationScope: CoroutineScope, appSettings: AppSettings) = module {
+fun applicationModule(
+    applicationScope: CoroutineScope,
+    appSettings: AppSettings,
+) = module {
     single { applicationScope }
 
     // Local storage

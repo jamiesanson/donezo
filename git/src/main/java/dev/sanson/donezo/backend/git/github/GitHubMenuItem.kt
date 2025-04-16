@@ -1,7 +1,7 @@
 package dev.sanson.donezo.backend.git.github
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -10,13 +10,12 @@ import dev.sanson.donezo.backend.BackendMenuItem
 import dev.sanson.donezo.backend.git.R
 
 object GitHubMenuItem : BackendMenuItem {
-
     @Composable
     override fun Icon() {
         Icon(
             painter = painterResource(id = R.drawable.ic_github),
             contentDescription = "GitHub logo",
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
         )
     }
 

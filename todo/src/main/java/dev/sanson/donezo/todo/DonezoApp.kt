@@ -4,7 +4,7 @@ import dev.sanson.donezo.arch.redux.createThunkMiddleware
 import dev.sanson.donezo.backend.Backend
 import dev.sanson.donezo.model.Todo
 import dev.sanson.donezo.model.TodoList
-import dev.sanson.donezo.todo.di.ApplicationModule
+import dev.sanson.donezo.todo.di.applicationModule
 import dev.sanson.donezo.todo.feature.list.ListsReducer
 import dev.sanson.donezo.todo.feature.navigation.BackNavigationMiddleware
 import dev.sanson.donezo.todo.feature.navigation.NavigationReducer
@@ -16,11 +16,11 @@ import org.koin.core.context.stopKoin
 import org.reduxkotlin.Store
 import org.reduxkotlin.applyMiddleware
 import org.reduxkotlin.combineReducers
-import org.reduxkotlin.createThreadSafeStore
+import org.reduxkotlin.createStore
 
 data class AppSettings(
     val localStorage: LocalStorage,
-    val availableBackends: List<Backend>
+    val availableBackends: List<Backend>,
 )
 
 /**
@@ -30,37 +30,41 @@ data class AppSettings(
 fun createApp(
     applicationScope: CoroutineScope,
     appSettings: AppSettings,
-    closeApp: () -> Unit
+    closeApp: () -> Unit,
 ): Store<AppState> {
     startKoin {
-        modules(ApplicationModule(applicationScope, appSettings))
+        modules(applicationModule(applicationScope, appSettings))
     }
 
-    val reducer = combineReducers(
-        NavigationReducer,
-        ListsReducer
-    )
+    val reducer =
+        combineReducers(
+            NavigationReducer,
+            ListsReducer,
+        )
 
-    val middleware = applyMiddleware(
-        BackNavigationMiddleware(closeApp),
-        createThunkMiddleware()
-    )
+    val middleware =
+        applyMiddleware(
+            BackNavigationMiddleware(closeApp),
+            createThunkMiddleware(),
+        )
 
     val initialState = AppState(backends = appSettings.availableBackends)
 
-    val store = createThreadSafeStore(reducer, initialState, middleware)
+    val store = createStore(reducer, initialState, middleware)
 
     store.initialiseLocalStorage(
-        initialState = listOf(
-            TodoList(
-                title = "TODO(\"Change me!\")",
-                items = listOf(
-                    Todo(text = "Hi, I'm a todo item!", isDone = true),
-                    Todo(text = "<-- try checking me off", isDone = false),
-                    Todo(text = "Want another list? Click the \"Add list\" button", isDone = false),
-                )
-            )
-        )
+        initialState =
+            listOf(
+                TodoList(
+                    title = "TODO(\"Change me!\")",
+                    items =
+                        listOf(
+                            Todo(text = "Hi, I'm a todo item!", isDone = true),
+                            Todo(text = "<-- try checking me off", isDone = false),
+                            Todo(text = "Want another list? Start typing below in \"Start something new\"", isDone = false),
+                        ),
+                ),
+            ),
     )
 
     return store

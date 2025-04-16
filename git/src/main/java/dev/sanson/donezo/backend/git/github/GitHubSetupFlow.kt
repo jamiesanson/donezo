@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import dev.sanson.donezo.backend.BackendSetupFlow
 
 object GitHubSetupFlow : BackendSetupFlow {
-
     @SuppressLint("ComposableNaming")
     @Composable
     override fun invoke() {

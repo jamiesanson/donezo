@@ -11,9 +11,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,19 +47,24 @@ fun TodoRow(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = 52.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = 52.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(modifier = Modifier.width(4.dp))
 
         Checkbox(
             checked = isDone,
             onCheckedChange = onTodoCheckedChange,
-            modifier = Modifier
-                .alignByBaseline()
-                .padding(top = 14.dp, bottom = 12.dp, start = 16.dp, end = 16.dp)
+            colors =
+                CheckboxDefaults.colors(
+                    checkedColor = MaterialTheme.colorScheme.secondary,
+                ),
+            modifier =
+                Modifier
+                    .padding(top = 14.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
         )
 
         // Setting selection to the length of the text moves the cursor to the end of the text by default
@@ -74,42 +80,45 @@ fun TodoRow(
 
                 textFieldValue.value = it
             },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    onImeAction()
-                }
-            ),
-            cursorBrush = SolidColor(MaterialTheme.colors.onSurface.copy(alpha = 0.54f)),
-            textStyle = MaterialTheme.typography.body1.copy(
-                color = MaterialTheme.colors.onSurface,
-            ),
-            modifier = modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .alignByBaseline()
-                .animateContentSize()
-                .padding(top = 12.dp, bottom = 12.dp, end = 16.dp)
-                .onPreviewKeyEvent {
-                    when {
-                        it.key == Key.Enter && it.type == KeyDown -> {
-                            onImeAction()
-                            true
-                        }
-                        it.key ==  Key.Backspace && it.type == KeyDown -> {
-                            if (textFieldValue.value.text.isEmpty()) {
-                                onDelete()
+            keyboardOptions =
+                KeyboardOptions.Default.copy(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next,
+                ),
+            keyboardActions =
+                KeyboardActions(
+                    onNext = {
+                        onImeAction()
+                    },
+                ),
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.54f)),
+            textStyle =
+                MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .animateContentSize()
+                    .padding(top = 12.dp, bottom = 12.dp, end = 16.dp)
+                    .onPreviewKeyEvent {
+                        when {
+                            it.key == Key.Enter && it.type == KeyDown -> {
+                                onImeAction()
                                 true
-                            } else {
-                                false
                             }
+                            it.key == Key.Backspace && it.type == KeyDown -> {
+                                if (textFieldValue.value.text.isEmpty()) {
+                                    onDelete()
+                                    true
+                                } else {
+                                    false
+                                }
+                            }
+                            else -> false
                         }
-                        else -> false
-                    }
-                }
+                    },
         )
     }
 }
@@ -119,14 +128,15 @@ fun TodoRow(
 @Composable
 fun TodoPreview() {
     DonezoTheme {
-        Scaffold {
+        Scaffold { padding ->
             TodoRow(
                 text = "Hang the washing out",
                 isDone = false,
                 onDelete = {},
                 onImeAction = {},
                 onTodoCheckedChange = {},
-                onTodoTextChange = {}
+                onTodoTextChange = {},
+                modifier = Modifier.padding(padding),
             )
         }
     }

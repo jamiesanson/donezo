@@ -13,9 +13,8 @@ import kotlinx.coroutines.flow.first
  */
 @Suppress("BlockingMethodInNonBlockingContext")
 class AndroidLocalStorage(
-    private val dataStore: DataStore<List<TodoList>>
+    private val dataStore: DataStore<List<TodoList>>,
 ) : LocalStorage {
-
     override suspend fun load(): List<TodoList> = dataStore.data.first()
 
     override suspend fun save(todos: List<TodoList>) {

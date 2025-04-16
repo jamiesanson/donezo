@@ -15,16 +15,16 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TodoDbTests : ReduxAppTest() {
-
-    private val stateFlow = flow {
-        store.subscribe {
-            testScope.launch { emit(store.state) }
-        }
-    }.stateIn(
-        testScope,
-        started = SharingStarted.Eagerly,
-        initialValue = AppState()
-    )
+    private val stateFlow =
+        flow {
+            store.subscribe {
+                testScope.launch { emit(store.state) }
+            }
+        }.stateIn(
+            testScope,
+            started = SharingStarted.Eagerly,
+            initialValue = AppState(),
+        )
 
     @Test
     fun `database is seeded correctly`() {

@@ -9,17 +9,18 @@ import io.kotest.matchers.shouldBe
 import org.junit.Test
 
 class ListReducerTests {
-
     @Test
     fun `adding todo item updates state`() {
-        val list = TodoList(
-            title = "",
-            items = emptyList()
-        )
+        val list =
+            TodoList(
+                title = "",
+                items = emptyList(),
+            )
 
-        val initialState = AppState(
-            lists = listOf(list)
-        )
+        val initialState =
+            AppState(
+                lists = listOf(list),
+            )
 
         val newState = ListsReducer(initialState, Action.AddTodo(list = list))
 
@@ -28,19 +29,22 @@ class ListReducerTests {
 
     @Test
     fun `editing todo item updates state`() {
-        val todo = Todo(
-            text = "",
-            isDone = false
-        )
-
-        val initialState = AppState(
-            lists = listOf(
-                TodoList(
-                    title = "",
-                    items = listOf(todo)
-                )
+        val todo =
+            Todo(
+                text = "",
+                isDone = false,
             )
-        )
+
+        val initialState =
+            AppState(
+                lists =
+                    listOf(
+                        TodoList(
+                            title = "",
+                            items = listOf(todo),
+                        ),
+                    ),
+            )
 
         val action = Action.UpdateTodoText(item = todo, text = "Hello world!")
 
@@ -51,19 +55,22 @@ class ListReducerTests {
 
     @Test
     fun `removing todo item updates state`() {
-        val todo = Todo(
-            text = "",
-            isDone = false
-        )
-
-        val initialState = AppState(
-            lists = listOf(
-                TodoList(
-                    title = "",
-                    items = listOf(todo)
-                )
+        val todo =
+            Todo(
+                text = "",
+                isDone = false,
             )
-        )
+
+        val initialState =
+            AppState(
+                lists =
+                    listOf(
+                        TodoList(
+                            title = "",
+                            items = listOf(todo),
+                        ),
+                    ),
+            )
 
         val action = Action.DeleteTodo(todo)
 

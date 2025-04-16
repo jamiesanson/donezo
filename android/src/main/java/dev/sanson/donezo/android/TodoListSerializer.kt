@@ -22,7 +22,10 @@ class TodoListSerializer(
         return Json.decodeFromString(jsonList)
     }
 
-    override suspend fun writeTo(t: List<TodoList>, output: OutputStream) {
+    override suspend fun writeTo(
+        t: List<TodoList>,
+        output: OutputStream,
+    ) {
         val jsonList = Json.encodeToString(t)
 
         withContext(ioDispatcher) {

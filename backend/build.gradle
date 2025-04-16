@@ -1,9 +1,12 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    alias libs.plugins.compose.compiler
 }
 
 android {
+    namespace "dev.sanson.donezo.backend"
+
     compileSdkVersion libs.versions.compilesdk.get().toInteger()
 
     defaultConfig {
@@ -15,33 +18,22 @@ android {
         compose true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.get()
-    }
-
     compileOptions {
         coreLibraryDesugaringEnabled = true
 
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs += [
-            "-Xopt-in=kotlin.RequiresOptIn"
-        ]
+        jvmTarget = "17"
     }
-}
-
-repositories {
-    google()
-    mavenCentral()
 }
 
 dependencies {
     api project(":model")
 
+    implementation platform(libs.androidx.compose.bom)
     implementation libs.bundles.compose
     implementation libs.kotlinx.coroutines.core
 

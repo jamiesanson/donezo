@@ -1,10 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    alias libs.plugins.compose.compiler
 }
 
 android {
     compileSdkVersion libs.versions.compilesdk.get().toInteger()
+
+    namespace "dev.sanson.donezo"
 
     defaultConfig {
         applicationId "dev.sanson.donezo"
@@ -62,17 +65,13 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
 
     buildFeatures {
         compose true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.get()
-        useLiveLiterals true
     }
 
     packagingOptions {
@@ -89,29 +88,24 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs += [
-                "-Xopt-in=kotlin.RequiresOptIn"
-        ]
+        jvmTarget = "17"
     }
 }
 
-repositories {
-    google()
-    mavenCentral()
-}
-
 dependencies {
+    implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.core
-    implementation libs.appcompat
-    implementation libs.material
     implementation libs.bundles.lifecycle
 
     implementation libs.bundles.compose
-    implementation libs.activity.compose
+    implementation libs.androidx.activity.compose
+
+    implementation libs.material
 
     implementation libs.datastore
 
     implementation project(":todo")
     implementation project(":git")
+
+    coreLibraryDesugaring libs.corelibrarydesugaring
 }

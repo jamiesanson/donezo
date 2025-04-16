@@ -5,7 +5,7 @@ package dev.sanson.donezo.todo.feature.navigation
 import dev.sanson.donezo.todo.Action
 import dev.sanson.donezo.todo.AppState
 import org.reduxkotlin.middleware
-import org.reduxkotlin.reducerForActionType
+import org.reduxkotlin.typedReducer
 
 /**
  * Navigation state for Tick
@@ -15,7 +15,7 @@ data class Navigation(
      * Backstack of previous screens, with index zero being the bottom of the stack
      */
     val backstack: List<Screen> = emptyList(),
-    val currentScreen: Screen = Screen.Lists
+    val currentScreen: Screen = Screen.Lists,
 )
 
 /**
@@ -37,32 +37,36 @@ fun BackNavigationMiddleware(exitApplication: () -> Unit) =
         }
     }
 
-val NavigationReducer = reducerForActionType<AppState, Action.Navigation> { state, action ->
-    when (action) {
-        Action.Navigation.Back -> state.pop()
-        is Action.Navigation.To -> {
-            if (state.navigation.currentScreen is Screen.Lists && action.screen is Screen.SyncSettings) {
-                state.push(Screen.SyncSettings)
-            } else {
-                state
+val NavigationReducer =
+    typedReducer<AppState, Action.Navigation> { state, action ->
+        when (action) {
+            Action.Navigation.Back -> state.pop()
+            is Action.Navigation.To -> {
+                if (state.navigation.currentScreen is Screen.Lists && action.screen is Screen.SyncSettings) {
+                    state.push(Screen.SyncSettings)
+                } else {
+                    state
+                }
             }
         }
     }
-}
 
-private fun AppState.replace(screen: Screen): AppState =
-    copy(navigation = navigation.copy(currentScreen = screen))
+private fun AppState.replace(screen: Screen): AppState = copy(navigation = navigation.copy(currentScreen = screen))
 
-private fun AppState.push(screen: Screen): AppState = copy(
-    navigation = navigation.copy(
-        backstack = listOf(*navigation.backstack.toTypedArray(), navigation.currentScreen),
-        currentScreen = screen
+private fun AppState.push(screen: Screen): AppState =
+    copy(
+        navigation =
+            navigation.copy(
+                backstack = listOf(*navigation.backstack.toTypedArray(), navigation.currentScreen),
+                currentScreen = screen,
+            ),
     )
-)
 
-private fun AppState.pop(): AppState = copy(
-    navigation = navigation.copy(
-        backstack = navigation.backstack.dropLast(1),
-        currentScreen = navigation.backstack.last()
+private fun AppState.pop(): AppState =
+    copy(
+        navigation =
+            navigation.copy(
+                backstack = navigation.backstack.dropLast(1),
+                currentScreen = navigation.backstack.last(),
+            ),
     )
-)

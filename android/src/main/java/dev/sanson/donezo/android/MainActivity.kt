@@ -1,16 +1,15 @@
 package dev.sanson.donezo.android
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
-import androidx.core.view.WindowCompat
 import androidx.datastore.dataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,11 +37,9 @@ val LocalDispatch = compositionLocalOf<(Any) -> Any> { error("No default dispatc
 private val Context.dataStore by dataStore("todo-lists", TodoListSerializer())
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             val viewModel: DonezoViewModel = viewModel()
@@ -53,11 +50,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             DisposableEffect(onBackPressedDispatcher) {
-                val callback = object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        viewModel.store.dispatch(Action.Navigation.Back)
+                val callback =
+                    object : OnBackPressedCallback(true) {
+                        override fun handleOnBackPressed() {
+                            viewModel.store.dispatch(Action.Navigation.Back)
+                        }
                     }
-                }
 
                 onBackPressedDispatcher.addCallback(callback)
 
@@ -77,38 +75,41 @@ class MainActivity : AppCompatActivity() {
 }
 
 class DonezoViewModel : ViewModel() {
-
     /**
      * Backends available to the Android application
      */
-    private val availableBackends = listOf(
-        GitHubBackend
-    )
+    private val availableBackends =
+        listOf(
+            GitHubBackend,
+        )
 
     /**
      * Local storage instance for the Android platform
      */
-    private val localStorage: LocalStorage = AndroidLocalStorage(
-        dataStore = DonezoApplication.context.dataStore
-    )
+    private val localStorage: LocalStorage =
+        AndroidLocalStorage(
+            dataStore = DonezoApplication.context.dataStore,
+        )
 
     /**
      * The store holding the whole app's state. We scope all internal
      * coroutines calls to this ViewModel, which represents the lifecycle of the entire application.
      */
-    val store = createApp(
-        applicationScope = viewModelScope,
-        appSettings = AppSettings(
-            localStorage = localStorage,
-            availableBackends = availableBackends
-        ),
-        closeApp = {
-            (finishActivityTrigger as MutableStateFlow).compareAndSet(
-                expect = false,
-                update = true
-            )
-        }
-    )
+    val store =
+        createApp(
+            applicationScope = viewModelScope,
+            appSettings =
+                AppSettings(
+                    localStorage = localStorage,
+                    availableBackends = availableBackends,
+                ),
+            closeApp = {
+                (finishActivityTrigger as MutableStateFlow).compareAndSet(
+                    expect = false,
+                    update = true,
+                )
+            },
+        )
 
     /**
      * The current state held in the [store]

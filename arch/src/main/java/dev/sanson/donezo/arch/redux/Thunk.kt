@@ -33,11 +33,12 @@ typealias Thunk<State> = (dispatch: Dispatcher, getState: GetState<State>) -> An
  */
 fun <State> asyncAction(
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    block: suspend CoroutineScope.(dispatch: Dispatcher, getState: GetState<State>) -> Any
-): Thunk<State> = { dispatch, getState ->
-    val scope by inject<CoroutineScope>()
-    scope.launch(dispatcher) { block(dispatch, getState) }
-}
+    block: suspend CoroutineScope.(dispatch: Dispatcher, getState: GetState<State>) -> Any,
+): Thunk<State> =
+    { dispatch, getState ->
+        val scope by inject<CoroutineScope>()
+        scope.launch(dispatcher) { block(dispatch, getState) }
+    }
 
 fun <State> createThunkMiddleware(): Middleware<State> =
     { store ->
@@ -45,14 +46,15 @@ fun <State> createThunkMiddleware(): Middleware<State> =
             { action: Any ->
                 if (action is Function<*>) {
                     @Suppress("UNCHECKED_CAST")
-                    val thunk = try {
-                        (action as Thunk<State>)
-                    } catch (e: ClassCastException) {
-                        throw IllegalArgumentException(
-                            "Dispatching functions must use type Thunk:",
-                            e
-                        )
-                    }
+                    val thunk =
+                        try {
+                            (action as Thunk<State>)
+                        } catch (e: ClassCastException) {
+                            throw IllegalArgumentException(
+                                "Dispatching functions must use type Thunk:",
+                                e,
+                            )
+                        }
 
                     thunk(store.dispatch, store.getState)
                 } else {

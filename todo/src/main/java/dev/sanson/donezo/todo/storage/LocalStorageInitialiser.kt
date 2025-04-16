@@ -12,15 +12,16 @@ import org.reduxkotlin.Store
 /**
  * Thunk function for loading initial state from local storage asynchronously
  */
-private fun LoadFromStorage(initialState: List<TodoList>) = asyncAction<AppState> { dispatch, _ ->
-    val storage by inject<LocalStorage>()
+private fun loadFromStorage(initialState: List<TodoList>) =
+    asyncAction<AppState> { dispatch, _ ->
+        val storage by inject<LocalStorage>()
 
-    dispatch(Action.ListsLoaded(storage.load().ifEmpty { initialState }))
-}
+        dispatch(Action.ListsLoaded(storage.load().ifEmpty { initialState }))
+    }
 
 fun Store<AppState>.initialiseLocalStorage(initialState: List<TodoList>) {
     // Load lists from storage immediately
-    dispatch(LoadFromStorage(initialState))
+    dispatch(loadFromStorage(initialState))
 
     // Publish changes back to local storage
     subscribe {

@@ -11,12 +11,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
@@ -31,7 +30,11 @@ import dev.sanson.donezo.theme.DonezoTheme
 import dev.sanson.donezo.todo.Action
 
 @Composable
-fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.current) {
+fun ListScreen(
+    lists: List<TodoList>,
+    modifier: Modifier = Modifier,
+    dispatch: (Any) -> Any = LocalDispatch.current,
+) {
     val focusManager = LocalFocusManager.current
 
     val wrappedDispatch: (Any) -> Any = { action ->
@@ -42,7 +45,7 @@ fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.cur
         }
     }
 
-    TodoListColumn(lists, wrappedDispatch)
+    TodoListColumn(lists, wrappedDispatch, modifier)
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalStdlibApi::class)
@@ -50,11 +53,11 @@ fun ListScreen(lists: List<TodoList>, dispatch: (Any) -> Any = LocalDispatch.cur
 private fun TodoListColumn(
     lists: List<TodoList>,
     dispatch: (Any) -> Any,
+    modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier.verticalScroll(scrollState)) {
-
+    Column(modifier = modifier.verticalScroll(scrollState)) {
         Spacer(modifier = Modifier.height(24.dp))
 
         for (list in lists) {
@@ -66,9 +69,10 @@ private fun TodoListColumn(
                 onValueChange = { dispatch(Action.UpdateListTitle(list, it)) },
                 onDoneAction = { dispatch(Action.AddTodo(list)) },
                 onDelete = { dispatch(Action.DeleteList(list)) },
-                modifier = Modifier
-                    .scrollToOnFocus()
-                    .focusOnEntry(ignoreImeVisibility = focusLastListOnEntry)
+                modifier =
+                    Modifier
+                        .scrollToOnFocus()
+                        .focusOnEntry(ignoreImeVisibility = focusLastListOnEntry),
             )
 
             for (item in list.items) {
@@ -79,9 +83,10 @@ private fun TodoListColumn(
                     onTodoCheckedChange = { dispatch(Action.UpdateTodoDone(item, it)) },
                     onImeAction = { dispatch(Action.AddTodoAfter(item)) },
                     onDelete = { dispatch(Action.DeleteTodo(item)) },
-                    modifier = Modifier
-                        .scrollToOnFocus()
-                        .focusOnEntry()
+                    modifier =
+                        Modifier
+                            .scrollToOnFocus()
+                            .focusOnEntry(),
                 )
             }
         }
@@ -99,19 +104,21 @@ private fun TodoListColumn(
 private fun AddListRow(dispatch: (Any) -> Any) {
     val source = remember { MutableInteractionSource() }
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = source,
-                indication = null
-            ) { dispatch(Action.AddList) }
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable(
+                    interactionSource = source,
+                    indication = null,
+                ) { dispatch(Action.AddList) },
     ) {
         Text(
             text = "Start something new",
-            style = MaterialTheme.typography.h5.copy(
-                color = MaterialTheme.colors.onSurface.copy(alpha = 0.4f),
-            ),
-            modifier = Modifier.padding(24.dp)
+            style =
+                MaterialTheme.typography.headlineMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                ),
+            modifier = Modifier.padding(24.dp),
         )
     }
 }
@@ -120,19 +127,21 @@ private fun AddListRow(dispatch: (Any) -> Any) {
 @Composable
 fun ListPreview() {
     DonezoTheme {
-        Scaffold {
+        Scaffold { contentPadding ->
             ListScreen(
                 listOf(
                     TodoList(
                         title = "Work, 23rd Feb",
-                        items = listOf(
-                            Todo(
-                                text = "Book that meeting",
-                                isDone = false
-                            )
-                        )
-                    )
-                )
+                        items =
+                            listOf(
+                                Todo(
+                                    text = "Book that meeting",
+                                    isDone = false,
+                                ),
+                            ),
+                    ),
+                ),
+                modifier = Modifier.padding(contentPadding),
             )
         }
     }
