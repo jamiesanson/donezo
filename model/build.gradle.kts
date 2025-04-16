@@ -1,6 +1,7 @@
 plugins {
-    id 'java-library'
-    id 'kotlin'
+    `java-library`
+    kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 java {
@@ -13,8 +14,5 @@ kotlin {
 }
 
 dependencies {
-    api libs.redux
-    api libs.koin
-
-    implementation libs.kotlinx.coroutines.core
+    api(libs.kotlin.serialization.json)
 }
